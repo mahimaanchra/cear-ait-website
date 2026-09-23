@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Syne:wght@700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --canvas-bg: #f9f9f8;
+  --primary-black: #111827;
+  --industrial-teal: #0d5c58;
+  --industrial-teal-dark: #073a37;
+  --industrial-red: #dc2626;
+  --card-white: #ffffff;
+  --border-light: #e5e7eb;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--canvas-bg);
+  color: var(--primary-black);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  selection-background-color: #0d5c58;
+  selection-color: #ffffff;
+}
+
+::selection {
+  background: #0d5c58;
+  color: #ffffff;
+}
+
+/* Custom Sleek Industrial Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1ef;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c5c5c0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0d5c58;
+}
+
+/* Typography Utility Classes */
+.font-industrial,
+.font-display,
+.font-cartoon,
+.font-pixel {
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.font-syne {
+  font-family: 'Syne', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-mono {
+  font-family: 'Space Mono', 'JetBrains Mono', monospace;
+}
+
+.font-sans {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Technical Ruled Paper Canvas Pattern */
+.canvas-tech-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+}
+
+/* Industrial Color Utilities */
+.text-teal-industrial {
+  color: #0d5c58;
+}
+
+.bg-teal-industrial {
+  background-color: #0d5c58;
+}
+
+.border-teal-industrial {
+  border-color: #0d5c58;
+}
+
+/* Signature Red Dash Accent */
+.red-dash {
+  width: 2rem;
+  height: 0.25rem;
+  background-color: #dc2626;
+  border-radius: 0.125rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+/* Primary Dark Teal Action Pill Button */
+.btn-teal-pill {
+  background-color: #0d5c58;
+  color: #ffffff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.65rem 1.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(13, 92, 88, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-teal-pill:hover {
+  background-color: #073a37;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(13, 92, 88, 0.35);
+}
+
+.btn-teal-pill:active {
+  transform: translateY(0);
+}
+
+/* Secondary Industrial Outline Button */
+.btn-outline-pill {
+  background-color: #ffffff;
+  color: #111827;
+  border: 1px solid #d1d5db;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.65rem 1.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-outline-pill:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+}
+
+/* macOS Window Card Style */
+.window-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.875rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.window-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Giant Watermark Text */
+.watermark-text {
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.05);
+  user-select: none;
+  pointer-events: none;
+}
