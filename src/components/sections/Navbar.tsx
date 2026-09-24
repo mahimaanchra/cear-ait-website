@@ -3,30 +3,36 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowRight, Cpu, Sparkles } from "lucide-react";
 import { siteConfig } from "@/data/siteData";
 
+interface NavbarProps {
+  onOpenRegister?: () => void;
+}
+
 const navLinks = [
-  { name: "Home", href: "#hero" },
+  { name: "About", href: "#about" },
   { name: "Team", href: "#team" },
   { name: "Projects", href: "#projects" },
-  { name: "About", href: "#about" },
-  { name: "Operations", href: "#events" },
-  { name: "Contact", href: "#contact" },
+  { name: "Events", href: "#events" },
+  { name: "Wartech", href: "#wartech", badge: "FLAGSHIP" },
 ];
 
-export function Navbar() {
+export function Navbar({ onOpenRegister }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero", "team", "projects", "about", "events", "contact"];
+      setScrolled(window.scrollY > 20);
+
+      const sections = ["hero", "about", "team", "projects", "events", "wartech"];
       for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 160 && rect.bottom >= 160) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 200 && rect.bottom >= 200) {
             setActiveSection(sectionId);
             break;
           }
@@ -40,92 +46,122 @@ export function Navbar() {
 
   return (
     <>
-      {/* Floating Dark Pill Navbar - AIT_CIDC Style */}
-      <header className="fixed top-4 left-0 right-0 z-40 px-4 flex justify-center pointer-events-none">
-        <div className="w-full max-w-4xl bg-[#111827] text-white px-5 sm:px-6 py-2.5 rounded-full shadow-xl border border-zinc-800 flex items-center justify-between pointer-events-auto backdrop-blur-md">
-          {/* Logo Badge */}
-          <Link href="#hero" className="flex items-center gap-2 group">
-            <span className="font-mono text-xs text-red-500 font-bold">{`{ / }`}</span>
-            <span className="font-industrial text-sm sm:text-base font-bold tracking-tight text-white group-hover:text-teal-400 transition-colors">
-              AIT_CEAR
-            </span>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm py-3"
+            : "bg-white/80 backdrop-blur-sm border-b border-slate-200/40 py-4"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          {/* Left: CEAR Logo + CEAR text branding with tiny green active dot */}
+          <Link href="#hero" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm group-hover:bg-blue-700 transition-colors">
+              <Cpu className="w-5 h-5" />
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5">
+                <span className="font-tech text-lg font-extrabold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">
+                  CEAR
+                </span>
+                <span
+                  className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
+                  title="Systems Operational"
+                />
+              </div>
+              <span className="text-[10px] font-mono text-slate-500 font-semibold tracking-wider uppercase">
+                AIT PUNE
+              </span>
+            </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-5 text-xs font-mono">
+          {/* Middle/Right: Quick links */}
+          <nav className="hidden md:flex items-center gap-1 sm:gap-2">
             {navLinks.map((link) => {
               const targetId = link.href.replace("#", "");
               const isActive = activeSection === targetId;
+
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`transition-colors py-1 ${
+                  className={`px-3.5 py-1.5 rounded-md text-xs font-semibold font-tech transition-colors relative flex items-center gap-1.5 ${
                     isActive
-                      ? "text-teal-400 font-bold border-b-2 border-teal-400"
-                      : "text-zinc-300 hover:text-white"
+                      ? "text-blue-600 bg-blue-50 font-bold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
-                  {link.name}
+                  <span>{link.name}</span>
+                  {link.badge && (
+                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 border border-amber-200">
+                      {link.badge}
+                    </span>
+                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Action: Wartech Subpage Link (Kept aside cleanly) */}
-          <div className="hidden sm:flex items-center gap-2">
-            <Link
-              href="/wartech"
-              className="text-[11px] font-mono font-bold text-zinc-300 hover:text-white bg-zinc-800/80 hover:bg-zinc-800 px-3 py-1.5 rounded-full border border-zinc-700 flex items-center gap-1 transition-colors"
+          {/* Right: CTA Button */}
+          <div className="hidden sm:flex items-center gap-3">
+            <button
+              onClick={onOpenRegister}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-tech font-bold text-xs shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
             >
-              <span>Wartech Fest</span>
-              <ArrowUpRight className="w-3 h-3 text-red-400" />
-            </Link>
+              <span>Register Now</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
-          {/* Mobile Hamburger Button */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1.5 rounded-full bg-zinc-800 text-zinc-300 hover:text-white"
-            aria-label="Toggle Navigation"
+            className="md:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
+            aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-4 top-20 z-50 bg-[#111827] text-white border border-zinc-800 rounded-3xl p-6 shadow-2xl md:hidden"
+            className="fixed inset-x-0 top-[60px] z-40 bg-white border-b border-slate-200 p-4 shadow-lg md:hidden"
           >
-            <div className="flex flex-col gap-3 font-mono text-sm">
+            <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="py-2 px-3 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800 flex items-center justify-between"
+                  className="px-3 py-2 rounded-lg text-sm font-semibold font-tech text-slate-800 hover:bg-slate-100 flex items-center justify-between"
                 >
                   <span>{link.name}</span>
-                  <span className="text-zinc-500 text-xs">→</span>
+                  {link.badge && (
+                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">
+                      {link.badge}
+                    </span>
+                  )}
                 </Link>
               ))}
 
-              <div className="pt-3 border-t border-zinc-800">
-                <Link
-                  href="/wartech"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 rounded-full text-center text-xs font-bold text-white bg-[#0d5c58] flex items-center justify-center gap-1.5"
+              <div className="pt-3 border-t border-slate-100 mt-1">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenRegister?.();
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-tech font-bold text-sm shadow-sm flex items-center justify-center gap-2"
                 >
-                  <span>Wartech 2026 Arena</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-teal-300" />
-                </Link>
+                  <span>Register Now / Join Club</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </motion.div>

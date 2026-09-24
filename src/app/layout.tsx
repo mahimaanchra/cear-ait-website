@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
+import { Preloader } from "@/components/Preloader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,7 +19,7 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "CEAR | Centre of Excellence for AI & Robotics – AIT Pune",
   description:
-    "Centre of Excellence for AI and Robotics (CEAR) at Army Institute of Technology, Pune. Innovation through development, tactical defense robotics, and autonomous systems.",
+    "Official portal for CEAR (Centre of Excellence for AI & Robotics) at Army Institute of Technology, Pune. Autonomous defense robotics, hardware craft, intelligent control architectures, and Wartech 2026.",
   keywords: [
     "CEAR",
     "Centre of Excellence for AI and Robotics",
@@ -26,15 +27,19 @@ export const metadata: Metadata = {
     "Army Institute of Technology",
     "Robotics Club",
     "Autonomous Systems",
+    "Wartech 2026",
+    "RoboSoccer",
+    "RoboRace",
+    "Drone Racing",
     "Jalpari",
     "Robotic Arm",
-    "AI",
+    "Edge AI",
   ],
-  authors: [{ name: "CEAR Team, AIT Pune" }],
+  authors: [{ name: "CEAR Engineering Cadre, AIT Pune" }],
   openGraph: {
-    title: "CEAR | Centre of Excellence for AI & Robotics",
+    title: "CEAR | Centre of Excellence for AI & Robotics – AIT Pune",
     description:
-      "INNOVATION THROUGH DEVELOPMENT_. Discover pioneering robotics research and autonomous systems at AIT Pune.",
+      "Autonomous Robotics, Intelligent Control & Hardware Craft. Explore our fleet, leadership cadre, and Wartech 2026.",
     type: "website",
     locale: "en_US",
     siteName: "CEAR AIT",
@@ -49,8 +54,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${spaceMono.variable} font-sans bg-[#f9f9f8] text-[#111827] antialiased min-h-screen selection:bg-[#0d5c58] selection:text-white`}
+        className={`${inter.variable} ${spaceMono.variable} font-sans bg-slate-50 text-slate-900 antialiased min-h-screen selection:bg-blue-600 selection:text-white`}
       >
+        <Preloader />
         {children}
       </body>
     </html>

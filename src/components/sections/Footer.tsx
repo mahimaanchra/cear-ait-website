@@ -1,16 +1,8 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {
-  Instagram,
-  Linkedin,
-  Github,
-  MapPin,
-  Mail,
-  ArrowUp,
-} from "lucide-react";
+import { Cpu, Linkedin, Github, Instagram, Mail, MapPin, ArrowUp, ShieldCheck } from "lucide-react";
 import { siteConfig } from "@/data/siteData";
 
 export function Footer() {
@@ -19,108 +11,109 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#111827] text-white pt-12 pb-10 px-4 sm:px-6 lg:px-8 border-t border-zinc-800">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* Col 1: Logo & Vision */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-xs text-red-500 font-bold">{`{ / }`}</span>
-              <span className="font-industrial text-lg font-bold text-white tracking-tight">
-                AIT_CEAR
-              </span>
+    <footer className="bg-slate-900 text-white pt-16 pb-12 border-t border-slate-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          {/* Col 1 & 2: Branding & Affiliation */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+                <Cpu className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="font-tech text-xl font-extrabold tracking-tight">CEAR</span>
+                <span className="block text-[10px] font-mono text-slate-400 tracking-wider">
+                  AI &amp; ROBOTICS EXCELLENCE
+                </span>
+              </div>
             </div>
 
-            <p className="text-xs text-zinc-400 font-sans leading-relaxed">
-              Centre of Excellence for AI &amp; Robotics at Army Institute of Technology, Pune. Advancing tactical systems, AUVs, and autonomous machines.
+            <p className="text-xs sm:text-sm text-slate-400 font-sans leading-relaxed max-w-sm">
+              {siteConfig.heroSubtitle}
             </p>
 
-            <p className="text-[11px] font-mono text-zinc-500">
-              BUILD • INNOVATE • AUTOMATE
-            </p>
+            <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700 space-y-1 text-xs font-mono text-slate-300">
+              <div className="flex items-center gap-2 font-bold text-white">
+                <ShieldCheck className="w-4 h-4 text-blue-400" />
+                <span>{siteConfig.college}</span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                {siteConfig.affiliation}
+              </p>
+            </div>
           </div>
 
-          {/* Col 2: Navigation Links */}
-          <div className="space-y-2">
-            <p className="font-mono text-xs uppercase tracking-wider text-teal-400 font-bold">
-              [INDEX]
-            </p>
-            <ul className="space-y-1.5 text-xs font-mono text-zinc-400">
+          {/* Col 3: Quick Navigation Links */}
+          <div className="space-y-3">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
+              PORTAL NAVIGATION
+            </span>
+            <ul className="space-y-2 text-xs font-tech font-semibold text-slate-300">
               <li>
-                <Link href="#hero" className="hover:text-white transition-colors">
-                  01. Innovation Manifesto
+                <Link href="#about" className="hover:text-blue-400 transition-colors">
+                  About CEAR
                 </Link>
               </li>
               <li>
-                <Link href="#team" className="hover:text-white transition-colors">
-                  02. Team Modules
+                <Link href="#team" className="hover:text-blue-400 transition-colors">
+                  Leadership Cadre
                 </Link>
               </li>
               <li>
-                <Link href="#projects" className="hover:text-white transition-colors">
-                  03. Active Projects
+                <Link href="#projects" className="hover:text-blue-400 transition-colors">
+                  Projects Showcase
                 </Link>
               </li>
               <li>
-                <Link href="#about" className="hover:text-white transition-colors">
-                  04. About CEAR
+                <Link href="#events" className="hover:text-blue-400 transition-colors">
+                  Workshops &amp; Events
                 </Link>
               </li>
               <li>
-                <Link href="/wartech" className="hover:text-white transition-colors text-red-400 font-bold">
-                  05. Wartech Fest Arena →
-                </Link>
-              </li>
-              <li>
-                <Link href="#events" className="hover:text-white transition-colors">
-                  06. Upcoming Operations
+                <Link href="#wartech" className="hover:text-blue-400 transition-colors flex items-center gap-1.5">
+                  <span>Wartech 2026</span>
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-red-900/60 text-red-300 border border-red-700">
+                    FLAGSHIP
+                  </span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Base Location */}
-          <div className="space-y-2">
-            <p className="font-mono text-xs uppercase tracking-wider text-teal-400 font-bold">
-              [COORDINATES]
-            </p>
-            <div className="space-y-2 text-xs font-mono text-zinc-400">
+          {/* Col 4: Lab Coordinates */}
+          <div className="space-y-3">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
+              CAMPUS COORDINATES
+            </span>
+            <div className="space-y-2 text-xs font-mono text-slate-400 leading-relaxed">
               <div className="flex items-start gap-2">
-                <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
-                <span>
-                  Lab 104, Dept of E&amp;TC,<br />
-                  Army Institute of Technology,<br />
-                  Dighi Hills, Pune 411015
-                </span>
+                <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                <span>{siteConfig.labLocation}</span>
               </div>
-              <div className="flex items-center gap-2 pt-1">
-                <Mail className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                <span>{siteConfig.contactEmail}</span>
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-blue-400 shrink-0" />
+                <a href={`mailto:${siteConfig.contactEmail}`} className="hover:text-white transition-colors">
+                  {siteConfig.contactEmail}
+                </a>
               </div>
+              <p className="text-[11px] text-slate-500 pt-1">
+                {siteConfig.address}
+              </p>
             </div>
           </div>
 
-          {/* Col 4: Socials & Back to Top */}
-          <div className="space-y-4">
-            <p className="font-mono text-xs uppercase tracking-wider text-teal-400 font-bold">
-              [CHANNELS]
-            </p>
+          {/* Col 5: Social Channels & Back to Top */}
+          <div className="space-y-3">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
+              CONNECT &amp; SOCIALS
+            </span>
             <div className="flex items-center gap-2">
-              <a
-                href={siteConfig.socials.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 flex items-center justify-center transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-4 h-4" />
-              </a>
               <a
                 href={siteConfig.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 flex items-center justify-center transition-colors"
-                aria-label="LinkedIn"
+                className="w-9 h-9 rounded-lg bg-slate-800 hover:bg-blue-600 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+                aria-label="CEAR LinkedIn"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
@@ -128,27 +121,43 @@ export function Footer() {
                 href={siteConfig.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 flex items-center justify-center transition-colors"
-                aria-label="GitHub"
+                className="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+                aria-label="CEAR GitHub"
               >
                 <Github className="w-4 h-4" />
               </a>
+              <a
+                href={siteConfig.socials.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-slate-800 hover:bg-pink-600 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+                aria-label="CEAR Instagram"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
             </div>
 
-            <button
-              onClick={scrollToTop}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-700 text-xs font-mono transition-colors cursor-pointer"
-            >
-              <span>Back to top</span>
-              <ArrowUp className="w-3.5 h-3.5" />
-            </button>
+            <div className="pt-4">
+              <button
+                onClick={scrollToTop}
+                className="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-white transition-colors"
+              >
+                <ArrowUp className="w-3.5 h-3.5" />
+                <span>Return to Top</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-zinc-500">
-          <p>© {new Date().getFullYear()} CEAR AIT Pune. Industrial Tech format.</p>
-          <p>Army Institute of Technology, Pune</p>
+        {/* Bottom Bar: Copyright & Defense Tech Note */}
+        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+          <div>
+            &copy; {new Date().getFullYear()} Centre of Excellence for AI &amp; Robotics (CEAR), AIT Pune. All rights reserved.
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>ARMY INSTITUTE OF TECHNOLOGY • PUNE</span>
+          </div>
         </div>
       </div>
     </footer>

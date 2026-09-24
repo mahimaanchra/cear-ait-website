@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Syne:wght@700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --canvas-bg: #f9f9f8;
-  --primary-black: #111827;
-  --industrial-teal: #0d5c58;
-  --industrial-teal-dark: #073a37;
-  --industrial-red: #dc2626;
-  --card-white: #ffffff;
-  --border-light: #e5e7eb;
+  --canvas-bg: #f8fafc;
+  --text-primary: #0f172a;
+  --brand-blue: #2563eb;
+  --brand-blue-hover: #1d4ed8;
+  --accent-green: #10b981;
+  --accent-yellow: #f59e0b;
+  --accent-red: #ef4444;
 }
 
 html {
@@ -21,48 +21,41 @@ html {
 
 body {
   background-color: var(--canvas-bg);
-  color: var(--primary-black);
+  color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
-  selection-background-color: #0d5c58;
-  selection-color: #ffffff;
 }
 
 ::selection {
-  background: #0d5c58;
+  background: #2563eb;
   color: #ffffff;
 }
 
-/* Custom Sleek Industrial Scrollbar */
+/* Custom Clean Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1ef;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c5c5c0;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0d5c58;
+  background: #2563eb;
 }
 
-/* Typography Utility Classes */
-.font-industrial,
+/* Typography Utilities */
+.font-tech,
 .font-display,
-.font-cartoon,
-.font-pixel {
+.font-industrial,
+.font-cartoon {
   font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  letter-spacing: -0.03em;
-}
-
-.font-syne {
-  font-family: 'Syne', sans-serif;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .font-mono {
@@ -75,75 +68,80 @@ body {
 
 /* Technical Ruled Paper Canvas Pattern */
 .canvas-tech-grid {
-  background-size: 32px 32px;
+  background-size: 36px 36px;
   background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
 }
 
-/* Industrial Color Utilities */
-.text-teal-industrial {
-  color: #0d5c58;
+/* Accent Badges */
+.badge-blue {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
 }
 
-.bg-teal-industrial {
-  background-color: #0d5c58;
+.badge-green {
+  background-color: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
 }
 
-.border-teal-industrial {
-  border-color: #0d5c58;
+.badge-yellow {
+  background-color: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
 }
 
-/* Signature Red Dash Accent */
-.red-dash {
-  width: 2rem;
-  height: 0.25rem;
-  background-color: #dc2626;
-  border-radius: 0.125rem;
-  display: inline-block;
-  margin-bottom: 0.5rem;
+.badge-red {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
 
-/* Primary Dark Teal Action Pill Button */
-.btn-teal-pill {
-  background-color: #0d5c58;
+.badge-slate {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+/* Tech Buttons */
+.btn-primary-tech {
+  background-color: #2563eb;
   color: #ffffff;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.65rem 1.5rem;
-  border-radius: 9999px;
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  padding: 0.65rem 1.4rem;
+  border-radius: 0.6rem;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 6px rgba(13, 92, 88, 0.25);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 }
 
-.btn-teal-pill:hover {
-  background-color: #073a37;
+.btn-primary-tech:hover {
+  background-color: #1d4ed8;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(13, 92, 88, 0.35);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
 }
 
-.btn-teal-pill:active {
+.btn-primary-tech:active {
   transform: translateY(0);
 }
 
-/* Secondary Industrial Outline Button */
-.btn-outline-pill {
+.btn-secondary-tech {
   background-color: #ffffff;
-  color: #111827;
-  border: 1px solid #d1d5db;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 0.65rem 1.5rem;
-  border-radius: 9999px;
+  font-size: 0.875rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 0.6rem;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -151,33 +149,44 @@ body {
   gap: 0.5rem;
 }
 
-.btn-outline-pill:hover {
-  background-color: #f3f4f6;
-  border-color: #9ca3af;
+.btn-secondary-tech:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  color: #2563eb;
   transform: translateY(-1px);
 }
 
-/* macOS Window Card Style */
-.window-card {
+/* Tech Cards */
+.tech-card {
   background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.875rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  overflow: hidden;
-  transition: all 0.25s ease;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.window-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+.tech-card:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
   transform: translateY(-2px);
 }
 
-/* Giant Watermark Text */
-.watermark-text {
-  font-family: 'Space Grotesk', -apple-system, sans-serif;
-  font-weight: 900;
-  color: rgba(0, 0, 0, 0.05);
-  user-select: none;
-  pointer-events: none;
+/* Technical Marquee */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-infinite {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee-infinite:hover {
+  animation-play-state: paused;
 }

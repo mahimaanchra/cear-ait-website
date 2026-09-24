@@ -1,196 +1,299 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React from "react";
 import { motion } from "framer-motion";
-import { Linkedin, Github, UserCheck, ArrowRight } from "lucide-react";
-import { facultyIncharge, secretaries, coreTeam } from "@/data/siteData";
-
-const categories = ["ALL", "SECRETARIES", "DOMAIN LEADS"];
+import { Linkedin, Github, UserCheck, ShieldCheck, Quote, Users, Award } from "lucide-react";
+import { facultyIncharge, secretaries, jointSecretaries, coreContributors, TeamMember } from "@/data/siteData";
 
 export function Team() {
-  const [activeCategory, setActiveCategory] = useState("ALL");
-
-  const allMembers = [
-    ...secretaries.map((s) => ({ ...s, tabCategory: "SECRETARIES" })),
-    ...coreTeam.map((c) => ({ ...c, tabCategory: "DOMAIN LEADS" })),
-  ];
-
-  const filteredMembers =
-    activeCategory === "ALL"
-      ? allMembers
-      : allMembers.filter((m) => m.tabCategory === activeCategory);
-
   return (
-    <section id="team" className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-14">
-        {/* Section Heading: Red Dash + TEAM MODULES_ */}
-        <div>
-          <div className="w-10 h-1 bg-red-600 rounded-sm mb-3" />
-          <h2 className="text-3xl sm:text-5xl font-extrabold uppercase font-industrial tracking-tight text-zinc-900 leading-[0.95] mb-3">
-            TEAM <br />
-            <span className="text-[#0d5c58]">MODULES_</span>
+    <section id="team" className="relative py-16 sm:py-24 bg-slate-50 border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-mono font-bold uppercase tracking-wider">
+            <Users className="w-3.5 h-3.5" />
+            <span>ORGANIZATIONAL CADRE</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-tech text-slate-900 tracking-tight">
+            Team Hierarchy &amp; Leadership
           </h2>
-          <p className="text-sm text-zinc-600 font-sans max-w-xl">
-            Distinguished faculty mentorship and dedicated student engineering cohorts powering defense automation and research.
+          <p className="text-sm sm:text-base text-slate-600 font-sans leading-relaxed">
+            The student engineers, domain specialists, and academic mentorship guiding AI &amp; robotics research at Army Institute of Technology.
           </p>
         </div>
 
-        {/* 1. Faculty Incharge Section - Centered Cards */}
-        <div className="space-y-6">
-          <div className="flex justify-center">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-red-100 text-red-700 border border-red-200">
-              FACULTY INCHARGE
+        {/* 1. LEVEL 1: Faculty In-Charge (Top Spotlight Card) */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-center gap-2">
+            <span className="h-px bg-slate-300 w-12" />
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-500">
+              1. FACULTY IN-CHARGE • TOP SPOTLIGHT
             </span>
+            <span className="h-px bg-slate-300 w-12" />
           </div>
 
-          <div className="flex justify-center">
+          <div className="max-w-2xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="w-full max-w-sm bg-white rounded-2xl border border-zinc-200 p-6 shadow-sm flex flex-col items-center text-center relative overflow-hidden"
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-2xl border-2 border-blue-200 shadow-md p-6 sm:p-8 relative overflow-hidden"
             >
-              {/* Window dots at top */}
-              <div className="w-full flex items-center gap-1.5 pb-4 mb-4 border-b border-zinc-100">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                <span className="font-mono text-[10px] text-zinc-400 ml-auto">HEAD_MODULE</span>
+              <div className="absolute top-0 right-0 bg-blue-600 text-white font-mono text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
+                CHIEF ADVISOR &amp; LAB HEAD
               </div>
 
-              {/* Portrait */}
-              <div className="w-28 h-28 rounded-xl bg-zinc-100 border border-zinc-200 mb-4 flex items-center justify-center overflow-hidden">
-                <UserCheck className="w-14 h-14 text-zinc-600" />
-              </div>
-
-              {/* Name & Title */}
-              <h3 className="font-industrial text-xl font-bold text-zinc-900">
-                {facultyIncharge.name}
-              </h3>
-              <p className="font-mono text-xs text-[#0d5c58] font-bold mt-1">
-                {facultyIncharge.role}
-              </p>
-              <p className="font-sans text-xs text-zinc-500 mt-2 leading-relaxed">
-                {facultyIncharge.specialization}
-              </p>
-
-              {/* Status indicator dots */}
-              <div className="flex items-center gap-2 mt-4 pt-3 border-t border-zinc-100 w-full justify-center text-[10px] font-mono text-zinc-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
-                <span>AIT PUNE</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#0d5c58]" />
-                <span>E&amp;TC DEPT</span>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* 2. Filter Pills: ALL / SECRETARIES / DOMAIN LEADS */}
-        <div className="flex justify-center gap-2 sm:gap-3 font-mono text-xs">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 sm:px-6 py-2 rounded-full font-bold transition-all cursor-pointer ${
-                activeCategory === cat
-                  ? "bg-[#0d5c58] text-white shadow-sm"
-                  : "bg-white text-zinc-600 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-300"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* 3. Grid of Student Leaders in macOS Window Card format */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredMembers.map((member, idx) => (
-            <motion.div
-              key={member.name}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
-              className="window-card p-4 flex flex-col justify-between"
-            >
-              <div>
-                {/* macOS Window Controls */}
-                <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-100">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                  </div>
-                  <span className="font-mono text-[9px] text-zinc-400">
-                    ID.0{idx + 1}
-                  </span>
-                </div>
-
-                {/* Member Avatar / Box */}
-                <div className="w-full aspect-[4/3] rounded-lg bg-zinc-100 border border-zinc-200 mb-3 flex items-center justify-center font-mono text-zinc-400 text-xs">
-                  <div className="text-center">
-                    <span className="font-bold text-zinc-700 block text-sm">
-                      {member.name.split(" ")[0]}
-                    </span>
-                    <span className="text-[10px] text-zinc-500 uppercase">
-                      {member.category}
-                    </span>
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                {/* Square Profile Image / Avatar */}
+                <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-xl aspect-square bg-gradient-to-br from-blue-600 to-blue-800 border-2 border-blue-300 flex flex-col items-center justify-center text-white shrink-0 shadow-sm relative overflow-hidden">
+                  <span className="font-tech text-3xl font-black tracking-tight">AP</span>
+                  <span className="text-[10px] font-mono tracking-widest text-blue-200 mt-1 uppercase">FACULTY</span>
+                  <div className="absolute bottom-2 right-2">
+                    <ShieldCheck className="w-4 h-4 text-emerald-300" />
                   </div>
                 </div>
 
-                {/* Member Details */}
-                <h4 className="font-industrial text-base font-bold text-zinc-900 leading-tight">
-                  {member.name}
-                </h4>
+                {/* Member Info */}
+                <div className="space-y-2 text-center sm:text-left flex-1">
+                  <div>
+                    <h3 className="text-2xl font-extrabold font-tech text-slate-900">
+                      {facultyIncharge.name}
+                    </h3>
+                    <p className="font-tech text-sm font-bold text-blue-600">
+                      {facultyIncharge.role}
+                    </p>
+                    <p className="text-xs font-mono text-slate-500">
+                      {facultyIncharge.subRole}
+                    </p>
+                  </div>
 
-                <p className="font-mono text-[11px] text-[#0d5c58] font-bold mt-1">
-                  {member.role}
-                </p>
+                  {/* 1-Line Custom Quote */}
+                  <div className="p-3 rounded-lg bg-blue-50/70 border border-blue-100 text-slate-700 text-xs font-sans italic flex items-start gap-2">
+                    <Quote className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                    <span>&ldquo;{facultyIncharge.quote}&rdquo;</span>
+                  </div>
 
-                {member.subRole && (
-                  <p className="font-mono text-[10px] text-zinc-500 mt-0.5">
-                    {member.subRole}
+                  <p className="text-xs text-slate-600 font-mono">
+                    <span className="font-bold text-slate-700">Domain Focus:</span> {facultyIncharge.specialization}
                   </p>
-                )}
 
-                <p className="font-sans text-xs text-zinc-600 mt-2 line-clamp-2 leading-relaxed">
-                  {member.bio || member.specialization}
-                </p>
-              </div>
-
-              {/* Card Footer: Social / Details */}
-              <div className="pt-3 mt-3 border-t border-zinc-100 flex items-center justify-between text-xs font-mono text-zinc-400">
-                <span className="text-[10px] uppercase font-bold text-zinc-500">
-                  {member.category}
-                </span>
-
-                {member.linkedin && (
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#0d5c58] hover:text-black font-bold flex items-center gap-1"
-                  >
-                    <Linkedin className="w-3 h-3" />
-                    <span>Bio</span>
-                  </a>
-                )}
+                  {facultyIncharge.linkedin && (
+                    <div className="pt-2 flex justify-center sm:justify-start">
+                      <a
+                        href={facultyIncharge.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                      >
+                        <Linkedin className="w-3.5 h-3.5" />
+                        <span>Faculty Profile</span>
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
-          ))}
+          </div>
         </div>
 
-        {/* 4. Bottom Induction Banner - AIT_CIDC Style */}
-        <div className="flex justify-center pt-4">
-          <Link
-            href="#events"
-            className="w-full max-w-xl py-3 px-6 rounded-full bg-[#0d5c58] hover:bg-[#073a37] text-white font-mono text-xs font-bold tracking-wider flex items-center justify-between transition-colors shadow-md"
-          >
-            <span>BECOME A CADET • INDUCTIONS 2026-27</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+        {/* 2. LEVEL 2: Secretaries (Core Executive Leads) */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-center gap-2">
+            <span className="h-px bg-slate-300 w-12" />
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-500">
+              2. SECRETARIES • CORE EXECUTIVE LEADS
+            </span>
+            <span className="h-px bg-slate-300 w-12" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {secretaries.map((sec, idx) => (
+              <motion.div
+                key={sec.id}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                className="bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-md p-5 sm:p-6 transition-all flex flex-col justify-between"
+              >
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-4">
+                  {/* Square Profile Image */}
+                  <div className={`w-24 h-24 rounded-lg aspect-square ${sec.avatarBg || "bg-blue-600 text-white"} flex flex-col items-center justify-center shrink-0 border border-slate-200 shadow-xs`}>
+                    <span className="font-tech text-xl font-bold">{sec.avatarInitials}</span>
+                    <span className="text-[9px] font-mono tracking-wider opacity-80 uppercase mt-0.5">SECRETARY</span>
+                  </div>
+
+                  <div className="text-center sm:text-left space-y-1 flex-1">
+                    <h4 className="text-lg font-bold font-tech text-slate-900">
+                      {sec.name}
+                    </h4>
+                    <p className="text-xs font-tech font-bold text-blue-600">
+                      {sec.role}
+                    </p>
+                    <p className="text-[11px] font-mono text-slate-500">
+                      {sec.subRole}
+                    </p>
+                  </div>
+                </div>
+
+                {/* 1-Line Custom Quote */}
+                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-slate-600 text-xs font-sans italic mb-3 flex items-start gap-1.5">
+                  <Quote className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                  <span className="line-clamp-2">&ldquo;{sec.quote}&rdquo;</span>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
+                  <span className="text-[10px] uppercase font-bold text-slate-400">EXECUTIVE LEAD</span>
+                  <div className="flex items-center gap-2">
+                    {sec.linkedin && (
+                      <a href={sec.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-blue-600">
+                        <Linkedin className="w-4 h-4" />
+                      </a>
+                    )}
+                    {sec.github && (
+                      <a href={sec.github} target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-900">
+                        <Github className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. LEVEL 3: Joint Secretaries (Domain Leads) */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-center gap-2">
+            <span className="h-px bg-slate-300 w-12" />
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-500">
+              3. JOINT SECRETARIES • DOMAIN LEADS
+            </span>
+            <span className="h-px bg-slate-300 w-12" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {jointSecretaries.map((js, idx) => (
+              <motion.div
+                key={js.id}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                className="bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-md p-5 transition-all flex flex-col justify-between"
+              >
+                <div>
+                  {/* Square Profile Image */}
+                  <div className="w-full aspect-square rounded-lg mb-4 bg-slate-100 border border-slate-200 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div className={`w-14 h-14 rounded-md ${js.avatarBg || "bg-blue-600"} text-white flex items-center justify-center font-tech font-bold text-lg`}>
+                      {js.avatarInitials}
+                    </div>
+                    <span className="font-mono text-[10px] text-slate-400 font-bold uppercase mt-2">
+                      DOMAIN LEAD
+                    </span>
+                  </div>
+
+                  <h4 className="font-tech text-base font-bold text-slate-900">
+                    {js.name}
+                  </h4>
+                  <p className="font-tech text-xs font-bold text-blue-600 mt-0.5">
+                    {js.role}
+                  </p>
+                  <p className="font-mono text-[11px] text-slate-500 mt-0.5">
+                    {js.subRole}
+                  </p>
+
+                  {/* 1-Line Custom Quote / Domain Focus */}
+                  <div className="mt-3 p-2 rounded bg-slate-50 border border-slate-100 text-slate-600 text-xs font-sans italic">
+                    &ldquo;{js.quote}&rdquo;
+                  </div>
+                </div>
+
+                <div className="pt-3 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
+                  <span className="text-[10px] uppercase font-bold text-slate-400">DOMAIN LEAD</span>
+                  <div className="flex items-center gap-2">
+                    {js.linkedin && (
+                      <a href={js.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600">
+                        <Linkedin className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                    {js.github && (
+                      <a href={js.github} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-900">
+                        <Github className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* 4. LEVEL 4: First Year Members / Core Contributors */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-center gap-2">
+            <span className="h-px bg-slate-300 w-12" />
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-500">
+              4. FIRST YEAR MEMBERS &amp; CORE CONTRIBUTORS
+            </span>
+            <span className="h-px bg-slate-300 w-12" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {coreContributors.map((cc, idx) => (
+              <motion.div
+                key={cc.id}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                className="bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-xs p-4 transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    {/* Square Profile Image */}
+                    <div className={`w-12 h-12 rounded-lg aspect-square ${cc.avatarBg || "bg-slate-700 text-white"} flex items-center justify-center font-tech font-bold text-sm shrink-0 border border-slate-200`}>
+                      {cc.avatarInitials}
+                    </div>
+                    <div className="truncate">
+                      <h4 className="font-tech text-sm font-bold text-slate-900 truncate">
+                        {cc.name}
+                      </h4>
+                      <p className="text-[11px] font-mono font-bold text-blue-600 truncate">
+                        {cc.role}
+                      </p>
+                      <p className="text-[10px] font-mono text-slate-500 truncate">
+                        {cc.subRole}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 1-Line Custom Quote */}
+                  <p className="text-xs text-slate-600 font-sans italic bg-slate-50 p-2 rounded border border-slate-100 line-clamp-2">
+                    &ldquo;{cc.quote}&rdquo;
+                  </p>
+                </div>
+
+                <div className="pt-2 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                  <span className="uppercase text-[10px] font-semibold text-slate-400">CONTRIBUTOR</span>
+                  {cc.linkedin && (
+                    <a
+                      href={cc.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                      title={`${cc.name} LinkedIn`}
+                    >
+                      <Linkedin className="w-3.5 h-3.5" />
+                      <span>LinkedIn</span>
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

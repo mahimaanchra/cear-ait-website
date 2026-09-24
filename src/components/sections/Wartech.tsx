@@ -1,295 +1,290 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import confetti from "canvas-confetti";
-import { Zap, Trophy, Shield, ArrowRight, CheckCircle2, Award } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Trophy,
+  Flame,
+  Zap,
+  Compass,
+  Grab,
+  Route,
+  Layers,
+  ShieldAlert,
+  ArrowRight,
+  Download,
+  Users,
+  Award,
+  CheckCircle2,
+  FileText,
+  X,
+} from "lucide-react";
 import { wartechTracks, WartechTrack } from "@/data/siteData";
 
-export function Wartech() {
-  const [selectedTrack, setSelectedTrack] = useState<WartechTrack | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    teamName: "",
-    college: "",
-    email: "",
-    phone: "",
-    trackId: "robowars",
-  });
+interface WartechProps {
+  onOpenRegister?: (trackId?: string) => void;
+  onOpenRulebook?: () => void;
+}
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.6 },
-    });
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        firstName: "",
-        lastName: "",
-        teamName: "",
-        college: "",
-        email: "",
-        phone: "",
-        trackId: "robowars",
-      });
-    }, 3000);
-  };
+const iconMap: Record<string, React.ReactNode> = {
+  Trophy: <Trophy className="w-5 h-5 text-blue-600" />,
+  Flame: <Flame className="w-5 h-5 text-red-500" />,
+  Compass: <Compass className="w-5 h-5 text-emerald-600" />,
+  ShieldAlert: <ShieldAlert className="w-5 h-5 text-amber-500" />,
+  Route: <Route className="w-5 h-5 text-blue-600" />,
+  Grab: <Grab className="w-5 h-5 text-emerald-600" />,
+  Layers: <Layers className="w-5 h-5 text-amber-500" />,
+  Zap: <Zap className="w-5 h-5 text-red-500" />,
+};
+
+const accentStyles: Record<string, { bg: string; text: string; border: string }> = {
+  blue: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
+  red: { bg: "bg-red-50", text: "text-red-700", border: "border-red-200" },
+  green: { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200" },
+  yellow: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
+};
+
+export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
+  const [selectedTrackDetail, setSelectedTrackDetail] = useState<WartechTrack | null>(null);
 
   return (
-    <section id="wartech" className="relative py-12 sm:py-20 px-3 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-16">
-        {/* 1. Wartech Festival Overview & Tracks Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="rounded-[28px] sm:rounded-[36px] bg-white border border-black/[0.08] p-6 sm:p-12 md:p-14 shadow-sm"
-        >
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <span className="font-mono text-xs uppercase tracking-wider text-zinc-500 font-semibold block mb-3">
-                [FLAGSHIP COMBAT FESTIVAL]
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-bold font-cartoon tracking-tight text-zinc-900 leading-tight">
-                Wartech 2026
+    <section id="wartech" className="relative py-16 sm:py-24 bg-white border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+        {/* Prominent Flagship Feature Banner */}
+        <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-8 sm:p-12 shadow-xl relative overflow-hidden">
+          {/* Subtle Grid overlay */}
+          <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div className="space-y-4 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-300 text-xs font-mono font-bold uppercase tracking-wider border border-red-500/30">
+                <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                <span>INTER-COLLEGE FLAGSHIP CHAMPIONSHIP</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-5xl font-black font-tech tracking-tight text-white leading-tight">
+                WARTECH 2026
               </h2>
-              <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-xl font-sans">
-                The premier inter-collegiate combat and autonomous robotics festival at Army Institute of Technology, Pune. ₹1,50,000+ prize pool.
+
+              <p className="text-sm sm:text-base text-slate-300 font-sans leading-relaxed">
+                The ultimate battleground for collegiate robotics. 8 high-octane competitive tracks spanning tactical 2v2 soccer, multi-terrain high-speed racing, FPV drone cages, circular sumo rings, and autonomous SLAM mazes.
               </p>
-            </div>
 
-            <div className="flex items-center gap-3">
-              <a
-                href="#registration-card"
-                className="btn-lime text-xs"
-              >
-                <Zap className="w-3.5 h-3.5 fill-current" />
-                <span>REGISTER TEAM</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Tracks Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {wartechTracks.map((track, idx) => (
-              <div
-                key={track.id}
-                className="p-6 rounded-2xl bg-zinc-50/60 border border-zinc-200/80 hover:bg-white hover:border-zinc-300 hover:shadow-sm transition-all flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-mono text-xs font-bold text-zinc-500 group-hover:text-black">
-                      [0{idx + 1}]
-                    </span>
-                    <span className="font-mono text-[11px] font-bold text-black bg-[#d4f933] px-2 py-0.5 rounded">
-                      {track.prizePool}
-                    </span>
-                  </div>
-
-                  <h3 className="font-mono text-base font-bold text-zinc-900 mb-2">
-                    {track.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-sans mb-4">
-                    {track.description}
-                  </p>
+              {/* Quick Stat Indicators */}
+              <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-mono">
+                <div className="px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center gap-2">
+                  <Award className="w-4 h-4 text-amber-400" />
+                  <span className="text-slate-300">PRIZE POOL:</span>
+                  <span className="font-bold text-amber-400">₹1,50,000+</span>
                 </div>
 
-                <div className="pt-3 border-t border-zinc-200/60 text-xs font-mono text-zinc-500">
-                  <div className="flex justify-between items-center">
-                    <span>TEAM SIZE:</span>
-                    <span className="font-bold text-zinc-900">{track.teamSize}</span>
-                  </div>
+                <div className="px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center gap-2">
+                  <Users className="w-4 h-4 text-blue-400" />
+                  <span className="text-slate-300">TEAMS:</span>
+                  <span className="font-bold text-blue-400">120+ SQUADS</span>
+                </div>
+
+                <div className="px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 flex items-center gap-2">
+                  <Trophy className="w-4 h-4 text-emerald-400" />
+                  <span className="text-slate-300">TRACKS:</span>
+                  <span className="font-bold text-emerald-400">8 ARENAS</span>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Direct CTAs */}
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+              <button
+                onClick={() => onOpenRegister?.("robo-soccer")}
+                className="bg-blue-600 hover:bg-blue-500 text-white font-tech font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Register for Wartech</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={onOpenRulebook}
+                className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-tech font-bold text-sm px-6 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Download className="w-4 h-4 text-slate-300" />
+                <span>Rules &amp; Guidelines</span>
+              </button>
+            </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* 2. Floating "Save your seat" Card (Matching the Right Screenshot in Dribbble!) */}
-        <div id="registration-card" className="rounded-[28px] sm:rounded-[36px] pixel-mesh-card p-6 sm:p-12 md:p-16 border border-black/[0.08] relative overflow-hidden shadow-sm">
-          {/* Subtle grid pattern inside */}
-          <div className="absolute inset-0 pixel-grid-pattern opacity-50 pointer-events-none" />
-
-          {/* Centered Floating Registration Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="max-w-xl mx-auto bg-white rounded-3xl p-7 sm:p-10 border border-black/[0.09] shadow-md relative z-10"
-          >
-            <div className="mb-6">
-              <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 font-semibold block mb-2">
-                [REGISTRATION]
+        {/* Detailed Event Sub-Tracks Section */}
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+                OFFICIAL COMPETITION BRACKETS
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold font-cartoon tracking-tight text-zinc-900 mb-2">
-                Save your seat
+              <h3 className="text-2xl font-bold font-tech text-slate-900 mt-1">
+                Explore Event Sub-Tracks
               </h3>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-sans">
-                Join us for Wartech 2026 and explore hands-on robotics combat, line traversal, and autonomous navigation. Registration is open to all engineering institutes.
-              </p>
             </div>
+            <span className="text-xs font-mono text-slate-500">
+              CLICK ANY TRACK TO VIEW RULES &amp; SPECS
+            </span>
+          </div>
 
-            {isSubmitted ? (
-              <div className="text-center py-12 space-y-3">
-                <div className="w-12 h-12 rounded-full bg-[#d4f933] text-black mx-auto flex items-center justify-center font-bold">
-                  <CheckCircle2 className="w-7 h-7" />
-                </div>
-                <h4 className="font-cartoon text-xl text-zinc-900 font-bold">
-                  Seat Saved!
-                </h4>
-                <p className="text-xs sm:text-sm text-zinc-600 font-sans">
-                  We have received your registration for {formData.teamName || "your team"}. Event rulebook sent to your email.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleRegisterSubmit} className="space-y-4 font-sans text-xs">
-                {/* First Name & Last Name */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-mono text-[11px] text-zinc-500 block mb-1">
-                      First Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="First Name"
-                      value={formData.firstName}
-                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-900 focus:bg-white focus:border-black focus:outline-none transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="font-mono text-[11px] text-zinc-500 block mb-1">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Last Name"
-                      value={formData.lastName}
-                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-900 focus:bg-white focus:border-black focus:outline-none transition-colors"
-                    />
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {wartechTracks.map((track, idx) => {
+              const style = accentStyles[track.accentColor] || accentStyles.blue;
 
-                {/* Team Name & College */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-mono text-[11px] text-zinc-500 block mb-1">
-                      Team Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. MechWarriors"
-                      value={formData.teamName}
-                      onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-900 focus:bg-white focus:border-black focus:outline-none transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="font-mono text-[11px] text-zinc-500 block mb-1">
-                      College / Institute *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. AIT Pune"
-                      value={formData.college}
-                      onChange={(e) => setFormData({ ...formData, college: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-900 focus:bg-white focus:border-black focus:outline-none transition-colors"
-                    />
-                  </div>
-                </div>
+              return (
+                <motion.div
+                  key={track.id}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: idx * 0.05 }}
+                  className="bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-md transition-all p-5 flex flex-col justify-between group"
+                >
+                  <div className="space-y-3">
+                    {/* Track Header */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-bold text-slate-500">
+                        {track.trackCode}
+                      </span>
+                      <span
+                        className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded border ${style.bg} ${style.text} ${style.border}`}
+                      >
+                        {track.prizePool}
+                      </span>
+                    </div>
 
-                {/* Email Address & Phone Number */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-mono text-[11px] text-zinc-500 block mb-1">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="leader@college.edu"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-900 focus:bg-white focus:border-black focus:outline-none transition-colors"
-                    />
+                    <div className="flex items-center gap-2.5 pt-1">
+                      <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 group-hover:scale-105 transition-transform">
+                        {iconMap[track.iconName] || <Trophy className="w-5 h-5 text-blue-600" />}
+                      </div>
+                      <h4 className="font-tech text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        {track.title}
+                      </h4>
+                    </div>
+
+                    <p className="text-xs text-slate-600 font-sans leading-relaxed line-clamp-3">
+                      {track.tagline}
+                    </p>
+
+                    <div className="pt-2 space-y-1 text-[11px] font-mono text-slate-500">
+                      <div>
+                        <span className="font-bold text-slate-700">Arena:</span> {track.arenaType}
+                      </div>
+                      <div>
+                        <span className="font-bold text-slate-700">Team:</span> {track.teamSize}
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <label className="font-mono text-[11px] text-zinc-500 block mb-1">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="+91 98765 43210"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-900 focus:bg-white focus:border-black focus:outline-none transition-colors"
-                    />
+
+                  {/* Track Actions */}
+                  <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <button
+                      onClick={() => setSelectedTrackDetail(track)}
+                      className="text-xs font-mono font-semibold text-slate-600 hover:text-blue-600 transition-colors cursor-pointer"
+                    >
+                      View Specs
+                    </button>
+
+                    <button
+                      onClick={() => onOpenRegister?.(track.id)}
+                      className="text-xs font-tech font-bold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Register</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
                   </div>
-                </div>
-
-                {/* Competition Track Select */}
-                <div>
-                  <label className="font-mono text-[11px] text-zinc-500 block mb-1">
-                    Select Track *
-                  </label>
-                  <select
-                    value={formData.trackId}
-                    onChange={(e) => setFormData({ ...formData, trackId: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-900 focus:bg-white focus:border-black focus:outline-none transition-colors font-mono"
-                  >
-                    {wartechTracks.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.title} ({t.prizePool})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Marketing Preferences Checkbox */}
-                <div className="pt-2">
-                  <label className="flex items-start gap-2 cursor-pointer text-zinc-600 text-[11px]">
-                    <input
-                      type="checkbox"
-                      defaultChecked
-                      className="mt-0.5 rounded border-zinc-300 text-black focus:ring-0"
-                    />
-                    <span>
-                      I agree that the organizing team can send schedule updates and rulebooks in relation to Wartech events.
-                    </span>
-                  </label>
-                </div>
-
-                {/* Save my seat Submit Button */}
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="w-full py-3 rounded-lg text-xs font-mono font-bold tracking-wider uppercase text-black bg-[#d4f933] hover:bg-[#c4ec18] shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <span>SAVE MY SEAT</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                  <p className="text-center text-[10px] font-mono text-zinc-400 mt-2">
-                    Free to attend • Hosted at AIT Pune Arena
-                  </p>
-                </div>
-              </form>
-            )}
-          </motion.div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
+
+      {/* Track Details Modal */}
+      <AnimatePresence>
+        {selectedTrackDetail && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 sm:p-8 shadow-2xl relative"
+            >
+              <button
+                onClick={() => setSelectedTrackDetail(null)}
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                    {selectedTrackDetail.trackCode}
+                  </span>
+                  <span className="text-xs font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    PRIZE: {selectedTrackDetail.prizePool}
+                  </span>
+                </div>
+
+                <h3 className="text-2xl font-bold font-tech text-slate-900">
+                  {selectedTrackDetail.title}
+                </h3>
+
+                <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
+                  {selectedTrackDetail.description}
+                </p>
+
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1.5 text-xs font-mono">
+                  <div>
+                    <span className="text-slate-500 font-bold">Arena:</span> {selectedTrackDetail.arenaType}
+                  </div>
+                  <div>
+                    <span className="text-slate-500 font-bold">Team Cap:</span> {selectedTrackDetail.teamSize}
+                  </div>
+                </div>
+
+                {/* Rules Highlights */}
+                <div className="space-y-2 pt-2">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+                    REGULATION HIGHLIGHTS
+                  </span>
+                  <ul className="space-y-1.5">
+                    {selectedTrackDetail.rulesHighlight.map((rule, idx) => (
+                      <li key={idx} className="flex items-center gap-2 text-xs font-mono text-slate-700">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>{rule}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                  <button
+                    onClick={() => setSelectedTrackDetail(null)}
+                    className="px-4 py-2 rounded-lg font-tech font-bold text-xs text-slate-600 hover:bg-slate-100"
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={() => {
+                      const id = selectedTrackDetail.id;
+                      setSelectedTrackDetail(null);
+                      onOpenRegister?.(id);
+                    }}
+                    className="btn-primary-tech text-xs"
+                  >
+                    <span>Register for this Track</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -5,24 +5,25 @@ import React from "react";
 export function BackgroundGrid() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Light technical paper backdrop */}
-      <div className="absolute inset-0 bg-[#f9f9f8]" />
+      {/* Clean Light Slate Backdrop */}
+      <div className="absolute inset-0 bg-slate-50" />
 
-      {/* Subtle fine technical grid */}
+      {/* Fine Technical Grid */}
       <div 
-        className="absolute inset-0 opacity-40" 
+        className="absolute inset-0 opacity-30" 
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px)
+            linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px)
           `,
-          backgroundSize: "36px 36px",
+          backgroundSize: "32px 32px",
         }}
       />
 
-      {/* Very subtle ambient warmth in corners */}
-      <div className="absolute top-0 right-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-gradient-to-bl from-teal-500/5 to-transparent blur-[120px]" />
-      <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-gradient-to-tr from-amber-500/5 to-transparent blur-[120px]" />
+      {/* Clean Subtle Tech Blue Accent Glow in Top Corner */}
+      <div className="absolute top-0 right-0 w-[35vw] h-[35vw] max-w-[450px] max-h-[450px] bg-blue-500/5 blur-[100px]" />
     </div>
   );
 }
+
+export default BackgroundGrid;

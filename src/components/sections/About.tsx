@@ -2,105 +2,123 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { siteConfig } from "@/data/siteData";
+import { Brain, Cpu, Eye, Navigation, CheckCircle2, ShieldCheck, Compass, Award } from "lucide-react";
+import { siteConfig, focusAreas } from "@/data/siteData";
+
+const iconMap: Record<string, React.ReactNode> = {
+  ai: <Brain className="w-6 h-6 text-blue-600" />,
+  robotics: <Cpu className="w-6 h-6 text-emerald-600" />,
+  vision: <Eye className="w-6 h-6 text-amber-500" />,
+  autonomous: <Navigation className="w-6 h-6 text-red-500" />,
+};
+
+const badgeStyles: Record<string, string> = {
+  blue: "bg-blue-50 text-blue-700 border-blue-200",
+  green: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  yellow: "bg-amber-50 text-amber-700 border-amber-200",
+  red: "bg-red-50 text-red-700 border-red-200",
+};
 
 export function About() {
   return (
-    <section id="about" className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-16">
-        {/* Section Heading: Red Dash + WANT TO KNOW ABOUT US?_ */}
-        <div>
-          <div className="w-10 h-1 bg-red-600 rounded-sm mb-3" />
-          <h2 className="text-3xl sm:text-5xl font-extrabold uppercase font-industrial tracking-tight text-zinc-900 leading-[0.95] mb-6">
-            WANT TO <br />
-            <span className="text-[#0d5c58]">KNOW ABOUT US?_</span>
+    <section id="about" className="relative py-16 sm:py-20 bg-white border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {/* Section Header */}
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-blue-50 text-blue-700 text-xs font-mono font-bold uppercase tracking-wider mb-3 border border-blue-100">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>DISCIPLINE • INNOVATION • FIELD EXCELLENCE</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold font-tech text-slate-900 tracking-tight">
+            About the Centre of Excellence
           </h2>
+          <p className="mt-3 text-base text-slate-600 font-sans leading-relaxed">
+            CEAR is the specialized robotics and artificial intelligence research wing at Army Institute of Technology, Pune. We bridge theoretical engineering algorithms with robust physical defense mechatronics through project-driven hardware research.
+          </p>
+        </div>
 
-          {/* 2-Column Overview Text from AIT_CIDC style */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm sm:text-base text-zinc-600 font-sans leading-relaxed">
-            <p>
-              The Centre of Excellence for AI and Robotics (CEAR) is a premier technology incubator established within the Army Institute of Technology, Pune. We bridge the critical gap between rigorous tactical defense applications and rapid academic technological progress.
+        {/* Vision & Mission Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-6 rounded-xl bg-slate-50 border border-slate-200/90 hover:border-blue-200 transition-colors">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-2 h-2 rounded-full bg-blue-600" />
+              <h3 className="font-tech text-lg font-bold text-slate-900 uppercase tracking-wide">
+                Our Strategic Vision
+              </h3>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed font-sans">
+              {siteConfig.vision}
             </p>
-            <p>
-              From designing autonomous underwater vehicles to constructing high-payload multi-axis robotic manipulators, CEAR cultivates hands-on engineering instincts, precision hardware fabrication, and cutting-edge machine intelligence.
+          </div>
+
+          <div className="p-6 rounded-xl bg-slate-50 border border-slate-200/90 hover:border-emerald-200 transition-colors">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-2 h-2 rounded-full bg-emerald-600" />
+              <h3 className="font-tech text-lg font-bold text-slate-900 uppercase tracking-wide">
+                Our Mission &amp; Approach
+              </h3>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed font-sans">
+              {siteConfig.mission}
             </p>
           </div>
         </div>
 
-        {/* Layered Floating White Cards: Mission & Vision */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Card 1: Mission */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="rounded-2xl bg-white border border-zinc-200/90 p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-red-600" />
-              <span className="font-mono text-xs font-bold text-red-600 tracking-wider">
-                01. OUR MISSION
-              </span>
-            </div>
-
-            <h3 className="font-industrial text-xl sm:text-2xl font-bold text-zinc-900 mb-3">
-              Hands-On Engineering &amp; Tactical Systems
+        {/* Core Domains Grid */}
+        <div className="space-y-6">
+          <div>
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+              CORE TECHNICAL DOMAINS
+            </span>
+            <h3 className="text-2xl font-bold font-tech text-slate-900 mt-1">
+              Four Pillars of CEAR Engineering
             </h3>
+          </div>
 
-            <p className="font-sans text-xs sm:text-sm text-zinc-600 leading-relaxed">
-              {siteConfig.mission}
-            </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {focusAreas.map((domain, idx) => (
+              <motion.div
+                key={domain.id}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                className="p-6 rounded-xl bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                      {iconMap[domain.id]}
+                    </div>
+                    <span
+                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                        badgeStyles[domain.accent]
+                      }`}
+                    >
+                      {domain.tag}
+                    </span>
+                  </div>
 
-            <div className="mt-6 pt-4 border-t border-zinc-100 flex items-center gap-4 text-xs font-mono text-zinc-400">
-              <span className="text-[#0d5c58] font-bold">TACTICAL FOCUS</span>
-              <span>•</span>
-              <span>R&amp;D DEFENSE</span>
-            </div>
-          </motion.div>
+                  <h4 className="font-tech text-lg font-bold text-slate-900 mb-2">
+                    {domain.title}
+                  </h4>
 
-          {/* Card 2: Vision */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="rounded-2xl bg-white border border-zinc-200/90 p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-[#0d5c58]" />
-              <span className="font-mono text-xs font-bold text-[#0d5c58] tracking-wider">
-                02. OUR VISION
-              </span>
-            </div>
+                  <p className="text-xs text-slate-600 font-sans leading-relaxed mb-4">
+                    {domain.description}
+                  </p>
+                </div>
 
-            <h3 className="font-industrial text-xl sm:text-2xl font-bold text-zinc-900 mb-3">
-              Fostering Next-Gen Robotics Leadership
-            </h3>
-
-            <p className="font-sans text-xs sm:text-sm text-zinc-600 leading-relaxed">
-              {siteConfig.vision}
-            </p>
-
-            <div className="mt-6 pt-4 border-t border-zinc-100 flex items-center gap-4 text-xs font-mono text-zinc-400">
-              <span className="text-[#0d5c58] font-bold">INTERDISCIPLINARY</span>
-              <span>•</span>
-              <span>INNOVATION CULTURE</span>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Stats Strip - Directly matching the AIT_CIDC style */}
-        <div className="rounded-2xl bg-zinc-50 border border-zinc-200/80 p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {siteConfig.stats.map((stat, idx) => (
-            <div key={idx} className="space-y-1">
-              <div className="font-industrial text-3xl sm:text-4xl font-extrabold text-zinc-900">
-                {stat.value}
-              </div>
-              <div className="font-mono text-xs text-[#0d5c58] uppercase font-bold tracking-tight">
-                {stat.label}
-              </div>
-            </div>
-          ))}
+                <div className="space-y-1.5 pt-4 border-t border-slate-100">
+                  {domain.bullets.map((bullet, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs font-mono text-slate-600">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
+                      <span className="truncate">{bullet}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

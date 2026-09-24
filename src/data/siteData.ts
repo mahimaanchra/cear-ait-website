@@ -1,7 +1,7 @@
 export interface Project {
   id: string;
   title: string;
-  category: "Robotics" | "Autonomous" | "Aquatics" | "Manipulation";
+  category: "Robotics" | "Autonomous" | "Aquatics" | "Manipulation" | "Aerial";
   tagline: string;
   description: string;
   longDescription: string;
@@ -10,6 +10,7 @@ export interface Project {
   specs: { label: string; value: string }[];
   highlight?: string;
   githubUrl?: string;
+  demoUrl?: string;
 }
 
 export interface WartechTrack {
@@ -24,6 +25,7 @@ export interface WartechTrack {
   rulesHighlight: string[];
   status: "Registrations Open" | "Filling Fast" | "Coming Soon";
   iconName: string;
+  accentColor: "blue" | "green" | "yellow" | "red";
 }
 
 export interface Achievement {
@@ -39,15 +41,16 @@ export interface Achievement {
 }
 
 export interface TeamMember {
+  id: string;
   name: string;
   role: string;
   subRole?: string;
-  category: "faculty" | "secretary" | "lead";
-  bio?: string;
+  tier: "faculty" | "secretary" | "joint_secretary" | "contributor";
+  quote: string;
   specialization?: string;
-  avatar?: string;
+  avatarBg?: string;
+  avatarInitials?: string;
   linkedin?: string;
-  instagram?: string;
   github?: string;
 }
 
@@ -56,7 +59,7 @@ export interface EventItem {
   title: string;
   date: string;
   category: string;
-  status: "Upcoming" | "Active / Ongoing" | "Registration Closed";
+  status: "Upcoming" | "Ongoing" | "Completed";
   description: string;
   location: string;
   ctaText: string;
@@ -64,31 +67,31 @@ export interface EventItem {
 
 export const siteConfig = {
   name: "CEAR",
-  fullName: "Centre of Excellence for AI and Robotics",
+  fullName: "Centre of Excellence for AI & Robotics",
   shortTitle: "CEAR AIT",
   college: "Army Institute of Technology, Pune",
   affiliation: "Affiliated to Savitribai Phule Pune University (SPPU)",
   tagline: "BUILD • INNOVATE • AUTOMATE",
   heroSubtitle:
-    "Pioneering next-generation autonomous robotics, intelligent control architectures, and tactical defense engineering at Army Institute of Technology.",
+    "Engineering autonomous robotics, intelligent control architectures, and high-performance hardware craft at Army Institute of Technology.",
   vision:
-    "To foster a culture of innovation, hands-on learning, and interdisciplinary collaboration in the field of AI and Robotics, empowering students to become future-ready technocrats and problem-solvers.",
+    "To build an interdisciplinary ecosystem that empowers cadet engineers to design, build, and deploy cutting-edge autonomous defense systems, embedded hardware, and AI algorithms.",
   mission:
-    "Spearheading practical research in autonomous mobile platforms, embedded intelligence, and biomechanical manipulation while bridging the gap between rigorous defense applications and modern industry.",
+    "Spearheading practical research in autonomous robotics, low-latency edge AI, and tactical defense mechatronics while training the next generation of technological leaders.",
   address: "Army Institute of Technology, Alandi Road, Dighi, Pune, Maharashtra 411015",
   contactEmail: "cear@aitpune.edu.in",
-  labLocation: "CEAR Robotics Lab, Mechanical & E&TC Block, Ground Floor",
+  labLocation: "CEAR Robotics Wing, Lab 104, Ground Floor",
   socials: {
     instagram: "https://instagram.com/robotics.club_ait",
     linkedin: "https://linkedin.com/company/cear-ait",
     github: "https://github.com/cear-ait",
-    whatsapp: "https://chat.whatsapp.com/cear-community",
+    discord: "https://discord.gg/cear-ait",
   },
   stats: [
-    { value: "50+", label: "Robots Engineered" },
-    { value: "15+", label: "National Podiums" },
-    { value: "120+", label: "Cadet Innovators" },
-    { value: "100%", label: "Hands-on Hardware" },
+    { value: "50+", label: "Robots Engineered", accent: "blue" },
+    { value: "15+", label: "National Podiums", accent: "yellow" },
+    { value: "120+", label: "Cadet Innovators", accent: "green" },
+    { value: "100%", label: "Hardware Craft", accent: "red" },
   ],
 };
 
@@ -96,54 +99,255 @@ export const focusAreas = [
   {
     id: "ai",
     title: "Artificial Intelligence",
-    icon: "BrainCircuit",
+    tag: "Neural Edge & RL",
     description:
-      "Developing low-latency edge inference models, neural decision networks, and reinforcement learning agents for adaptive robotics.",
-    bullets: ["Edge AI & Neural Hardware", "Reinforcement Learning", "Predictive Diagnostics", "Adaptive Control"],
-    color: "from-cyan-500/20 to-blue-500/10",
+      "Deploying quantized edge neural networks, spatial reinforcement learning models, and real-time decision algorithms on embedded accelerators.",
+    bullets: ["Edge AI Inference", "Reinforcement Learning", "Predictive Diagnostics", "Adaptive Trajectories"],
+    accent: "blue",
   },
   {
     id: "robotics",
-    title: "Robotics & Embedded Systems",
-    icon: "Cpu",
+    title: "Embedded Robotics",
+    tag: "Hardware & PCB",
     description:
-      "Engineering robust custom PCBs, high-torque motor drives, distributed microcontrollers, and real-time ROS2 communication pipelines.",
-    bullets: ["Custom Multilayer PCB Design", "ROS2 Foxy/Humble Framework", "High-Torque BLDC Drivers", "Telemetry Protocols"],
-    color: "from-teal-500/20 to-emerald-500/10",
+      "Designing multi-layer custom PCBs, high-torque BLDC motor drives, and real-time ROS2 micro-ros communication pipelines.",
+    bullets: ["Custom Multilayer PCBs", "ROS2 Humble Architecture", "High-Torque Drives", "Telemetry Links"],
+    accent: "green",
   },
   {
     id: "vision",
-    title: "Computer Vision & Sensing",
-    icon: "Eye",
+    title: "Computer Vision",
+    tag: "Sensing & Depth",
     description:
-      "Spatial depth perception, multi-spectral thermal imaging, and real-time obstacle segmentation in high-speed, dynamic environments.",
-    bullets: ["Real-Time LiDAR Point Clouds", "Thermal & Visual Sensor Fusion", "Optical Flow Localization", "Object Classification"],
-    color: "from-blue-500/20 to-cyan-500/10",
+      "Real-time 3D LiDAR point cloud processing, depth sensor fusion, optical flow localization, and high-speed obstacle segmentation.",
+    bullets: ["LiDAR Point Clouds", "Thermal Sensor Fusion", "Optical Flow Odometry", "YOLO Object Detection"],
+    accent: "yellow",
   },
   {
     id: "autonomous",
     title: "Autonomous Systems",
-    icon: "Navigation",
+    tag: "Tactical SLAM",
     description:
-      "Autonomous trajectory generation, swarm coordination, and SLAM in complex, GPS-denied tactical and subterranean terrains.",
-    bullets: ["GPS-Denied SLAM Traversal", "Swarm Coordination Protocols", "A* & DWA Path Generation", "Tactical Fail-Safe Modes"],
-    color: "from-purple-500/20 to-cyan-500/10",
+      "Autonomous path planning in GPS-denied environments, multi-robot swarm coordination, and tactical fail-safe protocols.",
+    bullets: ["GPS-Denied Navigation", "Swarm Coordination", "A* & DWA Path Generation", "Tactical Fail-Safe"],
+    accent: "red",
+  },
+];
+
+// Strict Team Hierarchy:
+// 1. Faculty In-Charge (Top spotlight)
+export const facultyIncharge: TeamMember = {
+  id: "faculty-patil",
+  name: "Dr. Avinash Patil",
+  role: "Faculty In-Charge & Head, CEAR",
+  subRole: "Professor, Department of E&TC, AIT Pune",
+  tier: "faculty",
+  quote: "Pioneering indigenous defense mechatronics and empowering cadets through real-world hands-on robotics research.",
+  specialization: "Robotics Architecture, Control Systems & Embedded Automation",
+  avatarInitials: "AP",
+  avatarBg: "bg-blue-600 text-white",
+  linkedin: "https://linkedin.com",
+};
+
+// 2. Secretaries (Core executive leads)
+export const secretaries: TeamMember[] = [
+  {
+    id: "sec-tejas",
+    name: "Tejas Jape",
+    role: "Secretary, CEAR",
+    subRole: "Executive Lead • Hardware & Drive Systems",
+    tier: "secretary",
+    quote: "Relentless hardware iteration and mechanical robustness win national championships.",
+    specialization: "Chassis Fabrication, Drive Telemetry, High-Torque Kinematics",
+    avatarInitials: "TJ",
+    avatarBg: "bg-blue-700 text-white",
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+  {
+    id: "sec-pragati",
+    name: "Pragati",
+    role: "Secretary, CEAR",
+    subRole: "Executive Lead • Autonomous Software",
+    tier: "secretary",
+    quote: "Bridging mathematical control theory with high-speed autonomous field execution.",
+    specialization: "Algorithmic Control, Sensor Calibration, Mission Architecture",
+    avatarInitials: "PR",
+    avatarBg: "bg-emerald-600 text-white",
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+];
+
+// 3. Joint Secretaries (Domain leads)
+export const jointSecretaries: TeamMember[] = [
+  {
+    id: "js-prateek",
+    name: "Prateek Nehra",
+    role: "Joint Secretary",
+    subRole: "Domain Lead • Aquatics & Aerial Swarms",
+    tier: "joint_secretary",
+    quote: "Mastering fluid dynamics and ROS2 multi-agent autonomous drone coordination.",
+    specialization: "ROS2 Nav2, Hydrodynamic Hulls, Swarm Telemetry",
+    avatarInitials: "PN",
+    avatarBg: "bg-blue-600 text-white",
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+  {
+    id: "js-aryan",
+    name: "Aryan Singh",
+    role: "Joint Secretary",
+    subRole: "Domain Lead • Fabrication & Chassis Engineering",
+    tier: "joint_secretary",
+    quote: "Precision CNC milling, structural FEA, and rapid combat armor prototyping.",
+    specialization: "CNC Milling, Stress Modeling, Hardened Combat Armor",
+    avatarInitials: "AS",
+    avatarBg: "bg-amber-600 text-white",
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+  {
+    id: "js-rohan",
+    name: "Rohan Dangi",
+    role: "Joint Secretary",
+    subRole: "Domain Lead • Mechanical & Combat Systems",
+    tier: "joint_secretary",
+    quote: "High-durability sealed enclosures and torque transmission optimization.",
+    specialization: "Thrust Vectoring, Sealed Enclosures, Power Distribution",
+    avatarInitials: "RD",
+    avatarBg: "bg-red-600 text-white",
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+  {
+    id: "js-drishti",
+    name: "Drishti",
+    role: "Joint Secretary",
+    subRole: "Domain Lead • Sensors & Firmware",
+    tier: "joint_secretary",
+    quote: "Zero-latency sensor filtering and microsecond embedded communication.",
+    specialization: "Optical Line Arrays, IMU Calibration, Low-Noise Telemetry",
+    avatarInitials: "DR",
+    avatarBg: "bg-emerald-600 text-white",
+    linkedin: "https://linkedin.com",
+    github: "https://github.com",
+  },
+];
+
+// 4. First Year Members / Core Contributors (Grid cards)
+export const coreContributors: TeamMember[] = [
+  {
+    id: "contrib-nancy",
+    name: "Nancy",
+    role: "Operations & Logistics Lead",
+    subRole: "Wartech Event Direction",
+    tier: "contributor",
+    quote: "Seamless logistical orchestration for 500+ national competitors.",
+    specialization: "National Event Direction, Outstation Logistics",
+    avatarInitials: "NA",
+    avatarBg: "bg-slate-700 text-white",
+    linkedin: "https://linkedin.com",
+  },
+  {
+    id: "contrib-aman",
+    name: "Aman Derker",
+    role: "Embedded Systems Specialist",
+    subRole: "Custom PCB Architecture",
+    tier: "contributor",
+    quote: "Routing high-density 4-layer PCBs for harsh electromagnetic environments.",
+    specialization: "MOSFET Motor Bridges, KiCad Routing, STM32",
+    avatarInitials: "AD",
+    avatarBg: "bg-blue-600 text-white",
+    linkedin: "https://linkedin.com",
+  },
+  {
+    id: "contrib-mantu",
+    name: "Mantu Dutta",
+    role: "Power & Electronics Lead",
+    subRole: "Battery Management & Power Rails",
+    tier: "contributor",
+    quote: "Ensuring stable 60A burst power delivery without voltage sags.",
+    specialization: "LiPo Safety Arrays, Regulated DC Rails, Telemetry",
+    avatarInitials: "MD",
+    avatarBg: "bg-amber-600 text-white",
+    linkedin: "https://linkedin.com",
+  },
+  {
+    id: "contrib-kshitij",
+    name: "Kshitij",
+    role: "Combat Robotics Specialist",
+    subRole: "Drive Dynamics & Weaponry",
+    tier: "contributor",
+    quote: "Optimizing kinetic energy transfer and hardened steel defense wedges.",
+    specialization: "Differential Drive Dynamics, Hardened Steel Wedges",
+    avatarInitials: "KS",
+    avatarBg: "bg-red-600 text-white",
+    linkedin: "https://linkedin.com",
+  },
+  {
+    id: "fy-vikramaditya",
+    name: "Cadet Vikramaditya",
+    role: "First Year Member",
+    subRole: "Microcontrollers & Line Tracing",
+    tier: "contributor",
+    quote: "Tuning millisecond PID loops for sub-millimeter trajectory accuracy.",
+    specialization: "ESP32, PID Algorithms, Sensor Arrays",
+    avatarInitials: "VK",
+    avatarBg: "bg-slate-800 text-white",
+    linkedin: "https://linkedin.com",
+  },
+  {
+    id: "fy-ananya",
+    name: "Cadet Ananya Sharma",
+    role: "First Year Member",
+    subRole: "Computer Vision & ROS2",
+    tier: "contributor",
+    quote: "Real-time edge neural inference for fast obstacle segmentation.",
+    specialization: "OpenCV, YOLO Inference, ROS2 Nodes",
+    avatarInitials: "AS",
+    avatarBg: "bg-emerald-700 text-white",
+    linkedin: "https://linkedin.com",
+  },
+  {
+    id: "fy-sahil",
+    name: "Cadet Sahil Verma",
+    role: "First Year Member",
+    subRole: "CAD & Rapid Prototyping",
+    tier: "contributor",
+    quote: "Designing lightweight carbon-nylon 3D printed mechanical linkages.",
+    specialization: "SolidWorks, FDM Prototyping, Kinematics",
+    avatarInitials: "SV",
+    avatarBg: "bg-blue-800 text-white",
+    linkedin: "https://linkedin.com",
+  },
+  {
+    id: "fy-tanya",
+    name: "Cadet Tanya Rawat",
+    role: "First Year Member",
+    subRole: "Sensors & Telemetry",
+    tier: "contributor",
+    quote: "Building low-latency telemetry dashboards with wireless RF packets.",
+    specialization: "Wireless RF, Telemetry UI, Sensor Calibration",
+    avatarInitials: "TR",
+    avatarBg: "bg-amber-700 text-white",
+    linkedin: "https://linkedin.com",
   },
 ];
 
 export const projects: Project[] = [
   {
     id: "robotic-arm",
-    title: "Robotic Arm",
+    title: "6-DOF Articulated Robotic Arm",
     category: "Manipulation",
-    tagline: "High-precision 6-DOF articulated robotic manipulator for surgical payload execution and industrial sorting.",
+    tagline: "High-precision 6-DOF articulated robotic manipulator for surgical payload execution.",
     description:
       "A high-precision articulated robotic arm engineered for multi-axis dexterity, inverse kinematic path trajectory execution, and accurate pick-and-place automation.",
     longDescription:
       "Designed and fabricated from the ground up at the CEAR lab, this multi-degree-of-freedom robotic arm utilizes closed-loop servo telemetry and real-time kinematic calculations. Equipped with custom interchangeable end-effectors, tactile pressure sensors, and intuitive micro-step positional feedback, it achieves sub-millimeter repeatable precision.",
     status: "Active R&D",
     highlight: "Inverse Kinematic Solver • Sub-mm Accuracy",
-    tags: ["Kinematics", "ROS2", "Servo Telemetry", "Custom End-Effector", "C++"],
+    tags: ["ROS2", "Computer Vision", "C++", "Kinematics", "Servo Telemetry"],
     specs: [
       { label: "Degrees of Freedom", value: "6-DOF Articulated" },
       { label: "Payload Capacity", value: "2.5 kg at full reach" },
@@ -152,12 +356,13 @@ export const projects: Project[] = [
       { label: "Latency", value: "< 12 ms" },
     ],
     githubUrl: "https://github.com/cear-ait/robotic-arm",
+    demoUrl: "https://github.com/cear-ait/robotic-arm#demo",
   },
   {
     id: "jalpari",
-    title: "Jalpari",
+    title: "Jalpari Amphibious Bot",
     category: "Aquatics",
-    tagline: "Amphibious underwater robot winning 3rd Position & Unique Design Award at IIT Guwahati Techniche Aquawar.",
+    tagline: "Amphibious underwater robot winning 3rd Position & Unique Design Award at IIT Guwahati Techniche.",
     description:
       "A specialized aquatic exploration and obstacle navigation robot engineered for hydrodynamic stability, ballast equilibrium, and submerged combat maneuvering.",
     longDescription:
@@ -173,10 +378,11 @@ export const projects: Project[] = [
       { label: "Accolades", value: "3rd Place Podium + Unique Design Award" },
     ],
     githubUrl: "https://github.com/cear-ait/jalpari-aquatic-bot",
+    demoUrl: "https://github.com/cear-ait/jalpari-aquatic-bot#specs",
   },
   {
     id: "master-slave-arm",
-    title: "Master-Slave Robotic Arm",
+    title: "Master-Slave Teleoperation Rig",
     category: "Manipulation",
     tagline: "Bilateral teleoperation system featuring real-time angular mirroring and sensory feedback for hazardous zones.",
     description:
@@ -185,7 +391,7 @@ export const projects: Project[] = [
       "Built for hazardous ordnance disposal and remote laboratory operations, this system uses an ergonomic wearable master rig fitted with high-resolution magnetic rotary encoders. The slave unit reproduces human operator joint trajectories in real time over low-latency wireless protocols with collision mitigation algorithms.",
     status: "Operational",
     highlight: "Zero-Lag Kinematic Mirroring & Tactile Feedback",
-    tags: ["Teleoperation", "Bilateral Feedback", "Magnetic Encoders", "Low-Latency RF", "Python/C++"],
+    tags: ["Teleoperation", "Bilateral Feedback", "Magnetic Encoders", "Low-Latency RF", "C++"],
     specs: [
       { label: "Tracking Precision", value: "14-bit Magnetic Angular Resolution" },
       { label: "Wireless Range", value: "250m Line-of-Sight RF" },
@@ -194,10 +400,11 @@ export const projects: Project[] = [
       { label: "Safety System", value: "Watchdog Auto-Brake on Packet Loss" },
     ],
     githubUrl: "https://github.com/cear-ait/master-slave-teleop",
+    demoUrl: "https://github.com/cear-ait/master-slave-teleop#telemetry",
   },
   {
     id: "pipe-climbing-bot",
-    title: "Pipe-Climbing Bot",
+    title: "Autonomous Pipe-Climbing Robot",
     category: "Autonomous",
     tagline: "Radial autonomous pipeline traversal robot for structural integrity audits and weld flaw detection.",
     description:
@@ -206,37 +413,143 @@ export const projects: Project[] = [
       "Engineered to inspect critical industrial pipeline infrastructures and defense conduit networks, this bot features magnetic and mechanical clamping arrays that allow it to scale vertical and curved pipes. An onboard ultrasonic flaw detector and micro-camera stream real-time telemetry back to an operator dashboard.",
     status: "Completed",
     highlight: "Vertical Traversal & Real-Time Flaw Detection",
-    tags: ["Pipeline Inspection", "Non-Destructive Testing", "Pneumatic Clamp", "Ultrasonic Sensors", "Autonomous Climb"],
+    tags: ["Non-Destructive Testing", "Pneumatic Clamp", "Ultrasonic Sensors", "Autonomous Climb", "Python"],
     specs: [
       { label: "Pipe Diameter Range", value: "150 mm to 400 mm" },
       { label: "Climbing Angle", value: "0° to 90° Vertical Climb" },
       { label: "Sensory Payload", value: "Ultrasonic Thickness & HD Optical" },
-      { label: "Adhesion Mechanism", value: "Dual Spring-Loaded Rubber Roller Tracks" },
+      { label: "Adhesion Mechanism", value: "Dual Spring-Loaded Roller Tracks" },
       { label: "Inspection Speed", value: "0.2 m/s steady scan" },
     ],
     githubUrl: "https://github.com/cear-ait/pipe-climbing-bot",
+    demoUrl: "https://github.com/cear-ait/pipe-climbing-bot#inspection",
+  },
+  {
+    id: "drone-swarm",
+    title: "Autonomous Swarm Quadcopters",
+    category: "Aerial",
+    tagline: "Synchronized multi-agent quadcopter swarm for GPS-denied tactical surveillance and 3D mapping.",
+    description:
+      "A synchronized fleet of lightweight carbon-fiber quadcopters running ROS2 Nav2 algorithms and optical flow positioning for coordinated aerial reconnaissance in GPS-denied environments.",
+    longDescription:
+      "Engineered for tactical indoor recon and perimeter security, each drone features an onboard companion processor running decentralized swarm flight controllers. Drones maintain dynamic flocking formation while mapping complex subterranean environments without satellite signals.",
+    status: "Active R&D",
+    highlight: "Decentralized Swarm Flight & Optical Flow SLAM",
+    tags: ["ROS2", "Computer Vision", "Swarm Telemetry", "PX4 Autopilot", "Python"],
+    specs: [
+      { label: "Fleet Capacity", value: "4x Synchronized Quadcopters" },
+      { label: "Flight Endurance", value: "22 mins continuous hover" },
+      { label: "Navigation Mode", value: "GPS-Denied Optical Flow + Lidar" },
+      { label: "Autopilot", value: "PX4 on STM32 H7 Controller" },
+      { label: "Communication", value: "5.8GHz Mesh Telemetry" },
+    ],
+    githubUrl: "https://github.com/cear-ait/swarm-quadcopters",
+    demoUrl: "https://github.com/cear-ait/swarm-quadcopters#swarm",
+  },
+  {
+    id: "tactical-rover",
+    title: "Tactical Autonomous Ground Rover",
+    category: "Autonomous",
+    tagline: "Rugged all-terrain autonomous rover featuring 3D LiDAR SLAM and dynamic obstacle evasion.",
+    description:
+      "A heavy-duty four-wheel independent drive rover engineered for high-torque tactical traversal, 3D point cloud mapping, and autonomous waypoint pursuit.",
+    longDescription:
+      "Built on a CNC-machined aluminum chassis with rocker-bogie suspension, this rover navigates hostile uneven terrain effortlessly. An onboard NVIDIA Jetson processor analyzes real-time Livox LiDAR point clouds to generate optimal traversal paths.",
+    status: "Operational",
+    highlight: "NVIDIA Jetson Edge Inference • Rocker-Bogie Suspension",
+    tags: ["ROS2", "Computer Vision", "C++", "LiDAR SLAM", "Jetson Edge"],
+    specs: [
+      { label: "Drive Configuration", value: "4WD Independent BLDC Motors" },
+      { label: "Payload Capacity", value: "15 kg tactical sensor payload" },
+      { label: "Obstacle Clearance", value: "Up to 180 mm obstacle steps" },
+      { label: "Processing Core", value: "NVIDIA Jetson Orin Nano" },
+      { label: "Sensor Array", value: "Livox Mid-360 LiDAR + Depth Cam" },
+    ],
+    githubUrl: "https://github.com/cear-ait/tactical-ground-rover",
+    demoUrl: "https://github.com/cear-ait/tactical-ground-rover#rover",
   },
 ];
 
 export const wartechTracks: WartechTrack[] = [
   {
-    id: "line-tracer",
-    title: "Line Tracer",
+    id: "robo-soccer",
+    title: "Robo Soccer",
     trackCode: "WT-01",
-    tagline: "Millisecond-critical high-speed autonomous path tracing.",
+    tagline: "2v2 tactical ball control, pneumatic kickers, and high-speed wireless maneuvering.",
     description:
-      "Robots must traverse an intricate path of high-speed curves, 90-degree corners, and intersecting gridlines using optical sensor arrays and optimized PID algorithms.",
+      "Teams clash in an enclosed synthetic turf arena. Bots execute offensive dribbles, tactical blocks, and high-velocity strikes with custom mechanical and pneumatic kickers.",
+    arenaType: "Enclosed Synthetic Turf Pitch with Goalposts",
+    teamSize: "2–4 Members",
+    prizePool: "₹35,000",
+    rulesHighlight: ["2v2 Match Format", "Pneumatic/spring kickers allowed", "5-minute halves", "Weight limit: 5kg"],
+    status: "Filling Fast",
+    iconName: "Trophy",
+    accentColor: "blue",
+  },
+  {
+    id: "robo-race",
+    title: "Robo Race",
+    trackCode: "WT-02",
+    tagline: "All-terrain obstacle circuit featuring gravel traps, oil slicks, ramps, and hairpins.",
+    description:
+      "An aggressive high-speed racing circuit featuring oil slicks, gravel traps, elevated bridge drops, and tight hairpin bends. Built for agile drivers and robust chassis suspension.",
+    arenaType: "Multi-Terrain Dynamic Race Circuit",
+    teamSize: "2–4 Members",
+    prizePool: "₹30,000",
+    rulesHighlight: ["Time trial + head-to-head heats", "Chassis width: 30cm limit", "Ramp clearing bonus", "Battery cap: 16.8V"],
+    status: "Registrations Open",
+    iconName: "Flame",
+    accentColor: "red",
+  },
+  {
+    id: "drone-racing",
+    title: "Drone Racing (Aerial Arena)",
+    trackCode: "WT-03",
+    tagline: "High-octane FPV quadcopter racing through illuminated 3D neon air gates.",
+    description:
+      "Pilots navigate micro and mini FPV quadcopters through an intricate 3D netted arena featuring illuminated hoops, dive gates, and sharp hairpin corkscrews.",
+    arenaType: "Enclosed Safety-Netted Aerial Arena with LED Gates",
+    teamSize: "1–3 Members",
+    prizePool: "₹35,000",
+    rulesHighlight: ["FPV goggles required", "Propeller guard mandatory", "Timed laps + finals bracket", "3S-4S LiPo max"],
+    status: "Registrations Open",
+    iconName: "Compass",
+    accentColor: "green",
+  },
+  {
+    id: "robo-sumo",
+    title: "Robo Sumo",
+    trackCode: "WT-04",
+    tagline: "High-torque battle of raw mass, traction, and pushing force.",
+    description:
+      "Two robots lock horns inside an elevated circular dohyo. The objective is pure physical dominance—push your opponent out of the ring without falling off the edge.",
+    arenaType: "Elevated Circular Dohyo (Black Matte Surface)",
+    teamSize: "2–4 Members",
+    prizePool: "₹35,000",
+    rulesHighlight: ["Weight limit: 5kg max", "No active projectile weapons", "Best of 3 rounds", "Edge sensor detection"],
+    status: "Filling Fast",
+    iconName: "ShieldAlert",
+    accentColor: "yellow",
+  },
+  {
+    id: "line-tracer",
+    title: "Line Tracer (Speed Path)",
+    trackCode: "WT-05",
+    tagline: "Millisecond-critical autonomous path tracing with high-speed optical arrays.",
+    description:
+      "Robots traverse an intricate path of high-speed curves, 90-degree corners, and intersecting gridlines using optical sensor arrays and optimized PID algorithms.",
     arenaType: "High-Contrast Polyvinyl Track with Intersections",
-    teamSize: "1–4 Members",
+    teamSize: "1–3 Members",
     prizePool: "₹25,000",
     rulesHighlight: ["Autonomous navigation only", "Pre-calibrated sensor calibration", "Penalty for track divergence"],
     status: "Registrations Open",
     iconName: "Route",
+    accentColor: "blue",
   },
   {
     id: "pick-and-place",
-    title: "Pick & Place",
-    trackCode: "WT-02",
+    title: "Pick & Place Arena",
+    trackCode: "WT-06",
     tagline: "Tactical dexterity, precision gripping, and obstacle transit.",
     description:
       "Test of gripping mechanics and actuator agility. Bots navigate through hostile obstacle fields, retrieve varied geometric objects, and deposit them into target zones.",
@@ -246,54 +559,13 @@ export const wartechTracks: WartechTrack[] = [
     rulesHighlight: ["Mechanical & magnetic grippers permitted", "Time-attack scoring", "Zone difficulty weightage"],
     status: "Registrations Open",
     iconName: "Grab",
-  },
-  {
-    id: "robo-sumo",
-    title: "Robo Sumo",
-    trackCode: "WT-03",
-    tagline: "High-torque battle of raw mass, traction, and pushing force.",
-    description:
-      "Two robots lock horns inside an elevated circular dohyo. The objective is pure physical dominance—push your opponent out of the ring without falling off the edge.",
-    arenaType: "Elevated Circular Dohyo (Black Matte Surface)",
-    teamSize: "2–4 Members",
-    prizePool: "₹35,000",
-    rulesHighlight: ["Weight limit: 5kg max", "No active projectile weapons", "Best of 3 rounds"],
-    status: "Filling Fast",
-    iconName: "ShieldAlert",
-  },
-  {
-    id: "robo-race",
-    title: "Robo Race",
-    trackCode: "WT-04",
-    tagline: "Blistering speed through rugged all-terrain chicanes.",
-    description:
-      "An aggressive high-speed racing circuit featuring oil slicks, gravel traps, elevated ramps, bridge drops, and tight hairpin bends. Built for agile drivers.",
-    arenaType: "Multi-Terrain Dynamic Race Circuit",
-    teamSize: "2–4 Members",
-    prizePool: "₹30,000",
-    rulesHighlight: ["Time trial + head-to-head heats", "Chassis width: 30cm limit", "Ramp clearing bonus"],
-    status: "Registrations Open",
-    iconName: "Flame",
-  },
-  {
-    id: "robo-soccer",
-    title: "Robo Soccer",
-    trackCode: "WT-05",
-    tagline: "Teamwork, tactical kicking mechanisms, and rapid wireless control.",
-    description:
-      "Teams of mobile robots clash in a synthetic turf arena, executing offensive dribbles, defensive tackles, and high-velocity strikes with custom kicker solenoids.",
-    arenaType: "Enclosed Synthetic Turf Pitch with Goalposts",
-    teamSize: "3–5 Members",
-    prizePool: "₹35,000",
-    rulesHighlight: ["2v2 Match Format", "Pneumatic/spring kickers allowed", "5-minute halves"],
-    status: "Filling Fast",
-    iconName: "Trophy",
+    accentColor: "green",
   },
   {
     id: "maze-runner",
-    title: "Maze Runner",
-    trackCode: "WT-06",
-    tagline: "Autonomous spatial mapping and real-time obstacle negotiation.",
+    title: "Autonomous Maze Runner",
+    trackCode: "WT-07",
+    tagline: "Autonomous spatial mapping, micromouse algorithms, and wall-following.",
     description:
       "Fully autonomous micromouse and sensor bots navigate a labyrinthine maze. Utilizing ultrasonic, LiDAR, or IR sensors, bots must compute the shortest exit route.",
     arenaType: "Modular Wooden Labyrinth with Dynamic Walls",
@@ -301,13 +573,14 @@ export const wartechTracks: WartechTrack[] = [
     prizePool: "₹25,000",
     rulesHighlight: ["No manual control allowed", "Exploration run + speed run", "Touch penalties apply"],
     status: "Registrations Open",
-    iconName: "Compass",
+    iconName: "Layers",
+    accentColor: "yellow",
   },
   {
     id: "stair-climbing",
-    title: "Stair Climbing (Robo Climbex)",
-    trackCode: "WT-07",
-    tagline: "Conquer steep multi-tiered inclines and vertical steps.",
+    title: "Robo Climbex (Stair Climbing)",
+    trackCode: "WT-08",
+    tagline: "Conquer steep multi-tiered inclines and 45-degree vertical steps.",
     description:
       "A grueling test of mobility, high-torque gearboxes, and multi-link suspension. Bots must ascend continuous multi-level staircases and steep risers without flipping.",
     arenaType: "Graduated Step Arena (Up to 45° Incline)",
@@ -315,7 +588,55 @@ export const wartechTracks: WartechTrack[] = [
     prizePool: "₹30,000",
     rulesHighlight: ["Riser height: 12-18 cm", "Stability and slip resistance scoring", "Flip-recovery allowance"],
     status: "Registrations Open",
-    iconName: "Layers",
+    iconName: "Zap",
+    accentColor: "red",
+  },
+];
+
+export const upcomingEvents: EventItem[] = [
+  {
+    id: "inductions-2026",
+    title: "CEAR Annual Inductions 2026-27",
+    date: "October 2026",
+    category: "Recruitment",
+    status: "Upcoming",
+    description:
+      "Join the elite engineering league at AIT. Open to all first and second year enthusiasts passionate about AI, electronics, mechanical fabrication, and coding.",
+    location: "Manekshaw Hall & CEAR Robotics Lab",
+    ctaText: "Apply for Inductions",
+  },
+  {
+    id: "arduino-bootcamp",
+    title: "Microcontrollers & Embedded IoT Bootcamp",
+    date: "November 2026",
+    category: "Hands-on Workshop",
+    status: "Ongoing",
+    description:
+      "Comprehensive multi-day workshop covering ESP32 architecture, PWM motor drivers, sensor interfacing, and building your first teleoperated rover.",
+    location: "Robotics Hardware Lab, AIT",
+    ctaText: "View Workshop Details",
+  },
+  {
+    id: "ros2-workshop",
+    title: "Autonomous Navigation & ROS2 Winter School",
+    date: "December 2026",
+    category: "Advanced Workshop",
+    status: "Upcoming",
+    description:
+      "Master node communication, Gazebo simulation, SLAM mapping, and lidar point cloud navigation with senior mentors and defense practitioners.",
+    location: "Computer Center 3, AIT",
+    ctaText: "Pre-Register",
+  },
+  {
+    id: "defense-symposium",
+    title: "National Defense & Robotics Symposium 2026",
+    date: "August 2026",
+    category: "Symposium",
+    status: "Completed",
+    description:
+      "Showcase of indigenous defense robotics, tactical swarm platforms, and keynote sessions with military tech leaders and industry pioneers.",
+    location: "AIT Auditorium",
+    ctaText: "View Highlights",
   },
 ];
 
@@ -368,211 +689,13 @@ export const achievements: Achievement[] = [
     category: "National Finalist",
     year: "2026",
   },
-  {
-    id: "drone-expo",
-    event: "Drone Expo 2025",
-    institution: "National Defense & Drone Forum",
-    edition: "2025",
-    rank: "Special Demonstration Award",
-    highlight: "Synchronized drone swarm in GPS-denied zones & pipeline thermal scan.",
-    description:
-      "Showcased custom carbon-fiber micro-quadcopters executing synchronized swarm maneuvers running ROS2 localized SLAM, plus simulated autonomous pipeline thermal leak detection.",
-    category: "Defense Showcase",
-    year: "2025",
-  },
-  {
-    id: "stride",
-    event: "Stride 2025 Defense Showcase",
-    institution: "Indian Army & MoD Showcase",
-    edition: "2025",
-    rank: "Commendation for Defense Innovation",
-    highlight: "Live demonstration of tactical autonomous robotics before Army leadership.",
-    description:
-      "Demonstrated cutting-edge indigenous defense robotics prototypes, autonomous ground vehicles, and tactical sensors bridging academia and private defense industry.",
-    category: "Defense Showcase",
-    year: "2025",
-  },
-  {
-    id: "robocon",
-    event: "DD Robocon 2025",
-    institution: "Asia-Pacific Broadcasting Union",
-    edition: "2025",
-    rank: "National Contestant",
-    highlight: "Built synchronized dual-robot automated alliance platform.",
-    description:
-      "Designed and fabricated synchronized autonomous and manual robots adhering to strict international athletic task regulations and high-speed pneumatic throwing.",
-    category: "National Finalist",
-    year: "2025",
-  },
-  {
-    id: "techfest",
-    event: "Techfest 2025",
-    institution: "IIT Bombay",
-    edition: "2025",
-    rank: "National Competitor",
-    highlight: "Contested in Asia's largest robotics proving ground.",
-    description:
-      "Represented AIT in high-speed autonomous navigation and heavy-weight combat tracks with advanced chassis reinforcement and fast battery swap architecture.",
-    category: "National Finalist",
-    year: "2025",
-  },
-];
-
-export const facultyIncharge: TeamMember = {
-  name: "Dr. Avinash Patil",
-  role: "Faculty Incharge & Head, CEAR",
-  subRole: "Professor, Army Institute of Technology",
-  category: "faculty",
-  bio: "Guiding CEAR's vision toward groundbreaking defense robotics, interdisciplinary engineering excellence, and academic-industry collaborative research.",
-  specialization: "Robotics Architecture, Embedded Automation & Control Systems",
-  avatar: "/team/faculty-patil.png",
-  linkedin: "https://linkedin.com",
-};
-
-export const secretaries: TeamMember[] = [
-  {
-    name: "Tejas Jape",
-    role: "Secretary, CEAR",
-    subRole: "Robotics & Embedded Systems",
-    category: "secretary",
-    bio: "Leading club operations, hardware fabrication, and tactical team coordination across national robotics championships.",
-    specialization: "Chassis Fabrication, Drive System Integration, Hardware Telemetry",
-    linkedin: "https://linkedin.com",
-    instagram: "https://instagram.com",
-    github: "https://github.com",
-  },
-  {
-    name: "Pragati",
-    role: "Secretary, CEAR",
-    subRole: "Autonomous Software & Coordination",
-    category: "secretary",
-    bio: "Spearheading software algorithms, sensor calibration modules, and strategic coordination for flagship events.",
-    specialization: "Algorithmic Control, Sensor Integration, Event Management",
-    linkedin: "https://linkedin.com",
-    instagram: "https://instagram.com",
-    github: "https://github.com",
-  },
-];
-
-export const coreTeam: TeamMember[] = [
-  {
-    name: "Prateek Nehra",
-    role: "Technical Lead",
-    subRole: "Aquatics & Swarm Drones",
-    category: "lead",
-    specialization: "ROS2, Hydrodynamic Hull Design, Swarm Protocols",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Aryan Singh",
-    role: "Hardware & Fabrication Lead",
-    subRole: "Chassis & Actuators",
-    category: "lead",
-    specialization: "CNC Milling, Stress Modeling, Combat Armor",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Rohan Dangi",
-    role: "Mechanical & Systems Lead",
-    subRole: "Combat & Aquatic Platforms",
-    category: "lead",
-    specialization: "Thrust Vectoring, Sealed Enclosures, Power Distribution",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Drishti",
-    role: "Sensors & Firmware Lead",
-    subRole: "Embedded Microcontrollers",
-    category: "lead",
-    specialization: "Optical Line Arrays, IMU Calibration, Low-Noise Telemetry",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Nancy",
-    role: "Operations & Event Lead",
-    subRole: "Event Logistics & PR",
-    category: "lead",
-    specialization: "Wartech Event Direction, Outstation Logistics",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Aman Derker",
-    role: "Embedded Systems Specialist",
-    subRole: "PCB Architecture",
-    category: "lead",
-    specialization: "High-Voltage Motor MOSFET Bridges, KiCad Routing",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Mantu Dutta",
-    role: "Power & Electronics Lead",
-    subRole: "Battery Management & Power",
-    category: "lead",
-    specialization: "LiPo Safety Arrays, Regulated DC Rails, Telemetry",
-    linkedin: "https://linkedin.com",
-  },
-  {
-    name: "Kshitij",
-    role: "Combat Robotics Specialist",
-    subRole: "Drive Dynamics",
-    category: "lead",
-    specialization: "Differential Drive Dynamics, Hardened Steel Wedges",
-    linkedin: "https://linkedin.com",
-  },
-];
-
-export const upcomingEvents: EventItem[] = [
-  {
-    id: "inductions-2026",
-    title: "CEAR Annual Inductions 2026-27",
-    date: "October 2026",
-    category: "Recruitment",
-    status: "Upcoming",
-    description:
-      "Join the elite engineering league at AIT. Open to all first and second year enthusiasts passionate about AI, electronics, mechanical fabrication, and coding.",
-    location: "Manekshaw Hall & CEAR Lab",
-    ctaText: "Apply for Inductions",
-  },
-  {
-    id: "arduino-bootcamp",
-    title: "Hands-on Microcontrollers & IoT Bootcamp",
-    date: "November 2026",
-    category: "Workshop",
-    status: "Active / Ongoing",
-    description:
-      "Comprehensive multi-day workshop on ESP32, motor drivers, sensor interfacing, and building your very first teleoperated robot.",
-    location: "Robotics Hardware Lab, AIT",
-    ctaText: "View Workshop Details",
-  },
-  {
-    id: "ros2-workshop",
-    title: "Autonomous Swarm & ROS2 Winter Workshop",
-    date: "December 2026",
-    category: "Advanced Workshop",
-    status: "Upcoming",
-    description:
-      "Master node communication, Gazebo simulation, SLAM mapping, and lidar point cloud navigation with certified industry mentors.",
-    location: "Computer Center 3, AIT",
-    ctaText: "Pre-Register",
-  },
-  {
-    id: "wartech-fest",
-    title: "WARTECH 2026 National Championship",
-    date: "March 2027",
-    category: "Flagship Festival",
-    status: "Upcoming",
-    description:
-      "CEAR's biggest annual robotics festival featuring 7 high-impact combat and autonomous tracks with competitors across India.",
-    location: "AIT Central Arenas & Open Ground",
-    ctaText: "Explore Wartech",
-  },
 ];
 
 export const faqs = [
   {
     question: "Who can join the Centre of Excellence for AI and Robotics?",
     answer:
-      "CEAR welcomes all students of Army Institute of Technology, Pune regardless of their branch. Whether you're in Computer Engineering, IT, Mechanical, or E&TC, there are specialized modules spanning hardware design, firmware, mechanical fabrication, and AI software.",
+      "CEAR welcomes all students of Army Institute of Technology, Pune regardless of their branch. Whether you are in Computer Engineering, IT, Mechanical, or E&TC, there are specialized modules spanning hardware design, firmware, mechanical fabrication, and AI software.",
   },
   {
     question: "Do I need prior robotics or coding experience to apply for inductions?",

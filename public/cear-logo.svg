@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <!-- Circular Path for Text along the upper arc -->
+    <path
+      id="textArc"
+      d="M 68 310 A 195 195 0 1 1 432 310"
+      fill="none"
+    />
+    
+    <style>
+      .emblem-bg { fill: #0b1120; }
+      .ring-line { stroke: #475569; stroke-width: 1.5; fill: none; }
+      .outer-ring { stroke: #334155; stroke-width: 2; fill: none; }
+      .hex-outer { stroke: #94a3b8; stroke-width: 2.2; fill: none; stroke-linejoin: round; }
+      .hex-inner { stroke: #475569; stroke-width: 1.2; stroke-dasharray: 4 3; fill: none; }
+      .cube-spine { stroke: #64748b; stroke-width: 1.5; fill: none; }
+      .arc-text {
+        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 15.5px;
+        font-weight: 700;
+        fill: #f8fafc;
+        letter-spacing: 0.165em;
+      }
+      .letter-solid {
+        fill: #ffffff;
+      }
+      .letter-wire {
+        fill: none;
+        stroke: #ffffff;
+        stroke-width: 2.8;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+      .letter-wire-inner {
+        fill: none;
+        stroke: #94a3b8;
+        stroke-width: 1.5;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+    </style>
+  </defs>
+
+  <!-- 1. Dark Emblem Base Circle -->
+  <circle cx="250" cy="250" r="245" class="emblem-bg" />
+  
+  <!-- Outer Border Rings -->
+  <circle cx="250" cy="250" r="243" stroke="#1e293b" stroke-width="3" fill="none" />
+  <circle cx="250" cy="250" r="230" class="ring-line" />
+  <circle cx="250" cy="250" r="162" stroke="#1e293b" stroke-width="1.5" fill="none" />
+
+  <!-- 2. Circular Text along Arc -->
+  <text class="arc-text">
+    <textPath href="#textArc" startOffset="50%" textAnchor="middle">
+      ● CENTER OF EXCELLENCE FOR AI AND ROBOTICS ●
+    </textPath>
+  </text>
+
+  <!-- 3. Isometric Hexagon Wireframe Backdrop -->
+  <!-- Center of hexagon at (250, 260) -->
+  <g id="hexagon-frame">
+    <!-- Outer Hexagon Outline -->
+    <!-- Top: (250, 135), Top-Right: (360, 198), Bottom-Right: (360, 323), Bottom: (250, 386), Bottom-Left: (140, 323), Top-Left: (140, 198) -->
+    <polygon
+      points="250,135 360,198 360,323 250,386 140,323 140,198"
+      class="hex-outer"
+    />
+    
+    <!-- Secondary Offset Hexagon Accent -->
+    <polygon
+      points="250,143 353,202 353,318 250,378 147,318 147,202"
+      class="hex-inner"
+    />
+
+    <!-- Cube 3D Internal Spine Lines -->
+    <line x1="250" y1="135" x2="250" y2="260" class="cube-spine" />
+    <line x1="250" y1="260" x2="360" y2="323" class="cube-spine" />
+    <line x1="250" y1="260" x2="140" y2="323" class="cube-spine" />
+  </g>
+
+  <!-- 4. Isometric CEAR Letters -->
+  <!-- Center junction is X=250, Y=260 -->
+
+  <!-- LEFT FACE: Letters C and E (Solid White Fill) -->
+  <!-- Left face has isometric plane: lines slope down away from center (towards -X) at 30 deg -->
+  <!-- In transform coordinates with center (250, 260): X goes left, skewY(-30) slopes left-down -->
+  <g transform="translate(250, 260) skewY(-30) scale(0.866, 1)">
+    <!-- Letter C: from x = -88 to x = -50, y from -55 to 55 -->
+    <path
+      d="
+        M -50 -55
+        L -84 -55
+        L -94 -38
+        L -94 38
+        L -84 55
+        L -50 55
+        L -50 32
+        L -72 32
+        L -76 22
+        L -76 -22
+        L -72 -32
+        L -50 -32
+        Z
+      "
+      class="letter-solid"
+    />
+
+    <!-- Letter E: from x = -44 to x = -8, y from -55 to 55 -->
+    <path
+      d="
+        M -8 -55
+        L -44 -55
+        L -44 55
+        L -8 55
+        L -8 33
+        L -26 33
+        L -26 12
+        L -10 12
+        L -10 -12
+        L -26 -12
+        L -26 -33
+        L -8 -33
+        Z
+      "
+      class="letter-solid"
+    />
+  </g>
+
+  <!-- RIGHT FACE: Letters A and R (Wireframe / Outline White) -->
+  <!-- Right face has isometric plane: lines slope down away from center (towards +X) at 30 deg -->
+  <g transform="translate(250, 260) skewY(30) scale(0.866, 1)">
+    <!-- Letter A: from x = 8 to x = 44, y from -55 to 55 -->
+    <!-- Outer Contour -->
+    <path
+      d="
+        M 26 -55
+        L 10 -25
+        L 10 55
+        L 23 55
+        L 23 20
+        L 29 20
+        L 29 55
+        L 42 55
+        L 42 -25
+        Z
+      "
+      class="letter-wire"
+    />
+    <!-- Inner Crossbar Hole of A -->
+    <polygon
+      points="26,-28 19,-6 33,-6"
+      class="letter-wire"
+    />
+
+    <!-- Letter R: from x = 50 to x = 88, y from -55 to 55 -->
+    <!-- Outer Contour & Leg -->
+    <path
+      d="
+        M 52 -55
+        L 78 -55
+        L 88 -38
+        L 88 -8
+        L 78 8
+        L 88 55
+        L 74 55
+        L 66 12
+        L 66 55
+        L 52 55
+        Z
+      "
+      class="letter-wire"
+    />
+    <!-- Inner Loop Hole of R -->
+    <path
+      d="
+        M 66 -35
+        L 74 -35
+        L 78 -27
+        L 78 -19
+        L 74 -11
+        L 66 -11
+        Z
+      "
+      class="letter-wire"
+    />
+  </g>
+</svg>

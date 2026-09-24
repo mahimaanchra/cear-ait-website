@@ -1,82 +1,82 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { BackgroundGrid } from "@/components/ui/BackgroundGrid";
+import React, { useState } from "react";
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
+import { About } from "@/components/sections/About";
 import { Team } from "@/components/sections/Team";
 import { ProjectsShowcase } from "@/components/sections/ProjectsShowcase";
-import { About } from "@/components/sections/About";
-import { Achievements } from "@/components/sections/Achievements";
 import { UpcomingEvents } from "@/components/sections/UpcomingEvents";
+import { Wartech } from "@/components/sections/Wartech";
+import { Achievements } from "@/components/sections/Achievements";
 import { ContactAndFAQ } from "@/components/sections/ContactAndFAQ";
 import { Footer } from "@/components/sections/Footer";
+import { RegistrationModal } from "@/components/ui/RegistrationModal";
+import { RulebookModal } from "@/components/ui/RulebookModal";
 
 export default function Home() {
+  const [registerModalOpen, setRegisterModalOpen] = useState(false);
+  const [selectedWartechTrack, setSelectedWartechTrack] = useState<string | undefined>(undefined);
+  const [rulebookModalOpen, setRulebookModalOpen] = useState(false);
+
+  const handleOpenRegister = (trackId?: string) => {
+    setSelectedWartechTrack(trackId);
+    setRegisterModalOpen(true);
+  };
+
+  const handleOpenRulebook = () => {
+    setRulebookModalOpen(true);
+  };
+
   return (
-    <div className="relative min-h-screen bg-[#f9f9f8] text-[#111827] selection:bg-[#0d5c58] selection:text-white">
-      {/* Light technical ruled paper canvas */}
-      <BackgroundGrid />
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white">
+      {/* 1. Sticky Navigation Bar */}
+      <Navbar onOpenRegister={() => handleOpenRegister()} />
 
-      {/* Floating dark capsule navbar */}
-      <Navbar />
-
-      {/* Main Single-Page Content Sections matching AIT_CIDC layout */}
-      <main className="relative z-10 space-y-4">
-        {/* 1. Hero: INNOVATION THROUGH DEVELOPMENT_ */}
+      {/* Main Single-Page Sections */}
+      <main className="relative">
+        {/* 2. Hero Section (Modern grid layout, meta bar, primary CTAs, bottom scrolling ticker) */}
         <Hero />
 
-        {/* 2. Team Modules */}
-        <Team />
-
-        {/* 3. Active Manifesto Projects */}
-        <ProjectsShowcase />
-
-        {/* 4. Want to know about us? */}
+        {/* 3. About & Core Domains Section */}
         <About />
 
-        {/* 5. Wartech Aside Banner Link */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="rounded-2xl bg-zinc-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-zinc-800 shadow-sm">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-                <span className="font-mono text-xs text-red-400 font-bold uppercase">
-                  ANNUAL COMBAT FESTIVAL
-                </span>
-              </div>
-              <h3 className="font-industrial text-xl sm:text-2xl font-bold">
-                Wartech 2026 Arena
-              </h3>
-              <p className="text-xs text-zinc-400 font-sans max-w-xl">
-                Looking for the inter-collegiate combat championship, obstacle maze solver, and drone racing? Explore tracks and rulebooks on the dedicated portal.
-              </p>
-            </div>
+        {/* 4. Team Hierarchy Section (Strict 4-Level Order) */}
+        <Team />
 
-            <Link
-              href="/wartech"
-              className="btn-teal-pill shrink-0 whitespace-nowrap"
-            >
-              <span>EXPLORE WARTECH PORTAL</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-teal-300" />
-            </Link>
-          </div>
-        </section>
+        {/* 5. Projects Showcase Section (Grid layout with Tech Stack tags & Spec Modals) */}
+        <ProjectsShowcase />
 
-        {/* 6. Track Record / Achievements */}
+        {/* 6. Key Events & Workshops Section (Status Badges: Upcoming, Ongoing, Completed) */}
+        <UpcomingEvents onOpenRegister={() => handleOpenRegister()} />
+
+        {/* 7. Wartech Flagship Highlight Section (8 Sub-tracks, Direct CTAs, Rulebook) */}
+        <Wartech
+          onOpenRegister={(trackId) => handleOpenRegister(trackId)}
+          onOpenRulebook={handleOpenRulebook}
+        />
+
+        {/* 8. Track Record & Achievements */}
         <Achievements />
 
-        {/* 7. Upcoming Operations */}
-        <UpcomingEvents />
-
-        {/* 8. Initiate Connection */}
+        {/* 9. Communications & FAQ */}
         <ContactAndFAQ />
       </main>
 
-      {/* Footer */}
+      {/* 10. Footer (AIT Pune branding, socials, coordinates, copyright) */}
       <Footer />
+
+      {/* Interactive Modals */}
+      <RegistrationModal
+        isOpen={registerModalOpen}
+        onClose={() => setRegisterModalOpen(false)}
+        initialTrack={selectedWartechTrack}
+      />
+
+      <RulebookModal
+        isOpen={rulebookModalOpen}
+        onClose={() => setRulebookModalOpen(false)}
+      />
     </div>
   );
 }

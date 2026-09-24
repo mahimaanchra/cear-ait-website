@@ -10,39 +10,61 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        industrial: {
-          teal: "#0d5c58",
-          "teal-dark": "#073a37",
-          red: "#dc2626",
-          black: "#111827",
-          canvas: "#f9f9f8",
+        brand: {
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb", // Primary tech-blue
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
         },
-        teal: {
-          industrial: "#0d5c58",
-          dark: "#073a37",
-          400: "#2dd4bf",
-          500: "#14b8a6",
-          600: "#0d9488",
-          700: "#0f766e",
-          800: "#0d5c58",
-          900: "#073a37",
+        accent: {
+          green: "#10b981",
+          yellow: "#f59e0b",
+          red: "#ef4444",
+          emerald: "#059669",
+          amber: "#d97706",
         },
-        red: {
-          industrial: "#dc2626",
-          600: "#dc2626",
-          700: "#b91c1c",
+        tech: {
+          canvas: "#f8fafc",
+          dark: "#0f172a",
+          card: "#ffffff",
+          border: "#e2e8f0",
+          muted: "#64748b",
         },
       },
       fontFamily: {
-        industrial: ["Space Grotesk", "-apple-system", "sans-serif"],
+        tech: ["Space Grotesk", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
         display: ["Space Grotesk", "-apple-system", "sans-serif"],
-        syne: ["Syne", "sans-serif"],
         mono: ["Space Mono", "JetBrains Mono", "monospace"],
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+      },
+      animation: {
+        "marquee": "marquee 28s linear infinite",
+        "marquee-fast": "marquee 16s linear infinite",
+        "pulse-subtle": "pulseSubtle 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        pulseSubtle: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.4" },
+        },
       },
       boxShadow: {
-        "window": "0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03)",
-        "pill": "0 2px 8px rgba(13, 92, 88, 0.25)",
+        "tech": "0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05)",
+        "tech-hover": "0 10px 25px -5px rgba(37, 99, 235, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05)",
+        "tech-card": "0 4px 20px -2px rgba(15, 23, 42, 0.06)",
+        "glow-blue": "0 0 20px -3px rgba(37, 99, 235, 0.35)",
+        "glow-green": "0 0 20px -3px rgba(16, 185, 129, 0.35)",
+        "glow-red": "0 0 20px -3px rgba(239, 68, 68, 0.35)",
       },
     },
   },
