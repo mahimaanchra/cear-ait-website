@@ -50,8 +50,8 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
   return (
     <section id="wartech" className="relative py-16 sm:py-24 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
-        {/* Prominent Flagship Feature Banner */}
-        <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-8 sm:p-12 shadow-xl relative overflow-hidden">
+        {/* Prominent Flagship Feature Banner in Logo Dark Navy */}
+        <div className="rounded-2xl bg-gradient-to-r from-logo-navy via-slate-900 to-logo-navy text-white p-8 sm:p-12 shadow-xl relative overflow-hidden border border-slate-800">
           {/* Subtle Grid overlay */}
           <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 

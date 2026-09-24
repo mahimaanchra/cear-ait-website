@@ -11,8 +11,8 @@ export function Team() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-mono font-bold uppercase tracking-wider">
-            <Users className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-logo-navy text-white text-xs font-mono font-bold uppercase tracking-wider border border-slate-800 shadow-xs">
+            <Users className="w-3.5 h-3.5 text-blue-400" />
             <span>ORGANIZATIONAL CADRE</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-tech text-slate-900 tracking-tight">
@@ -39,17 +39,17 @@ export function Team() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="bg-white rounded-2xl border-2 border-blue-200 shadow-md p-6 sm:p-8 relative overflow-hidden"
+              className="bg-white rounded-2xl border-2 border-slate-200 border-t-4 border-t-logo-navy shadow-md p-6 sm:p-8 relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 bg-blue-600 text-white font-mono text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
+              <div className="absolute top-0 right-0 bg-logo-navy text-white font-mono text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider border-b border-l border-slate-700">
                 CHIEF ADVISOR &amp; LAB HEAD
               </div>
 
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                 {/* Square Profile Image / Avatar */}
-                <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-xl aspect-square bg-gradient-to-br from-blue-600 to-blue-800 border-2 border-blue-300 flex flex-col items-center justify-center text-white shrink-0 shadow-sm relative overflow-hidden">
+                <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-xl aspect-square bg-gradient-to-br from-logo-navy to-slate-900 border-2 border-slate-700 flex flex-col items-center justify-center text-white shrink-0 shadow-sm relative overflow-hidden">
                   <span className="font-tech text-3xl font-black tracking-tight">AP</span>
-                  <span className="text-[10px] font-mono tracking-widest text-blue-200 mt-1 uppercase">FACULTY</span>
+                  <span className="text-[10px] font-mono tracking-widest text-slate-300 mt-1 uppercase">FACULTY</span>
                   <div className="absolute bottom-2 right-2">
                     <ShieldCheck className="w-4 h-4 text-emerald-300" />
                   </div>

@@ -25,8 +25,8 @@ export function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-blue-50 text-blue-700 text-xs font-mono font-bold uppercase tracking-wider mb-3 border border-blue-100">
-            <ShieldCheck className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-logo-navy text-white text-xs font-mono font-bold uppercase tracking-wider mb-3 border border-slate-800 shadow-xs">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>DISCIPLINE • INNOVATION • FIELD EXCELLENCE</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-tech text-slate-900 tracking-tight">
@@ -39,9 +39,9 @@ export function About() {
 
         {/* Vision & Mission Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 rounded-xl bg-slate-50 border border-slate-200/90 hover:border-blue-200 transition-colors">
+          <div className="p-6 rounded-xl bg-slate-50 border border-slate-200/90 border-t-4 border-t-logo-navy hover:border-slate-300 transition-colors shadow-xs">
             <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-2 rounded-full bg-blue-600" />
+              <span className="w-2 h-2 rounded-full bg-logo-navy" />
               <h3 className="font-tech text-lg font-bold text-slate-900 uppercase tracking-wide">
                 Our Strategic Vision
               </h3>

@@ -22,6 +22,12 @@ const config: Config = {
           800: "#1e40af",
           900: "#1e3a8a",
         },
+        logo: {
+          navy: "#0d1321", // Official CEAR emblem dark blue
+          dark: "#070d18",
+          surface: "#111a2e",
+          blue: "#0d1321",
+        },
         accent: {
           green: "#10b981",
           yellow: "#f59e0b",

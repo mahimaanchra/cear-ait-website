@@ -134,7 +134,7 @@ Official Queries: cear@aitpune.edu.in
             </button>
             <button
               onClick={handleDownload}
-              className="btn-primary-tech text-xs"
+              className="bg-logo-navy hover:bg-slate-800 text-white font-tech font-bold text-xs px-4 py-2.5 rounded-lg shadow-sm border border-slate-800 flex items-center gap-1.5 cursor-pointer transition-all"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Download Rulebook (.txt)</span>

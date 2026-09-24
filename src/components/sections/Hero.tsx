@@ -57,8 +57,8 @@ export function Hero() {
               transition={{ duration: 0.5 }}
               className="space-y-3"
             >
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-blue-100 text-blue-800 text-xs font-mono font-bold uppercase tracking-wider">
-                <Terminal className="w-3.5 h-3.5 text-blue-700" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-logo-navy text-white text-xs font-mono font-bold uppercase tracking-wider border border-slate-800 shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>CENTRE OF EXCELLENCE FOR AI &amp; ROBOTICS</span>
               </div>
 
@@ -113,7 +113,7 @@ export function Hero() {
             >
               <Link
                 href="#projects"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-tech font-bold text-sm px-6 py-3 rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-2 group cursor-pointer"
+                className="bg-logo-navy hover:bg-slate-800 text-white font-tech font-bold text-sm px-6 py-3 rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-2 group cursor-pointer border border-slate-800"
               >
                 <span>Explore Projects</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -221,7 +221,7 @@ export function Hero() {
       </div>
 
       {/* Ticker / Scrolling Marquee at the bottom of Hero */}
-      <div className="mt-12 bg-slate-900 text-white py-3 overflow-hidden border-y border-slate-800">
+      <div className="mt-12 bg-logo-navy text-white py-3 overflow-hidden border-y border-slate-800">
         <div className="animate-marquee-infinite flex items-center gap-8 whitespace-nowrap text-xs sm:text-sm font-mono font-bold tracking-wider">
           {[...tickerItems, ...tickerItems].map((item, idx) => (
             <div key={idx} className="flex items-center gap-4">

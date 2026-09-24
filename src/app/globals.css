@@ -7,8 +7,11 @@
 :root {
   --canvas-bg: #f8fafc;
   --text-primary: #0f172a;
+  --logo-navy: #0d1321;
+  --logo-navy-surface: #111a2e;
   --brand-blue: #2563eb;
   --brand-blue-hover: #1d4ed8;
+  --accent-cyan: #38bdf8;
   --accent-green: #10b981;
   --accent-yellow: #f59e0b;
   --accent-red: #ef4444;
@@ -97,6 +100,12 @@ body {
   background-color: #fef2f2;
   color: #b91c1c;
   border: 1px solid #fecaca;
+}
+
+.badge-navy {
+  background-color: #0d1321;
+  color: #ffffff;
+  border: 1px solid #1e293b;
 }
 
 .badge-slate {

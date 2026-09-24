@@ -27,8 +27,8 @@ export function ProjectsShowcase() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="max-w-2xl space-y-2">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-blue-50 text-blue-700 text-xs font-mono font-bold uppercase tracking-wider border border-blue-100">
-              <Cpu className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-logo-navy text-white text-xs font-mono font-bold uppercase tracking-wider border border-slate-800 shadow-xs">
+              <Cpu className="w-3.5 h-3.5 text-blue-400" />
               <span>LAB R&amp;D DEVELOPMENTS</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-tech text-slate-900 tracking-tight">

@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight, Cpu, Sparkles } from "lucide-react";
+import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
 import { siteConfig } from "@/data/siteData";
+import { CearLogo } from "@/components/ui/CearLogo";
 
 interface NavbarProps {
   onOpenRegister?: () => void;
@@ -56,9 +57,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Left: CEAR Logo + CEAR text branding with tiny green active dot */}
           <Link href="#hero" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm group-hover:bg-blue-700 transition-colors">
-              <Cpu className="w-5 h-5" />
-            </div>
+            <CearLogo className="w-9 h-9 shadow-xs group-hover:scale-105 transition-transform" size={36} priority />
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
                 <span className="font-tech text-lg font-extrabold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">
@@ -87,7 +86,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                   href={link.href}
                   className={`px-3.5 py-1.5 rounded-md text-xs font-semibold font-tech transition-colors relative flex items-center gap-1.5 ${
                     isActive
-                      ? "text-blue-600 bg-blue-50 font-bold"
+                      ? "text-logo-navy bg-slate-100 font-bold"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
@@ -102,11 +101,11 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             })}
           </nav>
 
-          {/* Right: CTA Button */}
+          {/* Right: CTA Button with Logo Dark Navy Touch */}
           <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={onOpenRegister}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-tech font-bold text-xs shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
+              className="bg-logo-navy hover:bg-slate-800 text-white px-4 py-2 rounded-lg font-tech font-bold text-xs shadow-sm hover:shadow transition-all flex items-center gap-1.5 cursor-pointer border border-slate-800"
             >
               <span>Register Now</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -157,7 +156,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                     setMobileMenuOpen(false);
                     onOpenRegister?.();
                   }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-tech font-bold text-sm shadow-sm flex items-center justify-center gap-2"
+                  className="w-full bg-logo-navy hover:bg-slate-800 text-white py-2.5 rounded-lg font-tech font-bold text-sm shadow-sm flex items-center justify-center gap-2 border border-slate-800"
                 >
                   <span>Register Now / Join Club</span>
                   <ArrowRight className="w-4 h-4" />

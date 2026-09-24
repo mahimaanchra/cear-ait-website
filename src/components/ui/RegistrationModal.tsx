@@ -101,14 +101,14 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                 Join CEAR or Enter Wartech
               </h3>
 
-              {/* Tabs Switcher */}
+              {/* Tabs Switcher with Logo Dark Navy Active Pill */}
               <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-lg text-xs font-tech font-bold pt-1">
                 <button
                   type="button"
                   onClick={() => setActiveTab("inductions")}
                   className={`py-2 px-3 rounded-md transition-all ${
                     activeTab === "inductions"
-                      ? "bg-white text-blue-600 shadow-xs"
+                      ? "bg-logo-navy text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
@@ -119,7 +119,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                   onClick={() => setActiveTab("wartech")}
                   className={`py-2 px-3 rounded-md transition-all ${
                     activeTab === "wartech"
-                      ? "bg-white text-blue-600 shadow-xs"
+                      ? "bg-logo-navy text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
@@ -354,7 +354,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                 </button>
                 <button
                   type="submit"
-                  className="btn-primary-tech text-xs"
+                  className="bg-logo-navy hover:bg-slate-800 text-white font-tech font-bold text-xs px-5 py-2.5 rounded-lg shadow-sm border border-slate-800 flex items-center gap-1.5 cursor-pointer transition-all"
                 >
                   <span>Submit Registration</span>
                   <ArrowRight className="w-3.5 h-3.5" />

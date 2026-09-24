@@ -44,6 +44,14 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: "CEAR AIT",
   },
+  icons: {
+    icon: [
+      { url: "/cear-logo.svg", type: "image/svg+xml" },
+      { url: "/cear-logo.png", type: "image/png" },
+    ],
+    shortcut: "/cear-logo.png",
+    apple: "/cear-logo.png",
+  },
 };
 
 export default function RootLayout({

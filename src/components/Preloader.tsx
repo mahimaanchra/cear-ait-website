@@ -166,14 +166,14 @@ export function Preloader({ duration = 1800, onComplete }: PreloaderProps) {
                     strokeWidth="2.5"
                   />
 
-                  {/* 4. Rounded Dark Visor Screen */}
+                  {/* 4. Rounded Dark Visor Screen in Logo Navy */}
                   <rect
                     x="39"
                     y="28"
                     width="82"
                     height="52"
                     rx="18"
-                    fill="#0f172a"
+                    fill="#0d1321"
                   />
 
                   {/* Visor Specular Glass Arc */}
@@ -197,7 +197,7 @@ export function Preloader({ duration = 1800, onComplete }: PreloaderProps) {
                       }}
                       style={{ transformOrigin: "62px 52px" }}
                     >
-                      <circle cx="62" cy="52" r="7.5" fill="#38bdf8" />
+                      <circle cx="62" cy="52" r="7.5" fill="#2563eb" />
                       <circle cx="60" cy="50" r="2.8" fill="#ffffff" />
                       <circle cx="64.5" cy="54.5" r="1.2" fill="#ffffff" />
                     </motion.g>
@@ -208,12 +208,12 @@ export function Preloader({ duration = 1800, onComplete }: PreloaderProps) {
                         <path
                           d="M 91 54 Q 98 46 105 54"
                           fill="none"
-                          stroke="#38bdf8"
+                          stroke="#2563eb"
                           strokeWidth="2.8"
                           strokeLinecap="round"
                         />
                         {/* Tiny playful sparkle */}
-                        <circle cx="106" cy="46" r="1.5" fill="#93c5fd" />
+                        <circle cx="106" cy="46" r="1.5" fill="#60a5fa" />
                       </g>
                     ) : (
                       <motion.g
@@ -227,7 +227,7 @@ export function Preloader({ duration = 1800, onComplete }: PreloaderProps) {
                         }}
                         style={{ transformOrigin: "98px 52px" }}
                       >
-                        <circle cx="98" cy="52" r="7.5" fill="#38bdf8" />
+                        <circle cx="98" cy="52" r="7.5" fill="#2563eb" />
                         <circle cx="96" cy="50" r="2.8" fill="#ffffff" />
                         <circle cx="100.5" cy="54.5" r="1.2" fill="#ffffff" />
                       </motion.g>
@@ -372,10 +372,10 @@ export function Preloader({ duration = 1800, onComplete }: PreloaderProps) {
               />
             </div>
 
-            {/* Clean Minimal Progress Line */}
+            {/* Clean Minimal Progress Line in Logo Dark Blue */}
             <div className="w-28 sm:w-32 h-1 bg-slate-100 rounded-full overflow-hidden mt-6">
               <div
-                className="h-full bg-blue-600 rounded-full transition-all duration-75 ease-out"
+                className="h-full bg-logo-navy rounded-full transition-all duration-75 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
