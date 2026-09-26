@@ -13,6 +13,8 @@ import { ContactAndFAQ } from "@/components/sections/ContactAndFAQ";
 import { Footer } from "@/components/sections/Footer";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
+import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
+import { CircuitDivider } from "@/components/ui/CircuitDivider";
 
 export default function Home() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -36,7 +38,10 @@ export default function Home() {
       {/* Main Single-Page Sections */}
       <main className="relative">
         {/* 2. Hero Section (Modern grid layout, meta bar, primary CTAs, bottom scrolling ticker) */}
-        <Hero />
+        <Hero onOpenRegister={handleOpenRegister} />
+
+        {/* Technical Data Stream Divider */}
+        <CircuitDivider label="NODE_01 // CORE_DOMAINS" />
 
         {/* 3. About & Core Domains Section */}
         <About />
@@ -44,11 +49,17 @@ export default function Home() {
         {/* 4. Team Hierarchy Section (Strict 4-Level Order) */}
         <Team />
 
+        {/* Technical Data Stream Divider */}
+        <CircuitDivider label="NODE_02 // ACTIVE_FLEET_R&D" />
+
         {/* 5. Projects Showcase Section (Grid layout with Tech Stack tags & Spec Modals) */}
         <ProjectsShowcase />
 
         {/* 6. Key Events & Workshops Section (Status Badges: Upcoming, Ongoing, Completed) */}
         <UpcomingEvents onOpenRegister={() => handleOpenRegister()} />
+
+        {/* Technical Data Stream Divider */}
+        <CircuitDivider label="NODE_03 // WARTECH_2026_ARENA" />
 
         {/* 7. Wartech Flagship Highlight Section (8 Sub-tracks, Direct CTAs, Rulebook) */}
         <Wartech
@@ -62,6 +73,9 @@ export default function Home() {
         {/* 9. Communications & FAQ */}
         <ContactAndFAQ />
       </main>
+
+      {/* Floating Autonomous Fleet Telemetry Beacon */}
+      <AutonomousStatusWidget />
 
       {/* 10. Footer (AIT Pune branding, socials, coordinates, copyright) */}
       <Footer />

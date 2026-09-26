@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
-import { Preloader } from "@/components/Preloader";
+import dynamic from "next/dynamic";
+import { SiteContentProvider } from "@/context/SiteContentContext";
+
+const Preloader = dynamic(() => import("@/components/Preloader"), {
+  ssr: false,
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -64,8 +69,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceMono.variable} font-sans bg-slate-50 text-slate-900 antialiased min-h-screen selection:bg-blue-600 selection:text-white`}
       >
-        <Preloader />
-        {children}
+        <SiteContentProvider>
+          <Preloader />
+          {children}
+        </SiteContentProvider>
       </body>
     </html>
   );

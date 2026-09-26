@@ -50,6 +50,7 @@ export interface TeamMember {
   specialization?: string;
   avatarBg?: string;
   avatarInitials?: string;
+  imageUrl?: string;
   linkedin?: string;
   github?: string;
 }

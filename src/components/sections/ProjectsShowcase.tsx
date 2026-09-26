@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, ExternalLink, Cpu, Info, Check, ArrowRight, Shield, Activity, X } from "lucide-react";
 import { projects, Project } from "@/data/siteData";
+import { PerceptionCard } from "@/components/ui/PerceptionCard";
 
 export function ProjectsShowcase() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -54,87 +55,89 @@ export function ProjectsShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: idx * 0.07 }}
-              className="bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all p-6 flex flex-col justify-between group"
+              className="h-full"
             >
-              <div className="space-y-4">
-                {/* Card Top: Category & Status Badge */}
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded">
-                    {project.category}
-                  </span>
-                  <span
-                    className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${getStatusBadge(
-                      project.status
-                    )}`}
-                  >
-                    {project.status}
-                  </span>
-                </div>
+              <PerceptionCard className="h-full p-6 flex flex-col justify-between">
+                <div className="space-y-4">
+                  {/* Card Top: Category & Status Badge */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded">
+                      {project.category}
+                    </span>
+                    <span
+                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${getStatusBadge(
+                        project.status
+                      )}`}
+                    >
+                      {project.status}
+                    </span>
+                  </div>
 
-                {/* Project Title */}
-                <h3 className="text-xl font-bold font-tech text-slate-900 group-hover:text-blue-600 transition-colors">
-                  {project.title}
-                </h3>
+                  {/* Project Title */}
+                  <h3 className="text-xl font-bold font-tech text-slate-900 group-hover:text-blue-600 transition-colors">
+                    {project.title}
+                  </h3>
 
-                {/* Short Description */}
-                <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
-                  {project.description}
-                </p>
+                  {/* Short Description */}
+                  <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
+                    {project.description}
+                  </p>
 
-                {/* Tech Stack Tags */}
-                <div className="space-y-1.5 pt-2">
-                  <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">
-                    TECH STACK
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-slate-50 border border-slate-200 text-slate-700 group-hover:border-blue-200 transition-colors"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  {/* Tech Stack Tags */}
+                  <div className="space-y-1.5 pt-2">
+                    <span className="text-[10px] font-mono text-slate-400 font-bold uppercase block">
+                      TECH STACK
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-slate-50 border border-slate-200 text-slate-700 group-hover:border-blue-200 transition-colors"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Card Footer: Links & Spec Modal Trigger */}
-              <div className="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between gap-2">
-                <button
-                  onClick={() => setSelectedProject(project)}
-                  className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
-                >
-                  <Info className="w-3.5 h-3.5" />
-                  <span>Inspect Specs</span>
-                </button>
+                {/* Card Footer: Links & Spec Modal Trigger */}
+                <div className="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <button
+                    onClick={() => setSelectedProject(project)}
+                    className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
+                  >
+                    <Info className="w-3.5 h-3.5" />
+                    <span>Inspect Specs</span>
+                  </button>
 
-                <div className="flex items-center gap-3">
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1.5 rounded text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
-                      title="GitHub Repository"
-                    >
-                      <Github className="w-4 h-4" />
-                    </a>
-                  )}
+                  <div className="flex items-center gap-3">
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 rounded text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                        title="GitHub Repository"
+                      >
+                        <Github className="w-4 h-4" />
+                      </a>
+                    )}
 
-                  {project.demoUrl && (
-                    <a
-                      href={project.demoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1.5 rounded text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                      title="Live Demo / Telemetry"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  )}
+                    {project.demoUrl && (
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 rounded text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        title="Live Demo / Telemetry"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </PerceptionCard>
             </motion.div>
           ))}
         </div>

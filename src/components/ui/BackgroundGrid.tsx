@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { NeuralCanvas } from "@/components/ui/NeuralCanvas";
 
 export function BackgroundGrid() {
   return (
@@ -19,6 +20,9 @@ export function BackgroundGrid() {
           backgroundSize: "32px 32px",
         }}
       />
+
+      {/* Neural AI & Robotics Mesh Background */}
+      <NeuralCanvas className="opacity-50" nodeCount={24} interactive={true} />
 
       {/* Clean Subtle Tech Blue Accent Glow in Top Corner */}
       <div className="absolute top-0 right-0 w-[35vw] h-[35vw] max-w-[450px] max-h-[450px] bg-blue-500/5 blur-[100px]" />

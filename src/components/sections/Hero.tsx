@@ -2,11 +2,18 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Terminal, Shield, Zap, Sparkles, Activity, Layers, Disc3 } from "lucide-react";
 import { siteConfig } from "@/data/siteData";
+import { NeuralCanvas } from "@/components/ui/NeuralCanvas";
+import { EventSpotlightCard } from "@/components/ui/EventSpotlightCard";
 
-export function Hero() {
+interface HeroProps {
+  onOpenRegister?: (trackId?: string) => void;
+}
+
+export function Hero({ onOpenRegister }: HeroProps = {}) {
   const tickerItems = [
     "AUTONOMOUS DEFENSE SYSTEMS",
     "THE ROBOTICS STACK",
@@ -23,6 +30,7 @@ export function Hero() {
     <section id="hero" className="relative pt-24 sm:pt-28 pb-12 overflow-hidden bg-slate-50 border-b border-slate-200">
       {/* Subtle Background Grid Pattern */}
       <div className="absolute inset-0 canvas-tech-grid opacity-70 pointer-events-none" />
+      <NeuralCanvas className="opacity-80" nodeCount={36} interactive={true} />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Meta Info Bar: Date/Lab badges, quick indicators */}
@@ -59,13 +67,13 @@ export function Hero() {
             >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-logo-navy text-white text-xs font-mono font-bold uppercase tracking-wider border border-slate-800 shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>CENTRE OF EXCELLENCE FOR AI &amp; ROBOTICS</span>
+                <span>ARMY INSTITUTE OF TECHNOLOGY • CEAR</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-tech text-slate-900 leading-[1.08]">
-                Autonomous Robotics, Intelligent Control &amp;{" "}
+                Center of Excellence for{" "}
                 <span className="text-blue-600 underline decoration-blue-300 decoration-wavy decoration-2">
-                  Hardware Craft.
+                  AI and Robotics
                 </span>
               </h1>
             </motion.div>
@@ -129,92 +137,15 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Right Column: Technical Documentation / Telemetry HUD Container */}
-          <div className="lg:col-span-5">
+          {/* Right Column: Live & Upcoming Event Spotlight Card */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white rounded-xl border border-slate-200 shadow-md p-6 relative overflow-hidden"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="w-full flex justify-center lg:justify-end"
             >
-              {/* Window Header */}
-              <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-red-400" />
-                  <span className="w-3 h-3 rounded-full bg-amber-400" />
-                  <span className="w-3 h-3 rounded-full bg-emerald-400" />
-                  <span className="ml-2 font-mono text-xs font-bold text-slate-600">CEAR_TELEMETRY.NODE</span>
-                </div>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">
-                  LIVE STREAM
-                </span>
-              </div>
-
-              {/* Technical Telemetry Grid */}
-              <div className="space-y-4 font-mono text-xs">
-                {/* Active Stack */}
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1.5">
-                  <div className="flex items-center justify-between text-slate-500 text-[11px]">
-                    <span>CORE FRAMEWORK</span>
-                    <span className="font-bold text-blue-600">ROS2 HUMBLE</span>
-                  </div>
-                  <div className="flex items-center justify-between font-bold text-slate-800">
-                    <span>MICRO-CONTROLLER</span>
-                    <span>STM32F4 + ESP32-S3</span>
-                  </div>
-                </div>
-
-                {/* Telemetry Metrics */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-500 uppercase block">LiDAR Point Cloud</span>
-                    <span className="font-bold text-slate-800 text-sm">24,000 pts/s</span>
-                    <div className="w-full bg-slate-200 h-1 rounded-full mt-2 overflow-hidden">
-                      <div className="bg-blue-600 h-full w-[85%]" />
-                    </div>
-                  </div>
-
-                  <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-500 uppercase block">Battery Bus</span>
-                    <span className="font-bold text-emerald-600 text-sm">16.4 V • 94%</span>
-                    <div className="w-full bg-slate-200 h-1 rounded-full mt-2 overflow-hidden">
-                      <div className="bg-emerald-500 h-full w-[94%]" />
-                    </div>
-                  </div>
-
-                  <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-500 uppercase block">Control Latency</span>
-                    <span className="font-bold text-blue-600 text-sm">6.2 ms (RF Mesh)</span>
-                    <div className="w-full bg-slate-200 h-1 rounded-full mt-2 overflow-hidden">
-                      <div className="bg-blue-500 h-full w-[35%]" />
-                    </div>
-                  </div>
-
-                  <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                    <span className="text-[10px] text-slate-500 uppercase block">IMU Drift Rate</span>
-                    <span className="font-bold text-slate-800 text-sm">0.018 deg/s</span>
-                    <div className="w-full bg-slate-200 h-1 rounded-full mt-2 overflow-hidden">
-                      <div className="bg-amber-500 h-full w-[20%]" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Subsystem Readiness Indicators */}
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-600 font-semibold">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span>Kinematics OK</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-blue-500" />
-                    <span>Vision Pipeline Active</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-500" />
-                    <span>RF Link 98%</span>
-                  </span>
-                </div>
-              </div>
+              <EventSpotlightCard onOpenRegister={onOpenRegister} />
             </motion.div>
           </div>
         </div>

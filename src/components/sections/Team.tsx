@@ -1,11 +1,14 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Linkedin, Github, UserCheck, ShieldCheck, Quote, Users, Award } from "lucide-react";
-import { facultyIncharge, secretaries, jointSecretaries, coreContributors, TeamMember } from "@/data/siteData";
+import { TeamMember } from "@/data/siteData";
+import { useSiteContent } from "@/context/SiteContentContext";
 
 export function Team() {
+  const { facultyIncharge, secretaries, jointSecretaries, coreContributors } = useSiteContent();
   return (
     <section id="team" className="relative py-16 sm:py-24 bg-slate-50 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
@@ -48,9 +51,24 @@ export function Team() {
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                 {/* Square Profile Image / Avatar */}
                 <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-xl aspect-square bg-gradient-to-br from-logo-navy to-slate-900 border-2 border-slate-700 flex flex-col items-center justify-center text-white shrink-0 shadow-sm relative overflow-hidden">
-                  <span className="font-tech text-3xl font-black tracking-tight">AP</span>
-                  <span className="text-[10px] font-mono tracking-widest text-slate-300 mt-1 uppercase">FACULTY</span>
-                  <div className="absolute bottom-2 right-2">
+                  {facultyIncharge.imageUrl ? (
+                    <Image
+                      src={facultyIncharge.imageUrl}
+                      alt={facultyIncharge.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <>
+                      <span className="font-tech text-3xl font-black tracking-tight">
+                        {facultyIncharge.avatarInitials || "AP"}
+                      </span>
+                      <span className="text-[10px] font-mono tracking-widest text-slate-300 mt-1 uppercase">
+                        FACULTY
+                      </span>
+                    </>
+                  )}
+                  <div className="absolute bottom-2 right-2 z-10">
                     <ShieldCheck className="w-4 h-4 text-emerald-300" />
                   </div>
                 </div>
@@ -120,9 +138,15 @@ export function Team() {
               >
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-4">
                   {/* Square Profile Image */}
-                  <div className={`w-24 h-24 rounded-lg aspect-square ${sec.avatarBg || "bg-blue-600 text-white"} flex flex-col items-center justify-center shrink-0 border border-slate-200 shadow-xs`}>
-                    <span className="font-tech text-xl font-bold">{sec.avatarInitials}</span>
-                    <span className="text-[9px] font-mono tracking-wider opacity-80 uppercase mt-0.5">SECRETARY</span>
+                  <div className={`w-24 h-24 rounded-lg aspect-square ${sec.avatarBg || "bg-blue-600 text-white"} flex flex-col items-center justify-center shrink-0 border border-slate-200 shadow-xs relative overflow-hidden`}>
+                    {sec.imageUrl ? (
+                      <Image src={sec.imageUrl} alt={sec.name} fill className="object-cover" />
+                    ) : (
+                      <>
+                        <span className="font-tech text-xl font-bold">{sec.avatarInitials || sec.name.slice(0, 2).toUpperCase()}</span>
+                        <span className="text-[9px] font-mono tracking-wider opacity-80 uppercase mt-0.5">SECRETARY</span>
+                      </>
+                    )}
                   </div>
 
                   <div className="text-center sm:text-left space-y-1 flex-1">
@@ -187,12 +211,18 @@ export function Team() {
                 <div>
                   {/* Square Profile Image */}
                   <div className="w-full aspect-square rounded-lg mb-4 bg-slate-100 border border-slate-200 flex flex-col items-center justify-center relative overflow-hidden">
-                    <div className={`w-14 h-14 rounded-md ${js.avatarBg || "bg-blue-600"} text-white flex items-center justify-center font-tech font-bold text-lg`}>
-                      {js.avatarInitials}
-                    </div>
-                    <span className="font-mono text-[10px] text-slate-400 font-bold uppercase mt-2">
-                      DOMAIN LEAD
-                    </span>
+                    {js.imageUrl ? (
+                      <Image src={js.imageUrl} alt={js.name} fill className="object-cover" />
+                    ) : (
+                      <>
+                        <div className={`w-14 h-14 rounded-md ${js.avatarBg || "bg-blue-600"} text-white flex items-center justify-center font-tech font-bold text-lg`}>
+                          {js.avatarInitials || js.name.slice(0, 2).toUpperCase()}
+                        </div>
+                        <span className="font-mono text-[10px] text-slate-400 font-bold uppercase mt-2">
+                          DOMAIN LEAD
+                        </span>
+                      </>
+                    )}
                   </div>
 
                   <h4 className="font-tech text-base font-bold text-slate-900">
@@ -254,8 +284,12 @@ export function Team() {
                 <div>
                   <div className="flex items-center gap-3 mb-3">
                     {/* Square Profile Image */}
-                    <div className={`w-12 h-12 rounded-lg aspect-square ${cc.avatarBg || "bg-slate-700 text-white"} flex items-center justify-center font-tech font-bold text-sm shrink-0 border border-slate-200`}>
-                      {cc.avatarInitials}
+                    <div className={`w-12 h-12 rounded-lg aspect-square ${cc.avatarBg || "bg-slate-700 text-white"} flex items-center justify-center font-tech font-bold text-sm shrink-0 border border-slate-200 relative overflow-hidden`}>
+                      {cc.imageUrl ? (
+                        <Image src={cc.imageUrl} alt={cc.name} fill className="object-cover" />
+                      ) : (
+                        <span>{cc.avatarInitials || cc.name.slice(0, 2).toUpperCase()}</span>
+                      )}
                     </div>
                     <div className="truncate">
                       <h4 className="font-tech text-sm font-bold text-slate-900 truncate">

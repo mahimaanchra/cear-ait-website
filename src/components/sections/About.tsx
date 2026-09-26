@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Brain, Cpu, Eye, Navigation, CheckCircle2, ShieldCheck, Compass, Award } from "lucide-react";
 import { siteConfig, focusAreas } from "@/data/siteData";
+import { PerceptionCard } from "@/components/ui/PerceptionCard";
 
 const iconMap: Record<string, React.ReactNode> = {
   ai: <Brain className="w-6 h-6 text-blue-600" />,
@@ -83,39 +84,41 @@ export function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="p-6 rounded-xl bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between"
+                className="h-full"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                      {iconMap[domain.id]}
+                <PerceptionCard className="p-6 h-full flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                        {iconMap[domain.id]}
+                      </div>
+                      <span
+                        className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                          badgeStyles[domain.accent]
+                        }`}
+                      >
+                        {domain.tag}
+                      </span>
                     </div>
-                    <span
-                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
-                        badgeStyles[domain.accent]
-                      }`}
-                    >
-                      {domain.tag}
-                    </span>
+
+                    <h4 className="font-tech text-lg font-bold text-slate-900 mb-2">
+                      {domain.title}
+                    </h4>
+
+                    <p className="text-xs text-slate-600 font-sans leading-relaxed mb-4">
+                      {domain.description}
+                    </p>
                   </div>
 
-                  <h4 className="font-tech text-lg font-bold text-slate-900 mb-2">
-                    {domain.title}
-                  </h4>
-
-                  <p className="text-xs text-slate-600 font-sans leading-relaxed mb-4">
-                    {domain.description}
-                  </p>
-                </div>
-
-                <div className="space-y-1.5 pt-4 border-t border-slate-100">
-                  {domain.bullets.map((bullet, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs font-mono text-slate-600">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
-                      <span className="truncate">{bullet}</span>
-                    </div>
-                  ))}
-                </div>
+                  <div className="space-y-1.5 pt-4 border-t border-slate-100">
+                    {domain.bullets.map((bullet, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs font-mono text-slate-600">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
+                        <span className="truncate">{bullet}</span>
+                      </div>
+                    ))}
+                  </div>
+                </PerceptionCard>
               </motion.div>
             ))}
           </div>
