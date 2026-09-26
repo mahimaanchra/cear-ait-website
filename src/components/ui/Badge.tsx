@@ -9,19 +9,19 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 export function Badge({ children, variant = "lime", className, ...props }: BadgeProps) {
   const variants = {
-    lime: "bg-[#d4f933] text-black border border-[#bef264] font-bold shadow-sm",
-    dark: "bg-[#09090c] text-white border border-zinc-700",
-    outline: "bg-white text-zinc-800 border border-zinc-300",
-    cyan: "bg-sky-100 text-sky-900 border border-sky-300",
-    teal: "bg-emerald-100 text-emerald-900 border border-emerald-300",
-    purple: "bg-purple-100 text-purple-900 border border-purple-300",
-    gold: "bg-amber-100 text-amber-900 border border-amber-300",
+    lime: "bg-white text-ink border-2 border-ink shadow-[2px_2px_0_#14140f]",
+    dark: "bg-ink text-paper border-2 border-ink shadow-[2px_2px_0_#14140f]",
+    outline: "bg-paper text-ink border-2 border-ink shadow-[2px_2px_0_#14140f]",
+    cyan: "bg-white text-ink border-2 border-ink shadow-[2px_2px_0_#14140f]",
+    teal: "bg-ink text-white border-2 border-ink shadow-[2px_2px_0_#14140f]",
+    purple: "bg-red text-white border-2 border-ink shadow-[2px_2px_0_#14140f]",
+    gold: "bg-white text-ink border-2 border-ink shadow-[2px_2px_0_#14140f]",
   };
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono tracking-tight transition-colors",
+        "inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-tech font-bold tracking-tight transition-transform",
         variants[variant],
         className
       )}
@@ -31,3 +31,5 @@ export function Badge({ children, variant = "lime", className, ...props }: Badge
     </span>
   );
 }
+
+export default Badge;

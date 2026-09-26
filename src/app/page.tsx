@@ -31,37 +31,28 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-paper text-ink font-body selection:bg-ink selection:text-paper">
       {/* 1. Sticky Navigation Bar */}
       <Navbar onOpenRegister={() => handleOpenRegister()} />
 
       {/* Main Single-Page Sections */}
       <main className="relative">
-        {/* 2. Hero Section (Modern grid layout, meta bar, primary CTAs, bottom scrolling ticker) */}
+        {/* 2. Hero Section */}
         <Hero onOpenRegister={handleOpenRegister} />
-
-        {/* Technical Data Stream Divider */}
-        <CircuitDivider label="NODE_01 // CORE_DOMAINS" />
 
         {/* 3. About & Core Domains Section */}
         <About />
 
-        {/* 4. Team Hierarchy Section (Strict 4-Level Order) */}
+        {/* 4. Team Hierarchy Section */}
         <Team />
 
-        {/* Technical Data Stream Divider */}
-        <CircuitDivider label="NODE_02 // ACTIVE_FLEET_R&D" />
-
-        {/* 5. Projects Showcase Section (Grid layout with Tech Stack tags & Spec Modals) */}
+        {/* 5. Projects Showcase Section */}
         <ProjectsShowcase />
 
-        {/* 6. Key Events & Workshops Section (Status Badges: Upcoming, Ongoing, Completed) */}
+        {/* 6. Key Events & Workshops Section */}
         <UpcomingEvents onOpenRegister={() => handleOpenRegister()} />
 
-        {/* Technical Data Stream Divider */}
-        <CircuitDivider label="NODE_03 // WARTECH_2026_ARENA" />
-
-        {/* 7. Wartech Flagship Highlight Section (8 Sub-tracks, Direct CTAs, Rulebook) */}
+        {/* 7. Wartech Flagship Highlight Section */}
         <Wartech
           onOpenRegister={(trackId) => handleOpenRegister(trackId)}
           onOpenRulebook={handleOpenRulebook}

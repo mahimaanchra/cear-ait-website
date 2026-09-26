@@ -71,17 +71,17 @@ export const siteConfig = {
   fullName: "Centre of Excellence for AI & Robotics",
   shortTitle: "CEAR AIT",
   college: "Army Institute of Technology, Pune",
-  affiliation: "Affiliated to Savitribai Phule Pune University (SPPU)",
+  affiliation: "Affiliated to SPPU, Pune",
   tagline: "BUILD • INNOVATE • AUTOMATE",
   heroSubtitle:
-    "Engineering autonomous robotics, intelligent control architectures, and high-performance hardware craft at Army Institute of Technology.",
+    "Autonomous robotics, defense mechatronics, and embedded intelligence at Army Institute of Technology, Pune.",
   vision:
-    "To build an interdisciplinary ecosystem that empowers cadet engineers to design, build, and deploy cutting-edge autonomous defense systems, embedded hardware, and AI algorithms.",
+    "Building an interdisciplinary ecosystem for autonomous defense systems, embedded hardware, and applied AI.",
   mission:
-    "Spearheading practical research in autonomous robotics, low-latency edge AI, and tactical defense mechatronics while training the next generation of technological leaders.",
+    "Conducting practical research in robotics, edge AI, and tactical mechatronics through rapid hardware engineering.",
   address: "Army Institute of Technology, Alandi Road, Dighi, Pune, Maharashtra 411015",
   contactEmail: "cear@aitpune.edu.in",
-  labLocation: "CEAR Robotics Wing, Lab 104, Ground Floor",
+  labLocation: "CEAR Robotics Wing, Lab 104",
   socials: {
     instagram: "https://instagram.com/robotics.club_ait",
     linkedin: "https://linkedin.com/company/cear-ait",
@@ -89,10 +89,10 @@ export const siteConfig = {
     discord: "https://discord.gg/cear-ait",
   },
   stats: [
-    { value: "50+", label: "Robots Engineered", accent: "blue" },
-    { value: "15+", label: "National Podiums", accent: "yellow" },
-    { value: "120+", label: "Cadet Innovators", accent: "green" },
-    { value: "100%", label: "Hardware Craft", accent: "red" },
+    { value: "50+", label: "Robots Built", accent: "blue" },
+    { value: "15+", label: "Podiums", accent: "yellow" },
+    { value: "120+", label: "Innovators", accent: "green" },
+    { value: "100%", label: "Hardware", accent: "red" },
   ],
 };
 
@@ -100,9 +100,9 @@ export const focusAreas = [
   {
     id: "ai",
     title: "Artificial Intelligence",
-    tag: "Neural Edge & RL",
+    tag: "Edge AI & RL",
     description:
-      "Deploying quantized edge neural networks, spatial reinforcement learning models, and real-time decision algorithms on embedded accelerators.",
+      "Quantized neural networks, reinforcement learning, and real-time decision algorithms on embedded accelerators.",
     bullets: ["Edge AI Inference", "Reinforcement Learning", "Predictive Diagnostics", "Adaptive Trajectories"],
     accent: "blue",
   },
@@ -111,8 +111,8 @@ export const focusAreas = [
     title: "Embedded Robotics",
     tag: "Hardware & PCB",
     description:
-      "Designing multi-layer custom PCBs, high-torque BLDC motor drives, and real-time ROS2 micro-ros communication pipelines.",
-    bullets: ["Custom Multilayer PCBs", "ROS2 Humble Architecture", "High-Torque Drives", "Telemetry Links"],
+      "Custom multi-layer PCBs, high-torque BLDC motor drives, and real-time ROS2 communication pipelines.",
+    bullets: ["Custom Multilayer PCBs", "ROS2 Architecture", "High-Torque Drives", "Telemetry Links"],
     accent: "green",
   },
   {
@@ -120,8 +120,8 @@ export const focusAreas = [
     title: "Computer Vision",
     tag: "Sensing & Depth",
     description:
-      "Real-time 3D LiDAR point cloud processing, depth sensor fusion, optical flow localization, and high-speed obstacle segmentation.",
-    bullets: ["LiDAR Point Clouds", "Thermal Sensor Fusion", "Optical Flow Odometry", "YOLO Object Detection"],
+      "3D LiDAR point clouds, depth sensor fusion, optical flow odometry, and high-speed target segmentation.",
+    bullets: ["LiDAR Point Clouds", "Sensor Fusion", "Optical Flow Odometry", "YOLO Detection"],
     accent: "yellow",
   },
   {
@@ -129,8 +129,8 @@ export const focusAreas = [
     title: "Autonomous Systems",
     tag: "Tactical SLAM",
     description:
-      "Autonomous path planning in GPS-denied environments, multi-robot swarm coordination, and tactical fail-safe protocols.",
-    bullets: ["GPS-Denied Navigation", "Swarm Coordination", "A* & DWA Path Generation", "Tactical Fail-Safe"],
+      "GPS-denied path planning, multi-robot swarm coordination, and tactical fail-safe navigation protocols.",
+    bullets: ["GPS-Denied Navigation", "Swarm Coordination", "Path Generation", "Tactical Fail-Safe"],
     accent: "red",
   },
 ];
@@ -339,13 +339,13 @@ export const coreContributors: TeamMember[] = [
 export const projects: Project[] = [
   {
     id: "robotic-arm",
-    title: "6-DOF Articulated Robotic Arm",
+    title: "6-DOF Articulated Arm",
     category: "Manipulation",
-    tagline: "High-precision 6-DOF articulated robotic manipulator for surgical payload execution.",
+    tagline: "High-precision articulated manipulator for inverse kinematic trajectory execution.",
     description:
-      "A high-precision articulated robotic arm engineered for multi-axis dexterity, inverse kinematic path trajectory execution, and accurate pick-and-place automation.",
+      "Multi-axis manipulator with closed-loop servo feedback and inverse kinematics for sub-millimeter precision.",
     longDescription:
-      "Designed and fabricated from the ground up at the CEAR lab, this multi-degree-of-freedom robotic arm utilizes closed-loop servo telemetry and real-time kinematic calculations. Equipped with custom interchangeable end-effectors, tactile pressure sensors, and intuitive micro-step positional feedback, it achieves sub-millimeter repeatable precision.",
+      "Designed and fabricated from the ground up at the CEAR lab, this multi-degree-of-freedom robotic arm utilizes closed-loop servo telemetry and real-time kinematic calculations.",
     status: "Active R&D",
     highlight: "Inverse Kinematic Solver • Sub-mm Accuracy",
     tags: ["ROS2", "Computer Vision", "C++", "Kinematics", "Servo Telemetry"],
@@ -365,9 +365,9 @@ export const projects: Project[] = [
     category: "Aquatics",
     tagline: "Amphibious underwater robot winning 3rd Position & Unique Design Award at IIT Guwahati Techniche.",
     description:
-      "A specialized aquatic exploration and obstacle navigation robot engineered for hydrodynamic stability, ballast equilibrium, and submerged combat maneuvering.",
+      "Hydrodynamic underwater exploration robot with passive ballast control and high-thrust brushless propulsion.",
     longDescription:
-      "Jalpari was engineered to conquer complex underwater challenges at IIT Guwahati's Aquawar. Featuring a custom waterproof acrylic chassis, high-thrust brushless thrusters, and precision ballast buoyancy management, Jalpari navigated underwater gates and recovered submerged targets under intense competition constraints.",
+      "Jalpari was engineered to conquer complex underwater challenges at IIT Guwahati's Aquawar. Featuring a custom waterproof acrylic chassis, high-thrust brushless thrusters, and precision ballast buoyancy management.",
     status: "Podium Winner",
     highlight: "Awarded 'Unique Design Award' & 3rd Place at IIT Guwahati Aquawar 3.0",
     tags: ["Marine Robotics", "Brushless Thrusters", "Hydrodynamics", "Wired/Wireless RF", "Ballast Control"],
@@ -385,11 +385,11 @@ export const projects: Project[] = [
     id: "master-slave-arm",
     title: "Master-Slave Teleoperation Rig",
     category: "Manipulation",
-    tagline: "Bilateral teleoperation system featuring real-time angular mirroring and sensory feedback for hazardous zones.",
+    tagline: "Bilateral teleoperation system featuring real-time angular mirroring and sensory feedback.",
     description:
-      "A dual-unit teleoperation robotic arm system where master telemetry seamlessly commands a synchronized slave arm with tactile sensory feedback.",
+      "Bilateral teleoperation arm reproducing human joint trajectories in real time over low-latency wireless links.",
     longDescription:
-      "Built for hazardous ordnance disposal and remote laboratory operations, this system uses an ergonomic wearable master rig fitted with high-resolution magnetic rotary encoders. The slave unit reproduces human operator joint trajectories in real time over low-latency wireless protocols with collision mitigation algorithms.",
+      "Built for hazardous ordnance disposal and remote laboratory operations, this system uses an ergonomic wearable master rig fitted with high-resolution magnetic rotary encoders.",
     status: "Operational",
     highlight: "Zero-Lag Kinematic Mirroring & Tactile Feedback",
     tags: ["Teleoperation", "Bilateral Feedback", "Magnetic Encoders", "Low-Latency RF", "C++"],
@@ -405,13 +405,13 @@ export const projects: Project[] = [
   },
   {
     id: "pipe-climbing-bot",
-    title: "Autonomous Pipe-Climbing Robot",
+    title: "Pipe-Climbing Robot",
     category: "Autonomous",
-    tagline: "Radial autonomous pipeline traversal robot for structural integrity audits and weld flaw detection.",
+    tagline: "Radial autonomous pipeline traversal robot for structural integrity audits.",
     description:
-      "An automated inspection robot engineered with high-traction omnidirectional clamp wheels for vertical and inverted pipeline traversal and crack detection.",
+      "Inspection robot with omnidirectional magnetic clamp wheels for vertical and curved pipeline traversal.",
     longDescription:
-      "Engineered to inspect critical industrial pipeline infrastructures and defense conduit networks, this bot features magnetic and mechanical clamping arrays that allow it to scale vertical and curved pipes. An onboard ultrasonic flaw detector and micro-camera stream real-time telemetry back to an operator dashboard.",
+      "Engineered to inspect critical industrial pipeline infrastructures and defense conduit networks, this bot features magnetic and mechanical clamping arrays that allow it to scale vertical and curved pipes.",
     status: "Completed",
     highlight: "Vertical Traversal & Real-Time Flaw Detection",
     tags: ["Non-Destructive Testing", "Pneumatic Clamp", "Ultrasonic Sensors", "Autonomous Climb", "Python"],
@@ -427,13 +427,13 @@ export const projects: Project[] = [
   },
   {
     id: "drone-swarm",
-    title: "Autonomous Swarm Quadcopters",
+    title: "Autonomous Quadcopter Swarm",
     category: "Aerial",
-    tagline: "Synchronized multi-agent quadcopter swarm for GPS-denied tactical surveillance and 3D mapping.",
+    tagline: "Synchronized multi-agent quadcopter swarm for GPS-denied tactical surveillance.",
     description:
-      "A synchronized fleet of lightweight carbon-fiber quadcopters running ROS2 Nav2 algorithms and optical flow positioning for coordinated aerial reconnaissance in GPS-denied environments.",
+      "Synchronized fleet of quadcopters running ROS2 Nav2 and optical flow for GPS-denied reconnaissance.",
     longDescription:
-      "Engineered for tactical indoor recon and perimeter security, each drone features an onboard companion processor running decentralized swarm flight controllers. Drones maintain dynamic flocking formation while mapping complex subterranean environments without satellite signals.",
+      "Engineered for tactical indoor recon and perimeter security, each drone features an onboard companion processor running decentralized swarm flight controllers.",
     status: "Active R&D",
     highlight: "Decentralized Swarm Flight & Optical Flow SLAM",
     tags: ["ROS2", "Computer Vision", "Swarm Telemetry", "PX4 Autopilot", "Python"],
@@ -449,13 +449,13 @@ export const projects: Project[] = [
   },
   {
     id: "tactical-rover",
-    title: "Tactical Autonomous Ground Rover",
+    title: "Tactical Ground Rover",
     category: "Autonomous",
-    tagline: "Rugged all-terrain autonomous rover featuring 3D LiDAR SLAM and dynamic obstacle evasion.",
+    tagline: "Rugged all-terrain autonomous rover featuring 3D LiDAR SLAM and obstacle evasion.",
     description:
-      "A heavy-duty four-wheel independent drive rover engineered for high-torque tactical traversal, 3D point cloud mapping, and autonomous waypoint pursuit.",
+      "4WD rocker-bogie rover running NVIDIA Jetson edge inference and Livox 3D LiDAR SLAM.",
     longDescription:
-      "Built on a CNC-machined aluminum chassis with rocker-bogie suspension, this rover navigates hostile uneven terrain effortlessly. An onboard NVIDIA Jetson processor analyzes real-time Livox LiDAR point clouds to generate optimal traversal paths.",
+      "Built on a CNC-machined aluminum chassis with rocker-bogie suspension, this rover navigates hostile uneven terrain effortlessly.",
     status: "Operational",
     highlight: "NVIDIA Jetson Edge Inference • Rocker-Bogie Suspension",
     tags: ["ROS2", "Computer Vision", "C++", "LiDAR SLAM", "Jetson Edge"],
@@ -597,45 +597,41 @@ export const wartechTracks: WartechTrack[] = [
 export const upcomingEvents: EventItem[] = [
   {
     id: "inductions-2026",
-    title: "CEAR Annual Inductions 2026-27",
+    title: "CEAR Annual Inductions 2026",
     date: "October 2026",
     category: "Recruitment",
     status: "Upcoming",
-    description:
-      "Join the elite engineering league at AIT. Open to all first and second year enthusiasts passionate about AI, electronics, mechanical fabrication, and coding.",
-    location: "Manekshaw Hall & CEAR Robotics Lab",
-    ctaText: "Apply for Inductions",
+    description: "Annual recruitment drive for FE and SE cadets across AI, robotics, and hardware.",
+    location: "Lab 104, AIT Pune",
+    ctaText: "Apply Now",
   },
   {
     id: "arduino-bootcamp",
-    title: "Microcontrollers & Embedded IoT Bootcamp",
+    title: "Embedded Systems Bootcamp",
     date: "November 2026",
-    category: "Hands-on Workshop",
+    category: "Workshop",
     status: "Ongoing",
-    description:
-      "Comprehensive multi-day workshop covering ESP32 architecture, PWM motor drivers, sensor interfacing, and building your first teleoperated rover.",
-    location: "Robotics Hardware Lab, AIT",
-    ctaText: "View Workshop Details",
+    description: "Hands-on ESP32 architecture, motor drivers, sensor interfacing, and rover telemetry.",
+    location: "CEAR Hardware Lab",
+    ctaText: "View Details",
   },
   {
     id: "ros2-workshop",
-    title: "Autonomous Navigation & ROS2 Winter School",
+    title: "Autonomous Navigation & ROS2",
     date: "December 2026",
-    category: "Advanced Workshop",
+    category: "Workshop",
     status: "Upcoming",
-    description:
-      "Master node communication, Gazebo simulation, SLAM mapping, and lidar point cloud navigation with senior mentors and defense practitioners.",
-    location: "Computer Center 3, AIT",
+    description: "Node communication, Gazebo simulation, SLAM mapping, and LiDAR navigation.",
+    location: "Computer Center 3",
     ctaText: "Pre-Register",
   },
   {
     id: "defense-symposium",
-    title: "National Defense & Robotics Symposium 2026",
+    title: "Defense Robotics Symposium",
     date: "August 2026",
     category: "Symposium",
     status: "Completed",
-    description:
-      "Showcase of indigenous defense robotics, tactical swarm platforms, and keynote sessions with military tech leaders and industry pioneers.",
+    description: "Showcase of indigenous defense robotics and tactical swarm platforms.",
     location: "AIT Auditorium",
     ctaText: "View Highlights",
   },
@@ -648,9 +644,8 @@ export const achievements: Achievement[] = [
     institution: "IIT Guwahati Techniche",
     edition: "2025",
     rank: "3rd Place Podium + Unique Design Award",
-    highlight: "Podium finish in aquatic robotics alongside the Unique Design trophy.",
-    description:
-      "CEAR's Jalpari amphibious bot secured 3rd position in national aquatic trials and earned the coveted Unique Design Award for innovative waterproof propulsion and stability architecture.",
+    highlight: "Podium finish in aquatic robotics alongside Unique Design trophy.",
+    description: "Jalpari amphibious bot secured 3rd position in national aquatic trials with Unique Design honors.",
     category: "Podium",
     year: "2025",
   },
@@ -660,9 +655,8 @@ export const achievements: Achievement[] = [
     institution: "BITS Goa",
     edition: "2025",
     rank: "3rd Place Podium",
-    highlight: "Secured bronze in high-octane national robotics arena.",
-    description:
-      "Demonstrated superior mechanical stability and tactical maneuvering in high-torque combat arenas, beating top engineering squads nationwide.",
+    highlight: "Bronze in national robotics combat.",
+    description: "Demonstrated mechanical stability and tactical maneuvering in high-torque combat arena.",
     category: "Podium",
     year: "2025",
   },
@@ -671,10 +665,9 @@ export const achievements: Achievement[] = [
     event: "ESCALADE 13.0",
     institution: "IIT Guwahati",
     edition: "2025-26",
-    rank: "Main Campus Finalist",
-    highlight: "Qualified for national finals after conquering zonal rounds.",
-    description:
-      "CEAR's all-terrain climbers conquered regional zonals and secured qualification for the prestigious National Finals at IIT Guwahati's main campus.",
+    rank: "National Finalist",
+    highlight: "Qualified for national finals after regional zonals.",
+    description: "All-terrain climber conquered regional zonals to qualify for National Finals.",
     category: "National Finalist",
     year: "2026",
   },
@@ -683,10 +676,9 @@ export const achievements: Achievement[] = [
     event: "Cognizance 2026",
     institution: "IIT Roorkee",
     edition: "2026",
-    rank: "Round 2 Qualifiers across 3 Events",
+    rank: "Round 2 Qualifiers",
     highlight: "Advanced to Round 2 in Plasma Pull, Pick & Place, and Line Follower.",
-    description:
-      "Competed with custom chassis fabrication, high-torque motor drives, and wired/wireless controls, advancing deep into multiple competitive brackets.",
+    description: "Custom chassis fabrication and high-torque drives advanced across 3 competitive brackets.",
     category: "National Finalist",
     year: "2026",
   },
@@ -694,23 +686,19 @@ export const achievements: Achievement[] = [
 
 export const faqs = [
   {
-    question: "Who can join the Centre of Excellence for AI and Robotics?",
-    answer:
-      "CEAR welcomes all students of Army Institute of Technology, Pune regardless of their branch. Whether you are in Computer Engineering, IT, Mechanical, or E&TC, there are specialized modules spanning hardware design, firmware, mechanical fabrication, and AI software.",
+    question: "Who is eligible to join CEAR?",
+    answer: "All AIT Pune students across all engineering branches and years are eligible to apply.",
   },
   {
-    question: "Do I need prior robotics or coding experience to apply for inductions?",
-    answer:
-      "No! We look for genuine curiosity, problem-solving mindset, and dedication. Our senior members and faculty provide intensive training bootcamps starting from fundamental microcontroller electronics to advanced ROS2 and machine learning frameworks.",
+    question: "Is prior robotics or coding experience required?",
+    answer: "No prior experience required. Senior members provide hands-on training bootcamps.",
   },
   {
-    question: "What hardware and resources are available in the CEAR Lab?",
-    answer:
-      "The lab is outfitted with 3D printers, precision PCB fabrication tools, high-capacity DC power supplies, oscilloscopes, LiDAR modules, depth cameras, ROS2 companion computers (Jetson & Raspberry Pi), and dedicated test arenas for combat and autonomous navigation.",
+    question: "What hardware resources are available?",
+    answer: "3D printers, custom PCB fabrication, LiDAR, Jetson AI accelerators, and dedicated test arenas.",
   },
   {
-    question: "How do outstation college teams register for Wartech tracks?",
-    answer:
-      "Wartech track registrations open online right here on the portal. Teams can register up to 4 members per track, access official rulebooks, and secure slots before entries cap.",
+    question: "How do external college teams register for Wartech?",
+    answer: "Register directly through the Wartech portal section. Teams can have 1–4 members.",
   },
 ];

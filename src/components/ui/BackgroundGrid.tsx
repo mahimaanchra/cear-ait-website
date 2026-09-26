@@ -6,26 +6,23 @@ import { NeuralCanvas } from "@/components/ui/NeuralCanvas";
 export function BackgroundGrid() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Clean Light Slate Backdrop */}
-      <div className="absolute inset-0 bg-slate-50" />
+      {/* Warm Paper Canvas Backdrop */}
+      <div className="absolute inset-0 bg-paper paper-canvas" />
 
-      {/* Fine Technical Grid */}
+      {/* Fine Technical Grid in Charcoal Ink */}
       <div 
-        className="absolute inset-0 opacity-30" 
+        className="absolute inset-0 opacity-40" 
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px)
+            linear-gradient(to right, rgba(20, 20, 15, 0.035) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(20, 20, 15, 0.035) 1px, transparent 1px)
           `,
           backgroundSize: "32px 32px",
         }}
       />
 
       {/* Neural AI & Robotics Mesh Background */}
-      <NeuralCanvas className="opacity-50" nodeCount={24} interactive={true} />
-
-      {/* Clean Subtle Tech Blue Accent Glow in Top Corner */}
-      <div className="absolute top-0 right-0 w-[35vw] h-[35vw] max-w-[450px] max-h-[450px] bg-blue-500/5 blur-[100px]" />
+      <NeuralCanvas className="opacity-60" nodeCount={24} interactive={true} />
     </div>
   );
 }

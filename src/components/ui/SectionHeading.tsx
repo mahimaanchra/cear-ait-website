@@ -40,15 +40,17 @@ export function SectionHeading({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className={cn("flex mb-3", isCenter ? "justify-center" : "justify-start")}
+          className={cn("flex mb-3.5", isCenter ? "justify-center" : "justify-start")}
         >
           <span
             className={cn(
-              "font-mono text-xs uppercase tracking-wider font-semibold",
-              isDark ? "text-lime-bright" : "text-zinc-600"
+              "paper-badge text-xs font-tech font-extrabold uppercase tracking-wider py-1 px-3 -rotate-1",
+              isDark
+                ? "bg-paper text-ink shadow-[2px_2px_0_#ffffff]"
+                : "bg-ink text-paper shadow-[2px_2px_0_#14140f]"
             )}
           >
-            [{badge}]
+            {badge}
           </span>
         </motion.div>
       )}
@@ -59,18 +61,15 @@ export function SectionHeading({
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.05 }}
         className={cn(
-          "text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight font-cartoon",
-          isDark ? "text-white" : "text-zinc-900"
+          "text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight font-display",
+          isDark ? "text-paper" : "text-ink"
         )}
       >
         {title}{" "}
         {highlightText && (
           <span
             className={cn(
-              "inline-block",
-              isDark
-                ? "text-lime-bright"
-                : "text-zinc-900 underline decoration-[#d4f933] decoration-4 underline-offset-8"
+              "inline-block underline decoration-red decoration-[3.5px] underline-offset-6 text-red"
             )}
           >
             {highlightText}
@@ -85,8 +84,8 @@ export function SectionHeading({
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.15 }}
           className={cn(
-            "text-sm sm:text-base font-normal leading-relaxed mt-4",
-            isDark ? "text-zinc-400" : "text-zinc-600",
+            "text-sm sm:text-base font-body font-medium leading-relaxed mt-3.5",
+            isDark ? "text-paper/75" : "text-ink/75",
             isCenter && "max-w-2xl mx-auto"
           )}
         >
@@ -96,3 +95,5 @@ export function SectionHeading({
     </div>
   );
 }
+
+export default SectionHeading;

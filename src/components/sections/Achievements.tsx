@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Award } from "lucide-react";
+import { Trophy } from "lucide-react";
 import { achievements } from "@/data/siteData";
 
-const categoryFilters = ["ALL", "PODIUM", "NATIONAL FINALIST", "DEFENSE SHOWCASE"];
+const categoryFilters = ["ALL", "PODIUM", "NATIONAL FINALIST"];
 
 export function Achievements() {
   const [filter, setFilter] = useState("ALL");
@@ -20,18 +20,19 @@ export function Achievements() {
         );
 
   return (
-    <section id="achievements" className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-slate-50 border-b border-slate-200">
+    <section id="achievements" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-paper border-b-[2.5px] border-ink">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Heading */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <div className="w-10 h-1 bg-blue-600 rounded-sm mb-3" />
-            <h2 className="text-3xl sm:text-5xl font-extrabold uppercase font-tech tracking-tight text-slate-900 leading-[0.95] mb-3">
-              TRACK <br />
-              <span className="text-blue-600">RECORD_</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-paper border-2 border-ink shadow-[2px_2px_0_#14140f] text-xs font-mono font-black text-ink mb-1 -rotate-1">
+              <span>PODIUM RECORD</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black font-tech tracking-tight text-ink mb-2">
+              Achievements
             </h2>
-            <p className="text-sm text-slate-600 font-sans max-w-xl">
-              Competitive podiums and defense showcases across national engineering championships.
+            <p className="text-sm sm:text-base text-ink-soft font-body font-semibold max-w-xl">
+              Podiums and showcases across national engineering championships.
             </p>
           </div>
 
@@ -41,13 +42,13 @@ export function Achievements() {
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-3.5 py-1.5 rounded-full font-bold transition-all cursor-pointer ${
+                className={`px-3.5 py-1 rounded-full font-black transition-all cursor-pointer border-2 border-ink ${
                   filter === cat
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300"
+                    ? "bg-ink text-paper shadow-[2px_2px_0_#14140f] -translate-y-0.5 -rotate-1"
+                    : "bg-white text-ink hover:bg-paper"
                 }`}
               >
-                {cat}
+                {cat === "ALL" ? "All" : cat === "PODIUM" ? "Podiums" : "Finalists"}
               </button>
             ))}
           </div>
@@ -62,36 +63,37 @@ export function Achievements() {
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="rounded-2xl bg-white border border-slate-200 p-6 shadow-xs hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between"
+                whileHover={{ y: -6, rotate: idx % 2 === 0 ? -1.5 : 1.5, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 350, damping: 18 }}
+                className="rounded-[20px_24px_18px_22px_/_24px_18px_22px_20px] bg-white border-[2.5px] border-ink p-6 shadow-[4px_5px_0_#14140f] flex flex-col justify-between cursor-default group"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    <span className="font-mono text-xs font-black text-ink bg-paper px-2.5 py-0.5 rounded-full border-2 border-ink shadow-[1.5px_1.5px_0_#14140f]">
                       {item.rank}
                     </span>
-                    <span className="font-mono text-xs text-slate-400">
+                    <span className="font-mono text-xs text-ink/60 font-bold">
                       {item.year}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="font-tech text-lg font-bold text-slate-900 leading-tight">
+                    <h3 className="font-tech text-lg font-black text-ink leading-tight group-hover:text-alarm transition-colors">
                       {item.event}
                     </h3>
-                    <p className="font-mono text-xs text-blue-600 font-bold mt-1">
+                    <p className="font-mono text-xs text-ink font-bold mt-1">
                       {item.institution}
                     </p>
                   </div>
 
-                  <p className="font-sans text-xs text-slate-600 leading-relaxed">
+                  <p className="font-body text-xs text-ink/80 font-semibold leading-relaxed">
                     {item.description}
                   </p>
                 </div>
 
-                <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-400">
-                  <span className="uppercase text-[10px]">{item.category}</span>
-                  <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                <div className="pt-4 mt-3 border-t-2 border-ink/10 flex items-center justify-between text-xs font-mono text-ink/70 font-bold">
+                  <span className="uppercase text-[10px] tracking-wider">{item.category}</span>
+                  <Trophy className="w-4 h-4 text-ink stroke-[2.2] group-hover:rotate-12 transition-transform" />
                 </div>
               </motion.div>
             );

@@ -88,7 +88,7 @@ export function NeuralCanvas({
       time += 0.02;
       ctx.clearRect(0, 0, width, height);
 
-      // Connect nearby nodes with delicate lines (Neural network / Swarm mesh)
+      // Connect nearby nodes with delicate lines (Blueprint ink drafting)
       const maxDistance = 110;
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
@@ -97,10 +97,10 @@ export function NeuralCanvas({
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < maxDistance) {
-            const alpha = (1 - dist / maxDistance) * 0.16;
+            const alpha = (1 - dist / maxDistance) * 0.18;
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(37, 99, 235, ${alpha})`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(20, 20, 15, ${alpha})`;
+            ctx.lineWidth = 0.9;
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
             ctx.stroke();
@@ -115,14 +115,14 @@ export function NeuralCanvas({
         ctx.save();
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, 22, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(37, 99, 235, 0.25)";
-        ctx.lineWidth = 1;
-        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = "rgba(20, 20, 15, 0.35)";
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([3, 3]);
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 2, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(37, 99, 235, 0.6)";
+        ctx.arc(mouse.x, mouse.y, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#c0342a";
         ctx.fill();
         ctx.restore();
 
@@ -134,7 +134,7 @@ export function NeuralCanvas({
           if (dist < mouse.radius) {
             const alpha = (1 - dist / mouse.radius) * 0.35;
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(14, 165, 233, ${alpha})`;
+            ctx.strokeStyle = `rgba(43, 90, 155, ${alpha})`;
             ctx.lineWidth = 1;
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(mouse.x, mouse.y);
@@ -167,21 +167,21 @@ export function NeuralCanvas({
         ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
 
         if (node.type === "core") {
-          // Blue core node with faint aura
-          ctx.fillStyle = "rgba(37, 99, 235, 0.75)";
+          // Ink core node with gold center
+          ctx.fillStyle = "#14140f";
           ctx.fill();
 
           ctx.beginPath();
-          ctx.arc(node.x, node.y, radius + 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(37, 99, 235, 0.12)";
+          ctx.arc(node.x, node.y, radius * 0.5, 0, Math.PI * 2);
+          ctx.fillStyle = "#f2c31a";
           ctx.fill();
         } else if (node.type === "relay") {
-          // Cyan relay node
-          ctx.fillStyle = "rgba(14, 165, 233, 0.7)";
+          // Cadet blue relay node
+          ctx.fillStyle = "#2b5a9b";
           ctx.fill();
         } else {
-          // Neutral slate sensor node
-          ctx.fillStyle = "rgba(100, 116, 139, 0.55)";
+          // Neutral charcoal sensor node
+          ctx.fillStyle = "rgba(20, 20, 15, 0.45)";
           ctx.fill();
         }
       }

@@ -33,9 +33,9 @@ export function GlowCard({
   };
 
   const themeClasses = {
-    light: "bg-white text-zinc-900 border border-zinc-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:border-zinc-300",
-    dark: "bg-[#121217] text-white border border-[#262632] shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:border-zinc-600",
-    lime: "bg-[#fcfdf6] text-zinc-900 border-2 border-[#bef264] shadow-[0_4px_20px_rgba(190,242,100,0.25)]",
+    light: "bg-white text-ink border-[2.5px] border-ink rounded-[22px_27px_20px_25px_/_27px_20px_25px_22px] shadow-[4px_5px_0_#14140f] hover:shadow-[2px_3px_0_#14140f] hover:translate-x-[2px] hover:translate-y-[2px]",
+    dark: "bg-ink text-paper border-[2.5px] border-ink rounded-[22px_27px_20px_25px_/_27px_20px_25px_22px] shadow-[4px_5px_0_#14140f]",
+    lime: "bg-coin-y1/20 text-ink border-[2.5px] border-ink rounded-[22px_27px_20px_25px_/_27px_20px_25px_22px] shadow-[4px_5px_0_#14140f]",
   };
 
   return (

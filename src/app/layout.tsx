@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Space_Mono } from "next/font/google";
+import { Nunito, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
-import dynamic from "next/dynamic";
+import { Preloader } from "@/components/Preloader";
 import { SiteContentProvider } from "@/context/SiteContentContext";
 
-const Preloader = dynamic(() => import("@/components/Preloader"), {
-  ssr: false,
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-nunito",
+  display: "swap",
 });
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
@@ -67,7 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${spaceMono.variable} font-sans bg-slate-50 text-slate-900 antialiased min-h-screen selection:bg-blue-600 selection:text-white`}
+        className={`${nunito.variable} ${spaceGrotesk.variable} ${spaceMono.variable} font-body bg-paper text-ink antialiased min-h-screen selection:bg-ink selection:text-paper`}
       >
         <SiteContentProvider>
           <Preloader />

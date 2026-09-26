@@ -20,7 +20,7 @@ export function PerceptionCard({
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative group bg-white rounded-xl border border-slate-200/90 transition-all duration-300 hover:border-blue-400 hover:shadow-lg overflow-hidden ${className}`}
+      className={`relative group bg-white rounded-[20px_24px_18px_22px_/_24px_18px_22px_20px] border-[2.5px] border-ink shadow-[4px_5px_0_#14140f] hover:shadow-[6px_7px_0_#14140f] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150 overflow-hidden ${className}`}
     >
       {/* Laser Perception Scanline */}
       {enableScan && (
@@ -29,25 +29,25 @@ export function PerceptionCard({
             isHovered
               ? {
                   top: ["-10%", "110%"],
-                  opacity: [0, 0.8, 0.8, 0],
+                  opacity: [0, 0.9, 0.9, 0],
                 }
               : { top: "-10%", opacity: 0 }
           }
           transition={{
-            duration: 1.1,
+            duration: 1.0,
             ease: "easeInOut",
             repeat: isHovered ? Infinity : 0,
-            repeatDelay: 0.6,
+            repeatDelay: 0.5,
           }}
-          className="pointer-events-none absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_10px_#38bdf8] z-20"
+          className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-alarm to-transparent z-20"
         />
       )}
 
-      {/* High-tech Corner Brackets */}
-      <div className="pointer-events-none absolute top-1.5 left-1.5 w-2 h-2 border-t-2 border-l-2 border-slate-300 group-hover:border-blue-500 transition-colors z-10" />
-      <div className="pointer-events-none absolute top-1.5 right-1.5 w-2 h-2 border-t-2 border-r-2 border-slate-300 group-hover:border-blue-500 transition-colors z-10" />
-      <div className="pointer-events-none absolute bottom-1.5 left-1.5 w-2 h-2 border-b-2 border-l-2 border-slate-300 group-hover:border-blue-500 transition-colors z-10" />
-      <div className="pointer-events-none absolute bottom-1.5 right-1.5 w-2 h-2 border-b-2 border-r-2 border-slate-300 group-hover:border-blue-500 transition-colors z-10" />
+      {/* Tactile Corner Registration Ticks */}
+      <div className="pointer-events-none absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-ink/40 group-hover:border-ink transition-colors z-10" />
+      <div className="pointer-events-none absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-ink/40 group-hover:border-ink transition-colors z-10" />
+      <div className="pointer-events-none absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-ink/40 group-hover:border-ink transition-colors z-10" />
+      <div className="pointer-events-none absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-ink/40 group-hover:border-ink transition-colors z-10" />
 
       {/* Card Content */}
       <div className="relative z-10">{children}</div>
