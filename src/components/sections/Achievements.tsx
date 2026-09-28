@@ -20,7 +20,7 @@ export function Achievements() {
         );
 
   return (
-    <section id="achievements" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-paper border-b-[2.5px] border-ink">
+    <section id="achievements" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-transparent border-b-[2.5px] border-ink">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Heading */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">

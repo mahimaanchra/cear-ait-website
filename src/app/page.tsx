@@ -14,7 +14,7 @@ import { Footer } from "@/components/sections/Footer";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
 import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
-import { CircuitDivider } from "@/components/ui/CircuitDivider";
+import { CearRoboticsBackground } from "@/components/ui/CearRoboticsBackground";
 
 export default function Home() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -31,7 +31,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-paper text-ink font-body selection:bg-ink selection:text-paper">
+    <div className="min-h-screen bg-paper text-ink font-body selection:bg-ink selection:text-paper relative">
+      {/* Creative CEAR (AI & Robotics) Blueprint Background Animations */}
+      <CearRoboticsBackground />
+
       {/* 1. Sticky Navigation Bar */}
       <Navbar onOpenRegister={() => handleOpenRegister()} />
 

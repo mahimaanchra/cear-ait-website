@@ -41,7 +41,7 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
   const [selectedTrackDetail, setSelectedTrackDetail] = useState<WartechTrack | null>(null);
 
   return (
-    <section id="wartech" className="relative py-24 sm:py-32 bg-paper border-b-[2.5px] border-ink">
+    <section id="wartech" className="relative py-24 sm:py-32 bg-transparent border-b-[2.5px] border-ink">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Prominent Flagship Feature Banner in Ink with Paper & Alarm Accents */}
         <div className="rounded-[24px_30px_22px_28px_/_30px_22px_28px_24px] bg-ink text-paper p-8 sm:p-12 shadow-[8px_9px_0_#14140f] relative overflow-hidden border-[3px] border-ink -rotate-0.5">

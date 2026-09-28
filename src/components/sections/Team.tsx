@@ -9,7 +9,7 @@ import { useSiteContent } from "@/context/SiteContentContext";
 export function Team() {
   const { facultyIncharge, secretaries, jointSecretaries, coreContributors } = useSiteContent();
   return (
-    <section id="team" className="relative py-24 sm:py-32 bg-paper border-b-[2.5px] border-ink">
+    <section id="team" className="relative py-24 sm:py-32 bg-transparent border-b-[2.5px] border-ink">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-2">

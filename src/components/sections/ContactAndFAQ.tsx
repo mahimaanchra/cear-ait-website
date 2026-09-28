@@ -25,7 +25,7 @@ export function ContactAndFAQ() {
   };
 
   return (
-    <section id="contact" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-paper border-b-[2.5px] border-ink">
+    <section id="contact" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-transparent border-b-[2.5px] border-ink">
       <div className="max-w-6xl mx-auto space-y-14">
         {/* Section Heading */}
         <div>

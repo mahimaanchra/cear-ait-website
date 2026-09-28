@@ -24,7 +24,7 @@ export function Hero({ onOpenRegister }: HeroProps = {}) {
   ];
 
   return (
-    <section id="hero" className="relative pt-28 sm:pt-36 pb-0 overflow-hidden bg-paper border-b-[2.5px] border-ink">
+    <section id="hero" className="relative pt-28 sm:pt-36 pb-0 overflow-hidden bg-transparent border-b-[2.5px] border-ink">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Hero 2-Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">

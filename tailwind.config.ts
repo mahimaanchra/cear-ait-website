@@ -72,12 +72,12 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ["'Luckiest Guy'", "'Space Grotesk'", "ui-rounded", "sans-serif"],
-        cartoon: ["'Luckiest Guy'", "'Space Grotesk'", "sans-serif"],
+        display: ["'Space Grotesk'", "system-ui", "-apple-system", "sans-serif"],
+        cartoon: ["'Space Grotesk'", "system-ui", "sans-serif"],
         body: ["'Nunito'", "'Space Grotesk'", "system-ui", "sans-serif"],
         tech: ["'Space Grotesk'", "'Nunito'", "sans-serif"],
         mono: ["'Space Mono'", "'JetBrains Mono'", "monospace"],
-        sans: ["'Nunito'", "'Inter'", "system-ui", "sans-serif"],
+        sans: ["'Space Grotesk'", "'Inter'", "system-ui", "sans-serif"],
       },
       animation: {
         "marquee": "marquee 26s linear infinite",
