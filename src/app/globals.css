@@ -101,13 +101,13 @@ body {
   font-family: 'Space Mono', 'JetBrains Mono', monospace;
 }
 
-/* Paper Text Shadow Halo (from dontlookup.app) */
+/* Paper Text Shadow Halo */
 .paper-halo {
   text-shadow: 0 0 9px var(--paper), 0 0 17px var(--paper);
 }
 
 /* =========================================================================
-   TACTILE PAPER BUTTONS (Exact Physics from dontlookup.app)
+   TACTILE PAPER BUTTONS
    ========================================================================= */
 
 .btn-paper-primary {
@@ -266,7 +266,7 @@ body {
 }
 
 /* =========================================================================
-   SPEECH BUBBLES & STICKER CALLOUTS (from dontlookup.app #feetip / #droptip)
+   SPEECH BUBBLES & STICKER CALLOUTS
    ========================================================================= */
 
 .paper-bubble {
@@ -315,7 +315,7 @@ body {
 }
 
 /* =========================================================================
-   TACTILE PROGRESS TRACK (from dontlookup.app #fee-track)
+   TACTILE PROGRESS TRACK
    ========================================================================= */
 
 .paper-track {

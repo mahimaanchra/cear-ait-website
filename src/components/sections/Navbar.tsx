@@ -98,7 +98,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             })}
           </nav>
 
-          {/* Right: CTA Button with dontlookup.app Tactile Physics */}
+          {/* Right: CTA Button with Tactile Physics */}
           <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={onOpenRegister}
