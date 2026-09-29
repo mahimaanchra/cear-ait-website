@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
-import { Preloader } from "@/components/Preloader";
 import { SiteContentProvider } from "@/context/SiteContentContext";
 
 const nunito = Nunito({
@@ -72,7 +71,6 @@ export default function RootLayout({
         className={`${nunito.variable} ${spaceGrotesk.variable} ${spaceMono.variable} font-body bg-[#060911] text-slate-100 antialiased min-h-screen selection:bg-cyan-400 selection:text-slate-950`}
       >
         <SiteContentProvider>
-          <Preloader />
           {children}
         </SiteContentProvider>
       </body>
