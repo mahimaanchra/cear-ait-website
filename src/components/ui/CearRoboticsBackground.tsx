@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 
 export type BotType =
   | "joybot"      // Waving Chibi TV Bot with angled ball antennas & big happy smile
-  | "ufobot"      // Floating cute flying saucer with dome, portholes & friendly alien face
+  | "ufobot"      // Floating cute flying saucer with dome, portholes & friendly pilot
   | "treadbot"    // Cute tank robot with big round eyes & 3 rolling wheels in tread
   | "domebot"     // Cute R2-style dome-head chibi with ear nubs, smile & stubby feet
   | "unibot"      // Cute monocycle bot balancing on a single big bouncy rolling wheel
@@ -12,14 +12,22 @@ export type BotType =
   | "spiderchibi" // Cute marshmallow baby spider with sparkly anime eyes & stubby bouncy legs
   | "trapbot";    // Cute trapezoid robot with double-circle eyes & dual wheel pods
 
+interface SpeechBubble {
+  text: string;
+  timer: number;
+  maxTimer: number;
+  isShout?: boolean;
+}
+
 interface DoodleBot {
+  id: number;
   x: number;
   y: number;
   vx: number;
   vy: number;
   type: BotType;
   facing: 1 | -1;
-  state: "moving" | "idle" | "happy";
+  state: "moving" | "idle" | "chatting" | "inspecting" | "happy";
   stateTimer: number;
   walkCycle: number;
   blinkTimer: number;
@@ -30,7 +38,9 @@ interface DoodleBot {
   alpha: number;
   speed: number;
   antennaWobble: number;
-  heartBubbleTimer: number; // For cute popup heart/sparkle when clicked
+  speechBubble?: SpeechBubble;
+  chatPartnerId?: number;
+  heartBubbleTimer: number;
 }
 
 interface FloatingDoodleItem {
@@ -54,12 +64,49 @@ interface DroppedDoodleToken {
   rotation: number;
   vRot: number;
   radius: number;
-  type: "nut" | "washer" | "gear" | "screw";
+  type: "gear" | "nut" | "coin" | "washer";
   bounces: number;
   settled: boolean;
   alpha: number;
   life: number;
 }
+
+// Dialogues inspired by dontlookup.app crowd banter, tailored for CEAR AIT
+const BOT_PHRASES = [
+  "Beep boop! 🤖",
+  "Wartech 2026! 🏆",
+  "AI model synced ⚡",
+  "Checking LiDAR... 📡",
+  "All systems GO! ✨",
+  "Battery: 100% 🔋",
+  "RoboRace ready 🏎️",
+  "Hi human! 👋",
+  "SumoBot armor check 🛡️",
+  "Drone telemetry OK 🛸",
+  "Path optimized 🎯",
+  "Calibrating sensors...",
+  "Line tracer locked 🏁",
+  "Neural net trained 🧠",
+  "Autonomous fleet ready 🦾",
+];
+
+const SOCIAL_REPLIES = [
+  "All circuits nominal! ✨",
+  "Affirmative! 🦾",
+  "Scanning arena... 🎯",
+  "Full speed ahead! ⚡",
+  "Roger that, fellow bot! 🤖",
+  "Podium incoming! 🏅",
+  "High five! ✋",
+];
+
+const DROP_REACTIONS = [
+  "Ooh, shiny gear! ⚙️",
+  "Hardware drop! 🔩",
+  "Parts received! 🛠️",
+  "Resource collected! ✨",
+  "Tactile coin drop! 🪙",
+];
 
 export function CearRoboticsBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -93,13 +140,15 @@ export function CearRoboticsBackground() {
     };
     window.addEventListener("resize", handleResize);
 
-    // Color Palette: Pure Dull Gray Sketchbook Ink (Warm, charming, monochrome)
-    const INK_MAIN = "rgba(58, 64, 72, 0.78)";       // Muted charcoal-gray marker ink
-    const INK_LIGHT = "rgba(105, 112, 122, 0.52)";   // Faint secondary sketch lines
-    const FILL_PAPER = "rgba(255, 255, 255, 0.72)";  // Translucent paper body fill
-    const FILL_SHADE = "rgba(222, 226, 232, 0.42)";  // Soft dull gray shading
+    // Color Palette: Pure Warm Sketchbook Ink & Paper (dontlookup.app tactile aesthetic)
+    const INK_MAIN = "rgba(45, 50, 58, 0.85)";       // Dense charcoal-black marker ink
+    const INK_LIGHT = "rgba(95, 102, 112, 0.55)";   // Secondary sketch lines
+    const FILL_PAPER = "rgba(255, 255, 255, 0.78)";  // Solid paper body fill
+    const FILL_SHADE = "rgba(215, 220, 228, 0.45)";  // Soft paper shadow
+    const COIN_GOLD = "rgba(242, 195, 26, 0.90)";    // Tactile gold coin fill
+    const COIN_DARK = "rgba(201, 143, 6, 0.90)";
 
-    // Fleet of Super Cute Hand-Drawn Doodle Robots Roaming across the screen
+    // Fleet of Super Cute Hand-Drawn Doodle Robots
     const bots: DoodleBot[] = [];
     const botTypes: BotType[] = [
       "joybot",
@@ -116,27 +165,28 @@ export function CearRoboticsBackground() {
     for (let i = 0; i < botCount; i++) {
       const type = botTypes[i % botTypes.length];
       const scale = 0.95 + (i % 3) * 0.12; // ~0.95, 1.07, 1.19
-      const alpha = 0.76 + (i % 2) * 0.12;  // High visibility, crisp dull gray
-      const speed = (0.50 + Math.random() * 0.30) * (type === "rocketbot" ? 1.3 : 1);
+      const alpha = 0.80 + (i % 2) * 0.10;
+      const speed = (0.52 + Math.random() * 0.32) * (type === "rocketbot" ? 1.3 : 1);
 
       let botY: number;
       if (type === "ufobot" || type === "rocketbot") {
-        botY = Math.random() * (height * 0.28) + 60;
+        botY = Math.random() * (height * 0.28) + 65;
       } else if (type === "joybot") {
-        botY = height * 0.24 + (i % 2) * (height * 0.32) + 20;
+        botY = height * 0.22 + (i % 2) * (height * 0.32) + 20;
       } else if (type === "treadbot") {
-        botY = height * 0.42 + (i % 2) * (height * 0.30) + 20;
+        botY = height * 0.40 + (i % 2) * (height * 0.30) + 20;
       } else if (type === "spiderchibi") {
-        botY = height * 0.54 + (i % 2) * (height * 0.32) + 20;
+        botY = height * 0.54 + (i % 2) * (height * 0.30) + 20;
       } else {
         botY = height * 0.62 + (i % 2) * (height * 0.26) + 20;
       }
 
-      botY = Math.max(70, Math.min(height - 85, botY));
+      botY = Math.max(75, Math.min(height - 95, botY));
       const facing = Math.random() > 0.5 ? 1 : -1;
 
       bots.push({
-        x: Math.random() * (width - 200) + 100,
+        id: i + 1,
+        x: Math.random() * (width - 240) + 120,
         y: botY,
         vx: facing * speed,
         vy: type === "ufobot" || type === "rocketbot" ? (Math.random() - 0.5) * 0.25 : 0,
@@ -157,7 +207,7 @@ export function CearRoboticsBackground() {
       });
     }
 
-    // Floating Doodle Mechanical Accents (directly from reference image sheet)
+    // Floating Doodle Mechanical Accents (from reference image)
     const floatingDoodles: FloatingDoodleItem[] = [];
     const doodleItemTypes: FloatingDoodleItem["type"][] = [
       "gear",
@@ -185,63 +235,76 @@ export function CearRoboticsBackground() {
       });
     }
 
-    // Interactive Dropped Doodle Tokens (on click/tap)
+    // Interactive Dropped Doodle Tokens with Parabolic Gravity & Floor Bouncing
     const droppedTokens: DroppedDoodleToken[] = [];
 
-    const spawnDoodleTokens = (x: number, y: number, count = 2) => {
-      const types: DroppedDoodleToken["type"][] = ["nut", "gear", "washer", "screw"];
+    const spawnDoodleTokens = (x: number, y: number, count = 3) => {
+      const types: DroppedDoodleToken["type"][] = ["coin", "gear", "nut", "washer"];
       for (let i = 0; i < count; i++) {
         droppedTokens.push({
           x,
           y,
-          vx: (Math.random() - 0.5) * 5,
-          vy: -Math.random() * 4 - 2.5,
+          vx: (Math.random() - 0.5) * 6,
+          vy: -Math.random() * 5 - 3.5,
           rotation: Math.random() * Math.PI * 2,
-          vRot: (Math.random() - 0.5) * 0.15,
-          radius: Math.random() * 3 + 11,
+          vRot: (Math.random() - 0.5) * 0.22,
+          radius: Math.random() * 4 + 11,
           type: types[i % types.length],
           bounces: 0,
           settled: false,
-          alpha: 0.8,
-          life: 340,
+          alpha: 0.95,
+          life: 380,
         });
       }
     };
 
-    // User Click Interaction
+    // Click / Tap Interaction: Spawns Bouncing Tokens & Alerts Nearby Bots
     const handlePointerDown = (e: MouseEvent | TouchEvent) => {
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
 
-      spawnDoodleTokens(clientX, clientY, 2);
+      spawnDoodleTokens(clientX, clientY, 3);
 
-      // Nearest bot turns towards click and does a cute celebration
-      let nearestBot: DoodleBot | null = null;
-      let minDistance = 380;
+      // Find nearest bots and trigger alert & gather
+      const sortedBots = [...bots].sort((a, b) => {
+        const da = Math.hypot(a.x - clientX, a.y - clientY);
+        const db = Math.hypot(b.x - clientX, b.y - clientY);
+        return da - db;
+      });
 
-      for (const bot of bots) {
-        const dx = bot.x - clientX;
-        const dy = bot.y - clientY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < minDistance) {
-          minDistance = dist;
-          nearestBot = bot;
+      if (sortedBots.length > 0) {
+        const nearest = sortedBots[0];
+        const dist = Math.hypot(nearest.x - clientX, nearest.y - clientY);
+        if (dist < 420) {
+          nearest.targetX = clientX + (Math.random() - 0.5) * 45;
+          nearest.state = "inspecting";
+          nearest.stateTimer = 200;
+          nearest.heartBubbleTimer = 140;
+          nearest.facing = clientX > nearest.x ? 1 : -1;
+
+          // Reaction speech bubble
+          const reaction = DROP_REACTIONS[Math.floor(Math.random() * DROP_REACTIONS.length)];
+          nearest.speechBubble = { text: reaction, timer: 140, maxTimer: 140, isShout: true };
         }
       }
 
-      if (nearestBot) {
-        nearestBot.targetX = clientX + (Math.random() - 0.5) * 40;
-        nearestBot.state = "happy";
-        nearestBot.stateTimer = 180;
-        nearestBot.heartBubbleTimer = 120;
-        nearestBot.facing = clientX > nearestBot.x ? 1 : -1;
+      // Second nearest bot may also notice
+      if (sortedBots.length > 1) {
+        const second = sortedBots[1];
+        const dist2 = Math.hypot(second.x - clientX, second.y - clientY);
+        if (dist2 < 340 && Math.random() > 0.3) {
+          second.targetX = clientX + (Math.random() - 0.5) * 70;
+          second.state = "inspecting";
+          second.stateTimer = 180;
+          second.facing = clientX > second.x ? 1 : -1;
+        }
       }
     };
 
     window.addEventListener("pointerdown", handlePointerDown);
 
     // =========================================================================
-    // HAND-DRAWN DOODLE SHAPE PRIMITIVES (Warm, organic, round line art)
+    // HAND-DRAWN TACTILE SHAPE PRIMITIVES
     // =========================================================================
 
     const drawDoodleRect = (
@@ -290,11 +353,86 @@ export function CearRoboticsBackground() {
       ctx.restore();
     };
 
-    // Cute Hand-Drawn Heart Bubble for happy interaction
+    // =========================================================================
+    // TACTILE SPEECH BUBBLE (Exact physics and styling from dontlookup.app)
+    // =========================================================================
+    const drawSpeechBubble = (
+      x: number,
+      y: number,
+      text: string,
+      alpha: number,
+      isShout = false
+    ) => {
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, Math.max(0, alpha));
+      ctx.font = isShout
+        ? "800 12.5px 'Space Grotesk', system-ui, sans-serif"
+        : "700 11.5px 'Space Grotesk', system-ui, sans-serif";
+
+      const metrics = ctx.measureText(text);
+      const textW = metrics.width;
+      const padX = 10;
+      const padY = 5;
+      const bubbleW = Math.max(textW + padX * 2, 44);
+      const bubbleH = 24;
+      const bubbleX = x - bubbleW / 2;
+      const bubbleY = y - 48; // Floating over head
+
+      // Tactile hard paper shadow (from dontlookup.app)
+      ctx.fillStyle = "rgba(20, 20, 15, 0.28)";
+      ctx.beginPath();
+      ctx.roundRect(bubbleX + 2, bubbleY + 3, bubbleW, bubbleH, 7);
+      ctx.fill();
+
+      // Bubble paper background
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = isShout ? "#c0342a" : INK_MAIN;
+      ctx.lineWidth = isShout ? 2.6 : 2.2;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      ctx.beginPath();
+      ctx.roundRect(bubbleX, bubbleY, bubbleW, bubbleH, 7);
+      ctx.fill();
+      ctx.stroke();
+
+      // Tail pointing directly at bot head (Continuous SVG-style tail)
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(x - 5, bubbleY + bubbleH - 0.5);
+      ctx.lineTo(x, bubbleY + bubbleH + 7);
+      ctx.lineTo(x + 5, bubbleY + bubbleH - 0.5);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(x - 5, bubbleY + bubbleH - 0.5);
+      ctx.lineTo(x, bubbleY + bubbleH + 7);
+      ctx.lineTo(x + 5, bubbleY + bubbleH - 0.5);
+      ctx.stroke();
+
+      // Erase interior chord of body bottom where tail connects
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(x - 4, bubbleY + bubbleH - 0.5);
+      ctx.lineTo(x + 4, bubbleY + bubbleH - 0.5);
+      ctx.stroke();
+
+      // Bubble Text
+      ctx.fillStyle = isShout ? "#c0342a" : INK_MAIN;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, x, bubbleY + bubbleH / 2);
+
+      ctx.restore();
+    };
+
+    // Heart bubble when inspecting / happy
     const drawHeartBubble = (x: number, y: number, timer: number) => {
-      const progress = 1 - timer / 120; // 0 to 1
-      const floatY = y - 48 - progress * 26;
-      const alpha = timer < 30 ? timer / 30 : 0.85;
+      const progress = 1 - timer / 140;
+      const floatY = y - 46 - progress * 24;
+      const alpha = timer < 30 ? timer / 30 : 0.90;
       const pulse = 1 + Math.sin(progress * Math.PI * 3) * 0.15;
 
       ctx.save();
@@ -302,29 +440,29 @@ export function CearRoboticsBackground() {
       ctx.scale(pulse, pulse);
       ctx.globalAlpha = alpha;
 
-      // Small speech bubble
-      ctx.fillStyle = FILL_PAPER;
+      // Small paper circle
+      ctx.fillStyle = "#ffffff";
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.0;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
       ctx.beginPath();
-      ctx.roundRect(-12, -12, 24, 20, 8);
+      ctx.roundRect(-12, -12, 24, 20, 7);
       ctx.fill();
       ctx.stroke();
 
-      // Bubble tail
+      // Tail
       ctx.beginPath();
       ctx.moveTo(-3, 8);
-      ctx.lineTo(-6, 14);
+      ctx.lineTo(-5, 13);
       ctx.lineTo(2, 8);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // Cute Little Heart inside
-      ctx.fillStyle = INK_MAIN;
+      // Cute Little Heart
+      ctx.fillStyle = "#c0342a";
       ctx.beginPath();
       ctx.moveTo(0, 2);
       ctx.bezierCurveTo(-5, -3, -5, -8, 0, -8);
@@ -335,10 +473,48 @@ export function CearRoboticsBackground() {
     };
 
     // =========================================================================
-    // FLOATING DOODLE MECHANICAL ACCENTS (from reference doodle sheet)
+    // FLOATING & DROPPED DOODLE ITEMS (Coins, Gears, Nuts, Tools)
     // =========================================================================
 
-    // 1. Doodle Cartoon Gear
+    const drawTactileCoin = (x: number, y: number, r: number, rotation: number, alpha: number) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.globalAlpha = alpha;
+
+      // Drop shadow
+      ctx.fillStyle = "rgba(20, 20, 15, 0.35)";
+      ctx.beginPath();
+      ctx.ellipse(2, 3, r, r * 0.85, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Outer rim
+      ctx.fillStyle = COIN_GOLD;
+      ctx.strokeStyle = INK_MAIN;
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Inner coin rim
+      ctx.strokeStyle = COIN_DARK;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.72, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Dollar / Gear stamp inside
+      ctx.fillStyle = INK_MAIN;
+      ctx.font = `800 ${Math.round(r * 1.1)}px 'Space Grotesk', monospace`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("$", 0, 1);
+
+      ctx.restore();
+    };
+
     const drawDoodleGear = (x: number, y: number, r: number, rotation: number, alpha: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -382,7 +558,6 @@ export function CearRoboticsBackground() {
       ctx.restore();
     };
 
-    // 2. Doodle Open-End Wrench
     const drawDoodleWrench = (x: number, y: number, length: number, rotation: number, alpha: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -398,12 +573,10 @@ export function CearRoboticsBackground() {
       const headR = length * 0.22;
 
       ctx.beginPath();
-      // Handle
       ctx.rect(-3.5, -hl + headR, 7, length - headR * 2);
       ctx.fill();
       ctx.stroke();
 
-      // Top jaw [c]
       ctx.beginPath();
       ctx.arc(0, -hl + headR, headR, 0.25 * Math.PI, 1.75 * Math.PI);
       ctx.lineTo(0, -hl + headR);
@@ -411,7 +584,6 @@ export function CearRoboticsBackground() {
       ctx.fill();
       ctx.stroke();
 
-      // Bottom jaw [c]
       ctx.beginPath();
       ctx.arc(0, hl - headR, headR, 1.25 * Math.PI, 2.75 * Math.PI);
       ctx.lineTo(0, hl - headR);
@@ -422,7 +594,6 @@ export function CearRoboticsBackground() {
       ctx.restore();
     };
 
-    // 3. Doodle Hex Nut
     const drawDoodleNut = (x: number, y: number, r: number, rotation: number, alpha: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -446,7 +617,6 @@ export function CearRoboticsBackground() {
       ctx.fill();
       ctx.stroke();
 
-      // Center hole
       ctx.beginPath();
       ctx.arc(0, 0, r * 0.48, 0, Math.PI * 2);
       ctx.fillStyle = FILL_SHADE;
@@ -456,7 +626,6 @@ export function CearRoboticsBackground() {
       ctx.restore();
     };
 
-    // 4. Doodle Speedometer Gauge
     const drawDoodleGauge = (x: number, y: number, r: number, phase: number, alpha: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -502,7 +671,6 @@ export function CearRoboticsBackground() {
       ctx.restore();
     };
 
-    // 5. Doodle Curly Spring (from reference image)
     const drawDoodleSpring = (x: number, y: number, phase: number, alpha: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -523,7 +691,6 @@ export function CearRoboticsBackground() {
       ctx.restore();
     };
 
-    // 6. Doodle Wall Plug (from reference image)
     const drawDoodlePlug = (x: number, y: number, phase: number, alpha: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -534,7 +701,6 @@ export function CearRoboticsBackground() {
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
-      // Prongs
       ctx.beginPath();
       ctx.moveTo(-4, -13);
       ctx.lineTo(-4, -6);
@@ -544,7 +710,6 @@ export function CearRoboticsBackground() {
 
       drawDoodleRect(-9, -6, 18, 13, 4, FILL_PAPER, INK_MAIN, 2.2);
 
-      // Wavy tail cord
       ctx.beginPath();
       ctx.moveTo(0, 7);
       ctx.bezierCurveTo(-7, 15, 7, 20, -3 + Math.sin(phase) * 3, 27);
@@ -553,7 +718,6 @@ export function CearRoboticsBackground() {
       ctx.restore();
     };
 
-    // 7. Cute Doodle Bubble / Sparkle
     const drawDoodleBubble = (x: number, y: number, size: number, phase: number, alpha: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -567,7 +731,6 @@ export function CearRoboticsBackground() {
       ctx.fill();
       ctx.stroke();
 
-      // Highlight
       ctx.fillStyle = INK_LIGHT;
       ctx.beginPath();
       ctx.arc(-size * 0.12, Math.sin(phase) * 3 - size * 0.12, size * 0.08, 0, Math.PI * 2);
@@ -577,7 +740,7 @@ export function CearRoboticsBackground() {
     };
 
     // =========================================================================
-    // THE SUPER CUTE DOODLE BOTS (Directly matching reference image)
+    // THE 8 SUPER CUTE DOODLE BOTS
     // =========================================================================
 
     // 1. JOYBOT (The Happy Waving Chibi TV Bot)
@@ -590,13 +753,11 @@ export function CearRoboticsBackground() {
       const walkBob = Math.abs(Math.sin(bot.walkCycle * 2.8)) * 3;
       ctx.translate(0, -walkBob);
 
-      // Soft ground shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 26 + walkBob, 28, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Legs & cute rectangular shoes
       const legStep = Math.sin(bot.walkCycle * 2.8) * 6;
       [-8, 8].forEach((lx, i) => {
         const step = i === 0 ? legStep : -legStep;
@@ -609,11 +770,9 @@ export function CearRoboticsBackground() {
         ctx.lineTo(lx + step * 0.6, 22);
         ctx.stroke();
 
-        // Cute rounded shoe
         drawDoodleRect(lx + step * 0.6 - 4, 21, 8, 5, 2.5, FILL_PAPER, INK_MAIN, 2.0);
       });
 
-      // A-line trapezoid cute dress body
       ctx.beginPath();
       ctx.moveTo(-13, -7);
       ctx.lineTo(13, -7);
@@ -628,12 +787,10 @@ export function CearRoboticsBackground() {
       ctx.lineJoin = "round";
       ctx.stroke();
 
-      // 3 cute belly buttons [• • •]
-      [ -1, 5, 11 ].forEach((by) => {
+      [-1, 5, 11].forEach((by) => {
         drawDoodleCircle(0, by, 1.8, INK_MAIN, INK_MAIN, 1);
       });
 
-      // Raised waving arms \o/
       const armWave = Math.sin(bot.walkCycle * 3.2) * 5;
       [-13, 13].forEach((ax, i) => {
         const dir = i === 0 ? -1 : 1;
@@ -646,7 +803,6 @@ export function CearRoboticsBackground() {
         ctx.lineTo(ax + dir * 10, -16 + (dir === 1 ? armWave : -armWave));
         ctx.stroke();
 
-        // Cute open clamp hand
         ctx.beginPath();
         ctx.arc(
           ax + dir * 12,
@@ -658,7 +814,6 @@ export function CearRoboticsBackground() {
         ctx.stroke();
       });
 
-      // Small neck connector
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.5;
       ctx.beginPath();
@@ -666,10 +821,8 @@ export function CearRoboticsBackground() {
       ctx.lineTo(0, -12);
       ctx.stroke();
 
-      // Rounded rectangular TV Head
       drawDoodleRect(-23, -36, 46, 25, 7, FILL_PAPER, INK_MAIN, 2.6);
 
-      // Two cute angled ball antennas \o  o/
       const wobble = Math.sin(bot.walkCycle * 2.5) * 2;
       [
         { sx: -13, ex: -21 + wobble, ey: -46 },
@@ -685,24 +838,20 @@ export function CearRoboticsBackground() {
         drawDoodleCircle(ex, ey - 2, 3.5, FILL_PAPER, INK_MAIN, 2.0);
       });
 
-      // Big cute round eyes & pupils
       [-10, 10].forEach((ex) => {
         drawDoodleCircle(ex, -24, 6, FILL_PAPER, INK_MAIN, 2.2);
 
         if (!bot.isBlinking) {
-          // Cute dark pupil with shiny dot
           ctx.fillStyle = INK_MAIN;
           ctx.beginPath();
           ctx.arc(ex + (bot.facing === 1 ? 1 : -1), -24, 2.8, 0, Math.PI * 2);
           ctx.fill();
 
-          // White eye shine
           ctx.fillStyle = "#ffffff";
           ctx.beginPath();
           ctx.arc(ex + (bot.facing === 1 ? 0.5 : -1.5), -25, 1, 0, Math.PI * 2);
           ctx.fill();
         } else {
-          // Cute happy curved closed eye ⌒
           ctx.strokeStyle = INK_MAIN;
           ctx.lineWidth = 2.0;
           ctx.beginPath();
@@ -711,7 +860,6 @@ export function CearRoboticsBackground() {
         }
       });
 
-      // Big happy smiling mouth ( ◕ ‿ ◕ )
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
       ctx.lineCap = "round";
@@ -719,7 +867,6 @@ export function CearRoboticsBackground() {
       ctx.arc(0, -21, 6.5, 0.15 * Math.PI, 0.85 * Math.PI);
       ctx.stroke();
 
-      // Cute blush dots
       [-17, 17].forEach((rx) => {
         ctx.fillStyle = INK_LIGHT;
         ctx.beginPath();
@@ -729,13 +876,20 @@ export function CearRoboticsBackground() {
 
       ctx.restore();
 
-      // Show floating heart/sparkle bubble if happy
-      if (bot.heartBubbleTimer > 0) {
+      if (bot.speechBubble && bot.speechBubble.timer > 0) {
+        drawSpeechBubble(
+          bot.x,
+          bot.y - 36 * bot.scale,
+          bot.speechBubble.text,
+          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1,
+          bot.speechBubble.isShout
+        );
+      } else if (bot.heartBubbleTimer > 0) {
         drawHeartBubble(bot.x, bot.y, bot.heartBubbleTimer);
       }
     };
 
-    // 2. UFOBOT (The Cute Flying Saucer with Dome & Friendly Alien Robot)
+    // 2. UFOBOT (The Cute Flying Saucer with Dome & Pilot)
     const drawUfoBot = (bot: DoodleBot) => {
       ctx.save();
       ctx.translate(bot.x, bot.y);
@@ -747,13 +901,11 @@ export function CearRoboticsBackground() {
       ctx.translate(0, hoverBob);
       ctx.rotate(tilt);
 
-      // Ground shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 58 - hoverBob, 28, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Bottom pod
       ctx.beginPath();
       ctx.arc(0, 4, 18, 0.15 * Math.PI, 0.85 * Math.PI);
       ctx.fillStyle = FILL_SHADE;
@@ -762,7 +914,6 @@ export function CearRoboticsBackground() {
       ctx.lineWidth = 2.2;
       ctx.stroke();
 
-      // Oval Saucer Rim
       ctx.beginPath();
       ctx.ellipse(0, 3, 38, 11, 0, 0, Math.PI * 2);
       ctx.fillStyle = FILL_PAPER;
@@ -771,12 +922,10 @@ export function CearRoboticsBackground() {
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
-      // 4 Cute Round Porthole Lights ( o o o o )
       [-23, -8, 8, 23].forEach((px) => {
         drawDoodleCircle(px, 3, 3.2, FILL_PAPER, INK_MAIN, 1.8);
       });
 
-      // Clear Glass Bubble Dome
       ctx.beginPath();
       ctx.arc(0, -4, 18, Math.PI, 0);
       ctx.closePath();
@@ -786,7 +935,6 @@ export function CearRoboticsBackground() {
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
-      // Top curly antenna with ball
       const antWobble = Math.sin(bot.walkCycle * 3) * 2;
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
@@ -796,7 +944,6 @@ export function CearRoboticsBackground() {
       ctx.stroke();
       drawDoodleCircle(antWobble * 0.5, -36, 3.5, FILL_PAPER, INK_MAIN, 2.0);
 
-      // Cute Little Robot Face inside dome ( • ‿ • )
       [-6, 6].forEach((ex) => {
         if (!bot.isBlinking) {
           ctx.fillStyle = INK_MAIN;
@@ -817,7 +964,6 @@ export function CearRoboticsBackground() {
         }
       });
 
-      // Smiling mouth
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.0;
       ctx.beginPath();
@@ -826,12 +972,20 @@ export function CearRoboticsBackground() {
 
       ctx.restore();
 
-      if (bot.heartBubbleTimer > 0) {
+      if (bot.speechBubble && bot.speechBubble.timer > 0) {
+        drawSpeechBubble(
+          bot.x,
+          bot.y - 36 * bot.scale,
+          bot.speechBubble.text,
+          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1,
+          bot.speechBubble.isShout
+        );
+      } else if (bot.heartBubbleTimer > 0) {
         drawHeartBubble(bot.x, bot.y, bot.heartBubbleTimer);
       }
     };
 
-    // 3. TREADBOT (The Cute Tank Robot with Big Round Eyes & Rolling Tread)
+    // 3. TREADBOT (The Cute Tank Robot with 3 Rolling Wheels)
     const drawTreadBot = (bot: DoodleBot) => {
       ctx.save();
       ctx.translate(bot.x, bot.y);
@@ -841,16 +995,13 @@ export function CearRoboticsBackground() {
       const bob = Math.sin(bot.walkCycle * 3.5) * 1.5;
       ctx.translate(0, bob);
 
-      // Shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 26, 32, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Rubber Tank Tread (Stadium rounded pill shape)
       drawDoodleRect(-28, 12, 56, 17, 8.5, FILL_PAPER, INK_MAIN, 2.6);
 
-      // 3 Cute Rolling Wheels inside tread (O O O)
       const wheelRot = bot.walkCycle * 2.8;
       [-17, 0, 17].forEach((wx) => {
         ctx.save();
@@ -859,7 +1010,6 @@ export function CearRoboticsBackground() {
 
         drawDoodleCircle(0, 0, 6.2, FILL_PAPER, INK_MAIN, 2.0);
 
-        // Spokes
         ctx.beginPath();
         ctx.moveTo(-4.5, 0);
         ctx.lineTo(4.5, 0);
@@ -875,12 +1025,10 @@ export function CearRoboticsBackground() {
         ctx.restore();
       });
 
-      // Torso with 2 square meter displays
       drawDoodleRect(-17, -9, 34, 21, 4, FILL_PAPER, INK_MAIN, 2.5);
       drawDoodleRect(-12, -4, 9, 9, 2, FILL_PAPER, INK_MAIN, 1.8);
       drawDoodleRect(3, -4, 9, 9, 2, FILL_PAPER, INK_MAIN, 1.8);
 
-      // Neck
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.4;
       ctx.beginPath();
@@ -888,10 +1036,8 @@ export function CearRoboticsBackground() {
       ctx.lineTo(0, -14);
       ctx.stroke();
 
-      // Wide Rounded Rectangle Head
       drawDoodleRect(-24, -36, 48, 22, 5, FILL_PAPER, INK_MAIN, 2.6);
 
-      // Antenna with wobbly ball
       const antWobble = Math.sin(bot.walkCycle * 2.5) * 2;
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
@@ -901,7 +1047,6 @@ export function CearRoboticsBackground() {
       ctx.stroke();
       drawDoodleCircle(antWobble, -49, 3.5, FILL_PAPER, INK_MAIN, 2.0);
 
-      // Big Round Cartoon Eyes ((o) (o))
       [-11, 11].forEach((ex) => {
         drawDoodleCircle(ex, -25, 6.8, FILL_PAPER, INK_MAIN, 2.2);
 
@@ -924,7 +1069,6 @@ export function CearRoboticsBackground() {
         }
       });
 
-      // Cute Little Grill Smile [|||||]
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 1.8;
       ctx.beginPath();
@@ -940,7 +1084,15 @@ export function CearRoboticsBackground() {
 
       ctx.restore();
 
-      if (bot.heartBubbleTimer > 0) {
+      if (bot.speechBubble && bot.speechBubble.timer > 0) {
+        drawSpeechBubble(
+          bot.x,
+          bot.y - 36 * bot.scale,
+          bot.speechBubble.text,
+          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1,
+          bot.speechBubble.isShout
+        );
+      } else if (bot.heartBubbleTimer > 0) {
         drawHeartBubble(bot.x, bot.y, bot.heartBubbleTimer);
       }
     };
@@ -957,24 +1109,21 @@ export function CearRoboticsBackground() {
       ctx.translate(0, -walkBob);
       ctx.rotate(waddle);
 
-      // Shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 28 + walkBob, 26, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Two cute stubby waddling feet
       const footShift = Math.sin(bot.walkCycle * 3.0) * 4;
       [-13, 3].forEach((fx, i) => {
         const shift = i === 0 ? footShift : -footShift;
         drawDoodleRect(fx + shift * 0.5, 20, 10, 8, 4, FILL_PAPER, INK_MAIN, 2.2);
       });
 
-      // Integrated Capsule Dome Body
       ctx.beginPath();
-      ctx.arc(0, -10, 21, Math.PI, 0); // Dome head top
-      ctx.lineTo(21, 20);              // Right side
-      ctx.lineTo(-21, 20);             // Bottom
+      ctx.arc(0, -10, 21, Math.PI, 0);
+      ctx.lineTo(21, 20);
+      ctx.lineTo(-21, 20);
       ctx.closePath();
       ctx.fillStyle = FILL_PAPER;
       ctx.fill();
@@ -984,15 +1133,12 @@ export function CearRoboticsBackground() {
       ctx.lineJoin = "round";
       ctx.stroke();
 
-      // Cute ear nubs on sides
       [-24, 21].forEach((ex) => {
         drawDoodleRect(ex, -14, 3.5, 9, 1.8, FILL_PAPER, INK_MAIN, 2.0);
       });
 
-      // Face Visor Screen
       drawDoodleRect(-15, -17, 30, 14, 6, FILL_PAPER, INK_MAIN, 2.2);
 
-      // Happy curved eyes (^ ‿ ^)
       [-7, 7].forEach((ex) => {
         if (!bot.isBlinking) {
           ctx.strokeStyle = INK_MAIN;
@@ -1010,14 +1156,12 @@ export function CearRoboticsBackground() {
         }
       });
 
-      // Sweet smiling mouth
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.0;
       ctx.beginPath();
       ctx.arc(0, -6, 3.5, 0.2 * Math.PI, 0.8 * Math.PI);
       ctx.stroke();
 
-      // Belly vertical stripe vents [ ||| ]
       [-8, 0, 8].forEach((vx) => {
         ctx.strokeStyle = INK_MAIN;
         ctx.lineWidth = 2.2;
@@ -1027,7 +1171,6 @@ export function CearRoboticsBackground() {
         ctx.stroke();
       });
 
-      // Cute outstretched stick arms with round ball hands o---[ ]---o
       const armSway = Math.sin(bot.walkCycle * 3.0) * 4;
       [-21, 21].forEach((ax, i) => {
         const dir = i === 0 ? -1 : 1;
@@ -1050,7 +1193,15 @@ export function CearRoboticsBackground() {
 
       ctx.restore();
 
-      if (bot.heartBubbleTimer > 0) {
+      if (bot.speechBubble && bot.speechBubble.timer > 0) {
+        drawSpeechBubble(
+          bot.x,
+          bot.y - 32 * bot.scale,
+          bot.speechBubble.text,
+          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1,
+          bot.speechBubble.isShout
+        );
+      } else if (bot.heartBubbleTimer > 0) {
         drawHeartBubble(bot.x, bot.y, bot.heartBubbleTimer);
       }
     };
@@ -1065,21 +1216,17 @@ export function CearRoboticsBackground() {
       const bounce = Math.abs(Math.sin(bot.walkCycle * 3.2)) * 4;
       ctx.translate(0, -bounce);
 
-      // Shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 36 + bounce, 24, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Single Big Bouncy Wheel (O)
       const wheelRot = bot.walkCycle * 3.6;
       ctx.save();
       ctx.translate(0, 24);
       ctx.rotate(wheelRot);
 
       drawDoodleCircle(0, 0, 13, FILL_PAPER, INK_MAIN, 2.6);
-
-      // Inner rim & spokes
       drawDoodleCircle(0, 0, 6.5, FILL_PAPER, INK_MAIN, 2.0);
       for (let s = 0; s < 4; s++) {
         ctx.rotate(Math.PI / 2);
@@ -1092,10 +1239,8 @@ export function CearRoboticsBackground() {
       ctx.beginPath();
       ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
       ctx.fill();
-
       ctx.restore();
 
-      // Fork connector from body to wheel
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.4;
       ctx.beginPath();
@@ -1103,12 +1248,9 @@ export function CearRoboticsBackground() {
       ctx.lineTo(0, 24);
       ctx.stroke();
 
-      // Square chest torso
       drawDoodleRect(-17, -9, 34, 21, 4, FILL_PAPER, INK_MAIN, 2.5);
-
-      // Chest meter & 3 horizontal stripes
       drawDoodleRect(-12, -4, 8, 8, 2, FILL_PAPER, INK_MAIN, 1.8);
-      [ -3, 0, 3 ].forEach((sy) => {
+      [-3, 0, 3].forEach((sy) => {
         ctx.strokeStyle = INK_MAIN;
         ctx.lineWidth = 1.8;
         ctx.beginPath();
@@ -1117,7 +1259,6 @@ export function CearRoboticsBackground() {
         ctx.stroke();
       });
 
-      // Waving clamp arms \ /
       const armWave = Math.sin(bot.walkCycle * 3.2) * 5;
       [-17, 17].forEach((ax, i) => {
         const dir = i === 0 ? -1 : 1;
@@ -1139,7 +1280,6 @@ export function CearRoboticsBackground() {
         ctx.stroke();
       });
 
-      // Flexible accordion neck
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.4;
       ctx.beginPath();
@@ -1149,10 +1289,8 @@ export function CearRoboticsBackground() {
       ctx.lineTo(5, -13);
       ctx.stroke();
 
-      // Rounded CRT TV Head
       drawDoodleRect(-22, -37, 44, 24, 6, FILL_PAPER, INK_MAIN, 2.6);
 
-      // Antenna on corner
       const antWobble = Math.sin(bot.walkCycle * 2.8) * 2;
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
@@ -1162,7 +1300,6 @@ export function CearRoboticsBackground() {
       ctx.stroke();
       drawDoodleCircle(-14 + antWobble, -50, 3.5, FILL_PAPER, INK_MAIN, 2.0);
 
-      // Big cute round eyes ( • ‿ • )
       [-9, 9].forEach((ex) => {
         drawDoodleCircle(ex, -25, 5.8, FILL_PAPER, INK_MAIN, 2.2);
 
@@ -1185,7 +1322,6 @@ export function CearRoboticsBackground() {
         }
       });
 
-      // Happy open smile
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
       ctx.beginPath();
@@ -1194,7 +1330,15 @@ export function CearRoboticsBackground() {
 
       ctx.restore();
 
-      if (bot.heartBubbleTimer > 0) {
+      if (bot.speechBubble && bot.speechBubble.timer > 0) {
+        drawSpeechBubble(
+          bot.x,
+          bot.y - 36 * bot.scale,
+          bot.speechBubble.text,
+          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1,
+          bot.speechBubble.isShout
+        );
+      } else if (bot.heartBubbleTimer > 0) {
         drawHeartBubble(bot.x, bot.y, bot.heartBubbleTimer);
       }
     };
@@ -1211,13 +1355,11 @@ export function CearRoboticsBackground() {
       ctx.translate(0, floatBob);
       ctx.rotate(tilt);
 
-      // Ground shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 52 - floatBob, 26, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Delta Wings / Fins on sides
       [-15, 15].forEach((fx, i) => {
         const dir = i === 0 ? -1 : 1;
         ctx.beginPath();
@@ -1232,7 +1374,6 @@ export function CearRoboticsBackground() {
         ctx.stroke();
       });
 
-      // Rocket Fuselage (Rounded nose cone at top, curving down to flat base)
       ctx.beginPath();
       ctx.moveTo(0, -32);
       ctx.bezierCurveTo(10, -22, 17, -5, 15, 14);
@@ -1247,7 +1388,6 @@ export function CearRoboticsBackground() {
       ctx.lineJoin = "round";
       ctx.stroke();
 
-      // Exhaust nozzle
       ctx.beginPath();
       ctx.moveTo(-6, 14);
       ctx.lineTo(-8, 20);
@@ -1260,17 +1400,14 @@ export function CearRoboticsBackground() {
       ctx.lineWidth = 2.2;
       ctx.stroke();
 
-      // Trailing cute smoke puffs o O o
       const puff = Math.sin(bot.walkCycle * 3.5) * 2;
       [-18, 1, 18].forEach((py, i) => {
         const pr = 3.5 + i * 1.5;
         drawDoodleCircle(puff * (i % 2 === 0 ? 1 : -1), 24 + py * 0.5, pr, FILL_PAPER, INK_LIGHT, 1.8);
       });
 
-      // Center Big Porthole Window
       drawDoodleCircle(0, -7, 10.5, FILL_PAPER, INK_MAIN, 2.4);
 
-      // Cute Little Cartoon Face looking out ( ◕ ‿ ◕ )
       if (!bot.isBlinking) {
         ctx.fillStyle = INK_MAIN;
         ctx.beginPath();
@@ -1291,12 +1428,20 @@ export function CearRoboticsBackground() {
 
       ctx.restore();
 
-      if (bot.heartBubbleTimer > 0) {
+      if (bot.speechBubble && bot.speechBubble.timer > 0) {
+        drawSpeechBubble(
+          bot.x,
+          bot.y - 36 * bot.scale,
+          bot.speechBubble.text,
+          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1,
+          bot.speechBubble.isShout
+        );
+      } else if (bot.heartBubbleTimer > 0) {
         drawHeartBubble(bot.x, bot.y, bot.heartBubbleTimer);
       }
     };
 
-    // 7. SPIDERCHIBI (The Adorable Baby Spider with Sparkly Anime Eyes & Stubby Legs)
+    // 7. SPIDERCHIBI (The Adorable Baby Spider with Sparkly Anime Eyes)
     const drawSpiderChibi = (bot: DoodleBot) => {
       ctx.save();
       ctx.translate(bot.x, bot.y);
@@ -1306,13 +1451,11 @@ export function CearRoboticsBackground() {
       const pitterPatter = Math.abs(Math.sin(bot.walkCycle * 3.8)) * 3.5;
       ctx.translate(0, -pitterPatter);
 
-      // Shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 22 + pitterPatter, 28, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // 4 Cute Stubby Puppy-like Legs that tip-toe playfully
       const legCycle = bot.walkCycle * 3.8;
       [-15, -6, 6, 15].forEach((lx, i) => {
         const swing = Math.sin(legCycle + i * 1.5) * 5;
@@ -1330,14 +1473,11 @@ export function CearRoboticsBackground() {
         ctx.quadraticCurveTo(lx * 1.2, 8, footX, footY);
         ctx.stroke();
 
-        // Cute rounded foot tip
         drawDoodleCircle(footX, footY, 2.2, INK_MAIN, INK_MAIN, 1);
       });
 
-      // Round Marshmallow/Macaron Body
       drawDoodleCircle(0, -2, 21, FILL_PAPER, INK_MAIN, 2.6);
 
-      // Springy spiral antenna with cute ball
       const boing = Math.sin(bot.walkCycle * 3.5) * 3;
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
@@ -1347,29 +1487,24 @@ export function CearRoboticsBackground() {
       ctx.stroke();
       drawDoodleCircle(boing * 0.5, -38, 3.8, FILL_PAPER, INK_MAIN, 2.0);
 
-      // Big Sparkly Kawaii Manga Eyes ( ◕ ‿ ◕ )
       [-8, 8].forEach((ex) => {
         drawDoodleCircle(ex, -4, 6.8, FILL_PAPER, INK_MAIN, 2.2);
 
         if (!bot.isBlinking) {
-          // Large dark pupil
           ctx.fillStyle = INK_MAIN;
           ctx.beginPath();
           ctx.arc(ex + (bot.facing === 1 ? 0.8 : -0.8), -4, 3.8, 0, Math.PI * 2);
           ctx.fill();
 
-          // Big cute white shine sparkle ✨
           ctx.fillStyle = "#ffffff";
           ctx.beginPath();
           ctx.arc(ex + (bot.facing === 1 ? 0.2 : -1.4), -5.5, 1.4, 0, Math.PI * 2);
           ctx.fill();
 
-          // Secondary small shine
           ctx.beginPath();
           ctx.arc(ex + (bot.facing === 1 ? 2.0 : 0.4), -3.0, 0.8, 0, Math.PI * 2);
           ctx.fill();
         } else {
-          // Cute smiling curve eye ⌒
           ctx.strokeStyle = INK_MAIN;
           ctx.lineWidth = 2.2;
           ctx.beginPath();
@@ -1378,14 +1513,12 @@ export function CearRoboticsBackground() {
         }
       });
 
-      // Sweet smiling mouth ‿
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
       ctx.beginPath();
       ctx.arc(0, 2, 4.5, 0.2 * Math.PI, 0.8 * Math.PI);
       ctx.stroke();
 
-      // Soft rosy cheek blush dots
       [-14, 14].forEach((rx) => {
         ctx.fillStyle = INK_LIGHT;
         ctx.beginPath();
@@ -1395,12 +1528,20 @@ export function CearRoboticsBackground() {
 
       ctx.restore();
 
-      if (bot.heartBubbleTimer > 0) {
+      if (bot.speechBubble && bot.speechBubble.timer > 0) {
+        drawSpeechBubble(
+          bot.x,
+          bot.y - 32 * bot.scale,
+          bot.speechBubble.text,
+          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1,
+          bot.speechBubble.isShout
+        );
+      } else if (bot.heartBubbleTimer > 0) {
         drawHeartBubble(bot.x, bot.y, bot.heartBubbleTimer);
       }
     };
 
-    // 8. TRAPBOT (The Cute Trapezoid Robot with Double-Circle Eyes & Dual Wheels)
+    // 8. TRAPBOT (The Cute Trapezoid Robot with Dual Rolling Wheels)
     const drawTrapBot = (bot: DoodleBot) => {
       ctx.save();
       ctx.translate(bot.x, bot.y);
@@ -1410,13 +1551,11 @@ export function CearRoboticsBackground() {
       const bob = Math.sin(bot.walkCycle * 3.0) * 1.6;
       ctx.translate(0, bob);
 
-      // Shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 26, 30, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Dual rolling wheels (O) ====== (O)
       const wheelRot = bot.walkCycle * 3.0;
       [-14, 14].forEach((wx) => {
         ctx.save();
@@ -1425,7 +1564,6 @@ export function CearRoboticsBackground() {
 
         drawDoodleCircle(0, 0, 9.0, FILL_PAPER, INK_MAIN, 2.4);
 
-        // Cross spokes
         ctx.beginPath();
         ctx.moveTo(-6, 0);
         ctx.lineTo(6, 0);
@@ -1441,7 +1579,6 @@ export function CearRoboticsBackground() {
         ctx.restore();
       });
 
-      // Axle bar connecting wheels
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.4;
       ctx.beginPath();
@@ -1449,7 +1586,6 @@ export function CearRoboticsBackground() {
       ctx.lineTo(14, 18);
       ctx.stroke();
 
-      // Trapezoid Torso (narrow at top, wide at base)
       ctx.beginPath();
       ctx.moveTo(-12, -8);
       ctx.lineTo(12, -8);
@@ -1464,12 +1600,10 @@ export function CearRoboticsBackground() {
       ctx.lineJoin = "round";
       ctx.stroke();
 
-      // 3 chest buttons
       [-6, 0, 6].forEach((bx) => {
         drawDoodleCircle(bx, 2, 2.0, INK_MAIN, INK_MAIN, 1);
       });
 
-      // Neck
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.4;
       ctx.beginPath();
@@ -1477,10 +1611,8 @@ export function CearRoboticsBackground() {
       ctx.lineTo(0, -13);
       ctx.stroke();
 
-      // Rounded rectangular head
       drawDoodleRect(-21, -34, 42, 21, 5, FILL_PAPER, INK_MAIN, 2.5);
 
-      // Antenna with ball
       const antWobble = Math.sin(bot.walkCycle * 2.8) * 2;
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
@@ -1490,7 +1622,6 @@ export function CearRoboticsBackground() {
       ctx.stroke();
       drawDoodleCircle(antWobble, -47, 3.5, FILL_PAPER, INK_MAIN, 2.0);
 
-      // Double-Circle Eyes ((o)) ((o))
       [-10, 10].forEach((ex) => {
         drawDoodleCircle(ex, -24, 6.2, FILL_PAPER, INK_MAIN, 2.2);
 
@@ -1509,7 +1640,6 @@ export function CearRoboticsBackground() {
         }
       });
 
-      // Cute Grill Smile [ |||| ]
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 1.8;
       ctx.beginPath();
@@ -1524,13 +1654,21 @@ export function CearRoboticsBackground() {
 
       ctx.restore();
 
-      if (bot.heartBubbleTimer > 0) {
+      if (bot.speechBubble && bot.speechBubble.timer > 0) {
+        drawSpeechBubble(
+          bot.x,
+          bot.y - 36 * bot.scale,
+          bot.speechBubble.text,
+          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1,
+          bot.speechBubble.isShout
+        );
+      } else if (bot.heartBubbleTimer > 0) {
         drawHeartBubble(bot.x, bot.y, bot.heartBubbleTimer);
       }
     };
 
     // =========================================================================
-    // MAIN ANIMATION LOOP
+    // MAIN ANIMATION LOOP (Social Simulation, Bouncing Physics, Floating Accents)
     // =========================================================================
     const loop = () => {
       ctx.clearRect(0, 0, width, height);
@@ -1572,14 +1710,14 @@ export function CearRoboticsBackground() {
         }
       }
 
-      // 2. Render Dropped Interactive Doodle Tokens
-      const floorY = height - 25;
+      // 2. Render Dropped Interactive Tokens with Tactile Gravity & Bouncing
+      const floorY = height - 28;
       for (let i = droppedTokens.length - 1; i >= 0; i--) {
         const tok = droppedTokens[i];
         tok.life--;
 
         if (tok.life < 50) {
-          tok.alpha = (tok.life / 50) * 0.8;
+          tok.alpha = (tok.life / 50) * 0.95;
         }
 
         if (tok.life <= 0) {
@@ -1588,19 +1726,20 @@ export function CearRoboticsBackground() {
         }
 
         if (!tok.settled) {
-          tok.vy += 0.38;
+          tok.vy += 0.38; // Gravity
           tok.x += tok.vx;
           tok.y += tok.vy;
           tok.rotation += tok.vRot;
 
+          // Floor bounce
           if (tok.y >= floorY) {
             tok.y = floorY;
-            tok.vy = -tok.vy * 0.45;
-            tok.vx *= 0.8;
-            tok.vRot *= 0.7;
+            tok.vy = -tok.vy * 0.44; // Damped elastic bounce
+            tok.vx *= 0.78;
+            tok.vRot *= 0.72;
             tok.bounces++;
 
-            if (Math.abs(tok.vy) < 0.8 && tok.bounces >= 3) {
+            if (Math.abs(tok.vy) < 0.7 && tok.bounces >= 3) {
               tok.settled = true;
               tok.vy = 0;
               tok.vx = 0;
@@ -1608,31 +1747,78 @@ export function CearRoboticsBackground() {
           }
         }
 
-        drawDoodleNut(tok.x, tok.y, tok.radius, tok.rotation, tok.alpha);
+        if (tok.type === "coin") {
+          drawTactileCoin(tok.x, tok.y, tok.radius, tok.rotation, tok.alpha);
+        } else if (tok.type === "gear") {
+          drawDoodleGear(tok.x, tok.y, tok.radius * 1.1, tok.rotation, tok.alpha);
+        } else {
+          drawDoodleNut(tok.x, tok.y, tok.radius, tok.rotation, tok.alpha);
+        }
       }
 
-      // 3. Update & Render Prominent Super Cute Hand-Drawn Doodle Robots Roaming
+      // 3. Social Interaction Checking (Crowd Chatting like dontlookup.app)
+      for (let i = 0; i < bots.length; i++) {
+        for (let j = i + 1; j < bots.length; j++) {
+          const b1 = bots[i];
+          const b2 = bots[j];
+          if (b1.state === "moving" && b2.state === "moving") {
+            const dist = Math.hypot(b1.x - b2.x, b1.y - b2.y);
+            if (dist < 88 && Math.random() < 0.007) {
+              // Trigger social greeting
+              b1.state = "chatting";
+              b2.state = "chatting";
+              b1.stateTimer = 160;
+              b2.stateTimer = 160;
+              b1.chatPartnerId = b2.id;
+              b2.chatPartnerId = b1.id;
+              b1.facing = b2.x > b1.x ? 1 : -1;
+              b2.facing = b1.x > b2.x ? 1 : -1;
+
+              const phrase = BOT_PHRASES[Math.floor(Math.random() * BOT_PHRASES.length)];
+              b1.speechBubble = { text: phrase, timer: 130, maxTimer: 130 };
+
+              // Delayed reply
+              setTimeout(() => {
+                if (b2.state === "chatting") {
+                  const reply = SOCIAL_REPLIES[Math.floor(Math.random() * SOCIAL_REPLIES.length)];
+                  b2.speechBubble = { text: reply, timer: 120, maxTimer: 120 };
+                }
+              }, 700);
+            }
+          }
+        }
+      }
+
+      // 4. Update & Render Robots
       for (const bot of bots) {
         bot.stateTimer--;
         if (bot.heartBubbleTimer > 0) {
           bot.heartBubbleTimer--;
         }
 
+        if (bot.speechBubble) {
+          bot.speechBubble.timer--;
+          if (bot.speechBubble.timer <= 0) {
+            bot.speechBubble = undefined;
+          }
+        }
+
         if (bot.stateTimer <= 0) {
-          if (bot.state === "moving" || bot.state === "happy") {
+          if (bot.state === "moving" || bot.state === "happy" || bot.state === "inspecting" || bot.state === "chatting") {
             bot.state = "idle";
             bot.stateTimer = Math.random() * 80 + 50;
+            bot.chatPartnerId = undefined;
           } else {
             bot.state = "moving";
-            bot.stateTimer = Math.random() * 240 + 160;
-            bot.targetX = Math.random() * (width - 160) + 80;
+            bot.stateTimer = Math.random() * 260 + 160;
+            bot.targetX = Math.random() * (width - 180) + 90;
             if (bot.type === "ufobot" || bot.type === "rocketbot") {
-              bot.targetY = Math.random() * (height * 0.28) + 60;
+              bot.targetY = Math.random() * (height * 0.28) + 65;
             }
           }
         }
 
-        if (bot.state === "moving" || bot.state === "happy") {
+        if (bot.state === "moving" || bot.state === "happy" || bot.state === "inspecting") {
           const dx = bot.targetX - bot.x;
           if (Math.abs(dx) > 10) {
             const dir = Math.sign(dx);
@@ -1654,7 +1840,7 @@ export function CearRoboticsBackground() {
 
         bot.x = Math.max(45, Math.min(width - 45, bot.x));
 
-        // Cute Blinking
+        // Blinking
         bot.blinkTimer--;
         if (bot.blinkTimer <= 0) {
           bot.isBlinking = !bot.isBlinking;
