@@ -169,33 +169,63 @@ export function CearRoboticsBackground() {
       "boxchibi",
     ];
 
-    const botCount = 14;
-    for (let i = 0; i < botCount; i++) {
-      const type = botTypes[i % botTypes.length];
-      const scale = 0.94 + (i % 3) * 0.10;
-      const alpha = 0.82 + (i % 2) * 0.10;
-      const speed = 0.46 + Math.random() * 0.28;
+    // Helper to pick wander targets that are maximally scattered away from other bots
+    const getScatteredTarget = (botId: number) => {
+      let bestX = Math.random() * (width - 120) + 60;
+      let bestY = Math.random() * (height - 140) + 70;
+      let maxMinDist = -1;
 
-      // Spawn with guaranteed spacing so no bots ever spawn overlapping
-      let spawnX = 0;
-      let spawnY = 0;
-      let attempts = 0;
-      let valid = false;
+      // Sample 6 candidates across the full screen and pick the one farthest from other bots
+      for (let attempt = 0; attempt < 6; attempt++) {
+        const candidateX = Math.random() * (width - 120) + 60;
+        const candidateY = Math.random() * (height - 140) + 70;
 
-      while (!valid && attempts < 80) {
-        spawnX = Math.random() * (width - 240) + 120;
-        spawnY = Math.random() * (height - 180) + 90;
-        valid = true;
-        for (const existing of bots) {
-          if (Math.hypot(existing.x - spawnX, existing.y - spawnY) < 72) {
-            valid = false;
-            break;
-          }
+        let minDist = 999999;
+        for (const other of bots) {
+          if (other.id === botId) continue;
+          const d = Math.hypot(other.x - candidateX, other.y - candidateY);
+          if (d < minDist) minDist = d;
         }
-        attempts++;
+
+        if (minDist > maxMinDist) {
+          maxMinDist = minDist;
+          bestX = candidateX;
+          bestY = candidateY;
+        }
       }
 
-      const facing = Math.random() > 0.5 ? 1 : -1;
+      return { x: bestX, y: bestY };
+    };
+
+    // 10 Distinct Non-Overlapping Spatial Zones to Scatter Bots Across the Entire Viewport
+    const SPATIAL_ZONES = [
+      { minX: 0.04, maxX: 0.22, minY: 0.08, maxY: 0.35 }, // Zone 1: Top-Left
+      { minX: 0.38, maxX: 0.62, minY: 0.08, maxY: 0.30 }, // Zone 2: Top-Center
+      { minX: 0.78, maxX: 0.96, minY: 0.08, maxY: 0.35 }, // Zone 3: Top-Right
+      { minX: 0.04, maxX: 0.20, minY: 0.42, maxY: 0.65 }, // Zone 4: Mid-Left
+      { minX: 0.80, maxX: 0.96, minY: 0.42, maxY: 0.65 }, // Zone 5: Mid-Right
+      { minX: 0.26, maxX: 0.46, minY: 0.38, maxY: 0.62 }, // Zone 6: Center-Left
+      { minX: 0.54, maxX: 0.74, minY: 0.38, maxY: 0.62 }, // Zone 7: Center-Right
+      { minX: 0.04, maxX: 0.22, minY: 0.72, maxY: 0.92 }, // Zone 8: Bottom-Left
+      { minX: 0.38, maxX: 0.62, minY: 0.72, maxY: 0.92 }, // Zone 9: Bottom-Center
+      { minX: 0.78, maxX: 0.96, minY: 0.72, maxY: 0.92 }, // Zone 10: Bottom-Right
+    ];
+
+    const botCount = SPATIAL_ZONES.length;
+    for (let i = 0; i < botCount; i++) {
+      const type = botTypes[i % botTypes.length];
+      const scale = 0.94 + (i % 3) * 0.09;
+      const alpha = 0.82 + (i % 2) * 0.10;
+      const speed = 0.42 + Math.random() * 0.25;
+
+      const zone = SPATIAL_ZONES[i];
+      const spawnX = Math.random() * (zone.maxX - zone.minX) * width + zone.minX * width;
+      const spawnY = Math.random() * (zone.maxY - zone.minY) * height + zone.minY * height;
+      const facing = spawnX < width / 2 ? 1 : -1;
+
+      // Initial wander goal in its area with room to traverse
+      const initTargetX = Math.random() * (zone.maxX - zone.minX) * width + zone.minX * width;
+      const initTargetY = Math.random() * (zone.maxY - zone.minY) * height + zone.minY * height;
 
       bots.push({
         id: i + 1,
@@ -206,10 +236,10 @@ export function CearRoboticsBackground() {
         type,
         facing,
         state: "moving",
-        stateTimer: Math.random() * 240 + 160,
+        stateTimer: Math.random() * 260 + 160,
         walkCycle: Math.random() * 30,
-        targetX: Math.random() * (width - 240) + 120,
-        targetY: Math.random() * (height - 180) + 90,
+        targetX: initTargetX,
+        targetY: initTargetY,
         scale,
         alpha,
         speed,
@@ -295,28 +325,17 @@ export function CearRoboticsBackground() {
       if (sortedBots.length > 0) {
         const nearest = sortedBots[0];
         const dist = Math.hypot(nearest.x - worldX, nearest.y - worldY);
-        if (dist < 460) {
-          nearest.targetX = worldX + (Math.random() - 0.5) * 45;
-          nearest.targetY = worldY + (Math.random() - 0.5) * 30;
+        // Only single closest bot if reasonably close reacts; other bots remain scattered
+        if (dist < 260) {
+          nearest.targetX = worldX + (Math.random() - 0.5) * 35;
+          nearest.targetY = worldY + (Math.random() - 0.5) * 25;
           nearest.state = "inspecting";
-          nearest.stateTimer = 220;
-          nearest.alertBubbleTimer = 160;
+          nearest.stateTimer = 140;
+          nearest.alertBubbleTimer = 110;
           nearest.facing = worldX > nearest.x ? 1 : -1;
 
           const reaction = DROP_REACTIONS[Math.floor(Math.random() * DROP_REACTIONS.length)];
-          nearest.speechBubble = { text: reaction, timer: 150, maxTimer: 150 };
-        }
-      }
-
-      for (let k = 1; k < Math.min(3, sortedBots.length); k++) {
-        const other = sortedBots[k];
-        const dist = Math.hypot(other.x - worldX, other.y - worldY);
-        if (dist < 420) {
-          other.targetX = worldX + (Math.random() - 0.5) * 75;
-          other.targetY = worldY + (Math.random() - 0.5) * 40;
-          other.state = "inspecting";
-          other.stateTimer = 190;
-          other.facing = worldX > other.x ? 1 : -1;
+          nearest.speechBubble = { text: reaction, timer: 100, maxTimer: 100 };
         }
       }
     };
@@ -923,39 +942,39 @@ export function CearRoboticsBackground() {
         ctx.restore();
       }
 
-      // 4. Social Interaction: Bots Chatting at a Safe Distance
+      // 4. Social Interaction: Rare brief chats without clustering
       for (let i = 0; i < bots.length; i++) {
         for (let j = i + 1; j < bots.length; j++) {
           const b1 = bots[i];
           const b2 = bots[j];
           if (b1.state === "moving" && b2.state === "moving") {
             const dist = Math.hypot(b1.x - b2.x, b1.y - b2.y);
-            // Chat distance safely outside collision boundary
-            if (dist > 68 && dist < 96 && Math.random() < 0.007) {
+            // Rare chat triggered only when passing at safe distance
+            if (dist > 75 && dist < 105 && Math.random() < 0.003) {
               b1.state = "chatting";
               b2.state = "chatting";
-              b1.stateTimer = 160;
-              b2.stateTimer = 160;
+              b1.stateTimer = 100;
+              b2.stateTimer = 100;
               b1.chatPartnerId = b2.id;
               b2.chatPartnerId = b1.id;
               b1.facing = b2.x > b1.x ? 1 : -1;
               b2.facing = b1.x > b2.x ? 1 : -1;
 
               const phrase = BOT_PHRASES[Math.floor(Math.random() * BOT_PHRASES.length)];
-              b1.speechBubble = { text: phrase, timer: 130, maxTimer: 130 };
+              b1.speechBubble = { text: phrase, timer: 90, maxTimer: 90 };
 
               setTimeout(() => {
                 if (b2.state === "chatting") {
                   const reply = SOCIAL_REPLIES[Math.floor(Math.random() * SOCIAL_REPLIES.length)];
-                  b2.speechBubble = { text: reply, timer: 120, maxTimer: 120 };
+                  b2.speechBubble = { text: reply, timer: 80, maxTimer: 80 };
                 }
-              }, 700);
+              }, 500);
             }
           }
         }
       }
 
-      // 5. Update State & Movement for All Square Bots
+      // 5. Update State & Movement with Dispersed Targets
       for (const bot of bots) {
         bot.stateTimer--;
         if (bot.alertBubbleTimer > 0) {
@@ -972,13 +991,15 @@ export function CearRoboticsBackground() {
         if (bot.stateTimer <= 0) {
           if (bot.state === "moving" || bot.state === "inspecting" || bot.state === "chatting") {
             bot.state = "idle";
-            bot.stateTimer = Math.random() * 80 + 50;
+            bot.stateTimer = Math.random() * 60 + 40;
             bot.chatPartnerId = undefined;
           } else {
             bot.state = "moving";
-            bot.stateTimer = Math.random() * 260 + 160;
-            bot.targetX = Math.random() * (width - 240) + 120;
-            bot.targetY = Math.random() * (height - 180) + 90;
+            bot.stateTimer = Math.random() * 280 + 180;
+            // Always pick new wander targets that are farthest from other bots
+            const nextTarget = getScatteredTarget(bot.id);
+            bot.targetX = nextTarget.x;
+            bot.targetY = nextTarget.y;
           }
         }
 
@@ -1001,6 +1022,38 @@ export function CearRoboticsBackground() {
         // Clamp inside visible bounds
         bot.x = Math.max(50, Math.min(width - 50, bot.x));
         bot.y = Math.max(75, Math.min(height - 90, bot.y));
+      }
+
+      // 5.5 LONG-RANGE DISPERSION FIELD (Actively scatters bots apart across the entire canvas)
+      const DISPERSION_RANGE = 180; // Repel if closer than 180px
+      for (let i = 0; i < bots.length; i++) {
+        for (let j = i + 1; j < bots.length; j++) {
+          const b1 = bots[i];
+          const b2 = bots[j];
+          const dx = b2.x - b1.x;
+          const dy = b2.y - b1.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < DISPERSION_RANGE && dist > 0.001) {
+            const push = ((DISPERSION_RANGE - dist) / DISPERSION_RANGE) * 0.16;
+            const nx = dx / dist;
+            const ny = dy / dist;
+
+            // Nudge velocities apart
+            b1.vx -= nx * push;
+            b1.vy -= ny * push;
+            b2.vx += nx * push;
+            b2.vy += ny * push;
+
+            // If getting within 110px, also deflect wander goals
+            if (dist < 110) {
+              b1.targetX -= nx * 40;
+              b1.targetY -= ny * 25;
+              b2.targetX += nx * 40;
+              b2.targetY += ny * 25;
+            }
+          }
+        }
       }
 
       // 6. ANTI-OVERLAP COLLISION AVOIDANCE PHYSICS PASS (Guarantees Bots NEVER Overlap)
