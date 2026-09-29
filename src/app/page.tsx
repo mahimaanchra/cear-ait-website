@@ -14,7 +14,7 @@ import { Footer } from "@/components/sections/Footer";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
 import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
-import { CearRoboticsBackground } from "@/components/ui/CearRoboticsBackground";
+import { CyberMatrixBackground } from "@/components/ui/CyberMatrixBackground";
 
 export default function Home() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -31,9 +31,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-paper text-ink font-body selection:bg-ink selection:text-paper relative">
-      {/* Creative CEAR (AI & Robotics) Blueprint Background Animations */}
-      <CearRoboticsBackground />
+    <div className="min-h-screen bg-[#060911] text-slate-100 font-body selection:bg-cyan-400 selection:text-slate-950 relative overflow-hidden">
+      {/* Sleek Cyber Matrix / Subtle Animated Grid Background */}
+      <CyberMatrixBackground />
 
       {/* 1. Sticky Navigation Bar */}
       <Navbar onOpenRegister={() => handleOpenRegister()} />

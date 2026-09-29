@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
-import { X, CheckCircle2, ArrowRight } from "lucide-react";
+import { X, CheckCircle2, ArrowRight, Terminal, Radio } from "lucide-react";
 import { wartechTracks } from "@/data/siteData";
 
 interface RegistrationModalProps {
@@ -71,20 +71,23 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/65 backdrop-blur-xs overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="relative w-full max-w-xl bg-white border-[3px] border-ink rounded-[24px_30px_22px_28px_/_30px_22px_28px_24px] p-6 sm:p-8 shadow-[8px_10px_0_#14140f] my-8 overflow-hidden"
+        className="relative w-full max-w-xl bg-[#0c1322] border border-cyan-500/35 rounded-2xl p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_25px_rgba(0,240,255,0.18)] my-8 overflow-hidden backdrop-blur-2xl"
       >
+        <div className="cyber-bracket-top-left" />
+        <div className="cyber-bracket-bottom-right" />
+
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full border-2 border-ink bg-paper hover:bg-coin-y1 text-ink shadow-[2px_2px_0_#14140f] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_#14140f] transition-all cursor-pointer"
+          className="absolute top-4 right-4 p-2 rounded-lg border border-slate-800 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-colors cursor-pointer"
           aria-label="Close"
         >
-          <X className="w-4 h-4 stroke-[2.5]" />
+          <X className="w-4 h-4" />
         </button>
 
         {!isSubmitted ? (
@@ -92,24 +95,24 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
             {/* Header & Tabs */}
             <div className="mb-6 space-y-3">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-red border border-ink animate-pulse" />
-                <span className="paper-badge-ink text-[11px] py-0.5 px-2">
-                  OFFICIAL PORTAL REGISTRATION
+                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#00f0ff] animate-ping" />
+                <span className="text-[10px] font-mono font-bold tracking-wider text-cyan-400 bg-cyan-950/40 px-2.5 py-0.5 rounded border border-cyan-500/30">
+                  OFFICIAL REGISTRATION PORTAL
                 </span>
               </div>
-              <h3 className="text-2xl font-black font-tech text-ink">
+              <h3 className="text-2xl font-black font-tech text-slate-100">
                 Join CEAR or Enter Wartech
               </h3>
 
-              {/* Tabs Switcher with Paper & Ink Pill */}
-              <div className="grid grid-cols-2 gap-2 p-1.5 bg-paper border-2 border-ink rounded-xl text-xs font-tech font-bold">
+              {/* Tabs Switcher */}
+              <div className="grid grid-cols-2 gap-2 p-1 bg-[#070b14] border border-slate-800 rounded-lg text-xs font-tech font-bold">
                 <button
                   type="button"
                   onClick={() => setActiveTab("inductions")}
-                  className={`py-2 px-3 rounded-lg border-2 transition-all cursor-pointer ${
+                  className={`py-2 px-3 rounded-md transition-all cursor-pointer ${
                     activeTab === "inductions"
-                      ? "bg-ink text-white border-ink shadow-[2px_2px_0_#14140f]"
-                      : "border-transparent text-ink/70 hover:text-ink"
+                      ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(0,240,255,0.25)]"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
                   Cadet Inductions (AIT)
@@ -117,13 +120,13 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                 <button
                   type="button"
                   onClick={() => setActiveTab("wartech")}
-                  className={`py-2 px-3 rounded-lg border-2 transition-all cursor-pointer ${
+                  className={`py-2 px-3 rounded-md transition-all cursor-pointer ${
                     activeTab === "wartech"
-                      ? "bg-alarm text-white border-ink shadow-[2px_2px_0_#14140f]"
-                      : "border-transparent text-ink/70 hover:text-ink"
+                      ? "bg-rose-500/20 text-rose-400 border border-rose-500/40 shadow-[0_0_10px_rgba(255,51,102,0.25)]"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  Wartech 2026 (All Colleges)
+                  Wartech 2026 (All Arenas)
                 </button>
               </div>
             </div>
@@ -133,7 +136,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
               {activeTab === "inductions" ? (
                 <>
                   <div>
-                    <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                    <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                       Full Cadet Name *
                     </label>
                     <input
@@ -144,13 +147,13 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                       onChange={(e) =>
                         setInductionData({ ...inductionData, fullName: e.target.value })
                       }
-                      className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all placeholder:text-slate-600"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                      <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                         Institution Email *
                       </label>
                       <input
@@ -161,11 +164,11 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                         onChange={(e) =>
                           setInductionData({ ...inductionData, email: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all placeholder:text-slate-600"
                       />
                     </div>
                     <div>
-                      <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                      <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                         Year &amp; Branch *
                       </label>
                       <select
@@ -173,7 +176,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                         onChange={(e) =>
                           setInductionData({ ...inductionData, yearBranch: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none transition-all"
                       >
                         <option value="FE - Computer">FE - Computer Engineering</option>
                         <option value="FE - IT">FE - Information Technology</option>
@@ -187,7 +190,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                   </div>
 
                   <div>
-                    <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                    <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                       Primary Domain of Interest *
                     </label>
                     <select
@@ -195,7 +198,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                       onChange={(e) =>
                         setInductionData({ ...inductionData, domain: e.target.value })
                       }
-                      className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none transition-all"
                     >
                       <option value="AI & Neural Edge">AI, Edge Inference &amp; Reinforcement Learning</option>
                       <option value="Robotics & Embedded">Embedded Systems, ESP32 &amp; Custom PCB Design</option>
@@ -205,7 +208,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                   </div>
 
                   <div>
-                    <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                    <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                       Why CEAR? (Motivation) *
                     </label>
                     <textarea
@@ -216,7 +219,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                       onChange={(e) =>
                         setInductionData({ ...inductionData, statement: e.target.value })
                       }
-                      className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all placeholder:text-slate-600 resize-none"
                     />
                   </div>
                 </>
@@ -224,7 +227,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                      <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                         Team Name *
                       </label>
                       <input
@@ -235,11 +238,11 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                         onChange={(e) =>
                           setWartechData({ ...wartechData, teamName: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all placeholder:text-slate-600"
                       />
                     </div>
                     <div>
-                      <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                      <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                         College / Institution *
                       </label>
                       <input
@@ -250,21 +253,21 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                         onChange={(e) =>
                           setWartechData({ ...wartechData, college: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all placeholder:text-slate-600"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
-                      Chosen Wartech Track *
+                    <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
+                      Chosen Wartech Arena *
                     </label>
                     <select
                       value={wartechData.trackId}
                       onChange={(e) =>
                         setWartechData({ ...wartechData, trackId: e.target.value })
                       }
-                      className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none transition-all"
                     >
                       {wartechTracks.map((t) => (
                         <option key={t.id} value={t.id}>
@@ -276,7 +279,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                      <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                         Team Leader Name *
                       </label>
                       <input
@@ -287,11 +290,11 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                         onChange={(e) =>
                           setWartechData({ ...wartechData, leadName: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all placeholder:text-slate-600"
                       />
                     </div>
                     <div>
-                      <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                      <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                         Team Size *
                       </label>
                       <select
@@ -299,7 +302,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                         onChange={(e) =>
                           setWartechData({ ...wartechData, teamSize: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none transition-all"
                       >
                         <option value="1 Member">1 Member (Solo Driver)</option>
                         <option value="2 Members">2 Members</option>
@@ -311,7 +314,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                      <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                         Contact Email *
                       </label>
                       <input
@@ -322,11 +325,11 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                         onChange={(e) =>
                           setWartechData({ ...wartechData, email: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all placeholder:text-slate-600"
                       />
                     </div>
                     <div>
-                      <label className="block text-ink font-bold mb-1 font-tech uppercase text-[11px]">
+                      <label className="block text-slate-300 font-bold mb-1 font-tech uppercase text-[11px]">
                         WhatsApp Phone *
                       </label>
                       <input
@@ -337,55 +340,62 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                         onChange={(e) =>
                           setWartechData({ ...wartechData, phone: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl border-2 border-ink bg-paper focus:bg-white focus:outline-none focus:shadow-[3px_3px_0_#14140f] text-ink font-mono transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-slate-800 bg-[#070b14] text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all placeholder:text-slate-600"
                       />
                     </div>
                   </div>
                 </>
               )}
 
-              <div className="pt-3 border-t-2 border-ink/10 flex items-center justify-end gap-3">
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-xl font-tech font-bold text-xs text-ink/70 hover:text-ink cursor-pointer"
+                  className="px-4 py-2 font-mono text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className={activeTab === "wartech" ? "btn-paper-red text-xs py-2 px-5 flex items-center gap-1.5" : "btn-paper-primary text-xs py-2 px-5 flex items-center gap-1.5"}
+                  className={
+                    activeTab === "wartech"
+                      ? "cyber-btn-crimson !h-[40px] text-xs !px-5"
+                      : "cyber-btn-primary !h-[40px] text-xs !px-5"
+                  }
                 >
                   <span>Submit Registration</span>
-                  <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </form>
           </div>
         ) : (
           <div className="py-6 text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-ink border-[2.5px] border-ink text-white flex items-center justify-center mx-auto shadow-[3px_3px_0_#14140f]">
-              <CheckCircle2 className="w-9 h-9 stroke-[2.5]" />
+            <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(0,255,157,0.3)]">
+              <CheckCircle2 className="w-9 h-9" />
             </div>
 
             <div className="space-y-1">
-              <h4 className="text-2xl font-black font-tech text-ink">
+              <h4 className="text-2xl font-black font-tech text-slate-100">
                 Registration Confirmed!
               </h4>
-              <p className="text-xs font-mono text-ink/70">
-                REGISTRATION TOKEN: <span className="font-bold text-ink bg-paper px-2 py-0.5 rounded border border-ink">{regId}</span>
+              <p className="text-xs font-mono text-slate-400">
+                REGISTRATION TOKEN:{" "}
+                <span className="font-bold text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30 font-mono">
+                  {regId}
+                </span>
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-paper border-2 border-ink text-xs font-sans text-ink/80 max-w-md mx-auto leading-relaxed shadow-[3px_3px_0_#14140f]">
+            <div className="p-4 rounded-xl bg-[#070b14] border border-slate-800 text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
               {activeTab === "inductions"
                 ? "Your induction application has been queued for the 2026-27 batch. Orientation details and screening schedules will be sent to your student email."
-                : "Your squad slot has been reserved for Wartech 2026. The official track rulebook and reporting instructions have been logged to your squad leader."}
+                : "Your squad slot has been reserved for Wartech 2026. The official arena schedule and reporting instructions have been transmitted to your squad leader."}
             </div>
 
             <button
               onClick={handleReset}
-              className="btn-paper-primary text-xs mt-2"
+              className="cyber-btn-primary text-xs mt-2"
             >
               <span>Done</span>
             </button>

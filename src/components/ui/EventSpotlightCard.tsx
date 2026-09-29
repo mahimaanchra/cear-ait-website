@@ -14,6 +14,8 @@ import {
   Sparkles,
   ChevronRight,
   ExternalLink,
+  Radio,
+  Zap,
 } from "lucide-react";
 
 interface EventSpotlightCardProps {
@@ -23,7 +25,7 @@ interface EventSpotlightCardProps {
 interface SpotlightItem {
   id: string;
   badge: string;
-  badgeColor: "red" | "emerald" | "blue" | "amber";
+  badgeColor: "crimson" | "emerald" | "cyan";
   category: string;
   title: string;
   tagline: string;
@@ -40,16 +42,16 @@ const spotlightEvents: SpotlightItem[] = [
   {
     id: "wartech-2026",
     badge: "OCTOBER 2026",
-    badgeColor: "red",
-    category: "FLAGSHIP",
+    badgeColor: "crimson",
+    category: "NATIONAL FLAGSHIP",
     title: "Wartech 2026",
     tagline: "National Robotics Championship: 8 Combat & Autonomous Arenas.",
     date: "October 14–16, 2026",
-    countdown: "14 Days",
+    countdown: "T-14 DAYS",
     location: "Lab 104 & Campus Arena, AIT Pune",
     perks: [
       { label: "PRIZE POOL", value: "₹1,50,000+" },
-      { label: "ARENAS", value: "8 Sub-Tracks" },
+      { label: "ARENAS", value: "8 COMBAT TRACKS" },
     ],
     primaryCtaText: "Register for Wartech",
     registerTrackId: "robo-soccer",
@@ -59,15 +61,15 @@ const spotlightEvents: SpotlightItem[] = [
     id: "inductions-2026",
     badge: "RECRUITMENT",
     badgeColor: "emerald",
-    category: "ANNUAL",
+    category: "CADET SELECTION",
     title: "CEAR Inductions",
-    tagline: "Recruiting FE & SE cadets across AI, hardware, and robotics.",
+    tagline: "Recruiting FE & SE engineering cadets across AI, hardware, and embedded robotics.",
     date: "October 2026",
-    countdown: "Live",
+    countdown: "TELEMETRY LIVE",
     location: "Manekshaw Hall & Lab 104",
     perks: [
-      { label: "ELIGIBILITY", value: "FE & SE Cadets" },
-      { label: "DOMAINS", value: "Hardware & AI" },
+      { label: "ELIGIBILITY", value: "FE & SE CADETS" },
+      { label: "DOMAINS", value: "AI & HARDWARE" },
     ],
     primaryCtaText: "Apply for Inductions",
     registerTrackId: undefined,
@@ -86,24 +88,29 @@ export function EventSpotlightCard({ onOpenRegister }: EventSpotlightCardProps) 
   };
 
   return (
-    <div className="w-full max-w-md bg-white border-[3px] border-ink rounded-[22px_27px_20px_25px_/_27px_20px_25px_22px] shadow-[6px_7px_0_#14140f] -rotate-1 hover:rotate-0 transition-transform duration-200 relative overflow-hidden flex flex-col justify-between font-body">
-      {/* Top Banner Accent Stripe */}
-      <div className="h-2 w-full bg-alarm border-b-2 border-ink" />
+    <div className="w-full max-w-md bg-[#0a101d]/90 border border-cyan-500/35 rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(0,240,255,0.15)] relative overflow-hidden flex flex-col justify-between font-body backdrop-blur-xl">
+      {/* Corner HUD Laser Brackets */}
+      <div className="cyber-bracket-top-left" />
+      <div className="cyber-bracket-bottom-right" />
 
-      {/* Card Header: Live Status & Switcher */}
-      <div className="p-5 pb-3 border-b-2 border-ink/15 flex items-center justify-between gap-2">
+      {/* Top Banner Accent Laser Stripe */}
+      <div className="h-1 w-full bg-gradient-to-r from-cyan-400 via-rose-500 to-cyan-400 shadow-[0_0_10px_#00f0ff]" />
+
+      {/* Card Header: Live Telemetry Status & Switcher */}
+      <div className="p-5 pb-3 border-b border-cyan-500/20 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-alarm opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-alarm border border-ink" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 shadow-[0_0_6px_#ff3366]" />
           </span>
-          <span className="text-[11px] font-mono font-black tracking-wider uppercase text-ink bg-paper px-2.5 py-0.5 rounded-full border-2 border-ink shadow-[2px_2px_0_#14140f]">
+          <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-cyan-400 bg-cyan-950/40 px-2.5 py-0.5 rounded border border-cyan-500/30">
             {activeEvent.badge}
           </span>
         </div>
 
-        <span className="text-[10px] font-mono font-black text-ink-muted uppercase tracking-wider">
-          {activeEvent.category}
+        <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+          <Radio className="w-3 h-3 text-cyan-400 animate-pulse" />
+          <span>{activeEvent.category}</span>
         </span>
       </div>
 
@@ -120,55 +127,57 @@ export function EventSpotlightCard({ onOpenRegister }: EventSpotlightCardProps) 
           >
             {/* Title & Tagline */}
             <div>
-              <h3 className="text-2xl font-black font-tech text-ink tracking-tight flex items-center gap-2">
+              <h3 className="text-2xl font-black font-tech text-slate-100 tracking-tight flex items-center gap-2">
                 <span>{activeEvent.title}</span>
-                <Flame className="w-5 h-5 text-alarm shrink-0 animate-bounce" />
+                <Flame className="w-5 h-5 text-rose-500 shrink-0" />
               </h3>
-              <p className="text-xs text-ink/80 font-body font-semibold mt-1 leading-relaxed">
+              <p className="text-xs text-slate-300 font-body font-medium mt-1 leading-relaxed">
                 {activeEvent.tagline}
               </p>
             </div>
 
-            {/* Schedule & Location in a single clean block */}
-            <div className="p-3 rounded-xl bg-paper border-2 border-ink space-y-1.5 font-mono text-xs">
+            {/* Schedule & Location */}
+            <div className="p-3 rounded-lg bg-[#070b14]/90 border border-slate-800 space-y-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 font-bold text-ink">
-                  <Calendar className="w-3.5 h-3.5 text-ink shrink-0" />
+                <div className="flex items-center gap-2 font-semibold text-slate-200">
+                  <Calendar className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                   <span>{activeEvent.date}</span>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-ink text-white font-black animate-pulse">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/15 border border-rose-500/40 text-rose-400 font-bold">
                   {activeEvent.countdown}
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-ink/75 text-[11px] font-semibold">
-                <MapPin className="w-3.5 h-3.5 text-ink/70 shrink-0" />
+              <div className="flex items-center gap-2 text-slate-400 text-[11px]">
+                <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                 <span className="truncate">{activeEvent.location}</span>
               </div>
             </div>
 
-            {/* Tactile Meter Track with Animated Hazard Stripes */}
+            {/* Telemetry Capacity Progress Bar */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[10px] font-mono font-bold text-ink">
-                <span>SLOT FILL RATE</span>
-                <span className="text-alarm font-black">84% CAPACITY</span>
+              <div className="flex items-center justify-between text-[10px] font-mono font-bold">
+                <span className="text-slate-400">SLOT FILL TELEMETRY</span>
+                <span className="text-rose-400">84% CAPACITY [REG OPEN]</span>
               </div>
-              <div className="paper-track">
-                <div className="paper-track-fill hazard-stripes" style={{ width: "84%" }} />
-                <div className="paper-track-need" style={{ left: "84%" }} />
+              <div className="h-2 w-full bg-slate-900 border border-slate-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-rose-500 shadow-[0_0_8px_rgba(0,240,255,0.6)]"
+                  style={{ width: "84%" }}
+                />
               </div>
             </div>
 
-            {/* 2 Perks in a minimal horizontal split */}
+            {/* Perks in Split Module */}
             <div className="grid grid-cols-2 gap-2 font-mono">
               {activeEvent.perks.map((perk, i) => (
                 <div
                   key={i}
-                  className="px-3 py-2 rounded-xl bg-paper/60 border border-ink/40 text-left"
+                  className="px-3 py-2 rounded-lg bg-[#080d1a] border border-cyan-500/20 text-left"
                 >
-                  <span className="block text-[9px] uppercase tracking-wider text-ink/60 font-bold">
+                  <span className="block text-[9px] uppercase tracking-wider text-slate-400 font-bold">
                     {perk.label}
                   </span>
-                  <span className="block text-xs font-black text-ink font-tech">
+                  <span className="block text-xs font-black text-cyan-300 font-tech">
                     {perk.value}
                   </span>
                 </div>
@@ -183,7 +192,7 @@ export function EventSpotlightCard({ onOpenRegister }: EventSpotlightCardProps) 
         <div className="flex items-center gap-2.5">
           <button
             onClick={handleRegisterClick}
-            className="flex-1 btn-paper-red !h-[42px] !text-xs !py-0 !px-4"
+            className="flex-1 cyber-btn-crimson !h-[42px] !text-xs !py-0 !px-4"
           >
             <span>{activeEvent.primaryCtaText}</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -191,25 +200,25 @@ export function EventSpotlightCard({ onOpenRegister }: EventSpotlightCardProps) 
 
           <Link
             href={activeEvent.detailsHref}
-            className="btn-paper-secondary !h-[42px] !text-xs !py-0 !px-4"
+            className="cyber-btn-secondary !h-[42px] !text-xs !py-0 !px-4"
             title="Explore event details"
           >
             <span>Details</span>
           </Link>
         </div>
 
-        {/* Event Quick-Switch Carousel Tabs */}
-        <div className="pt-3 border-t-2 border-ink/15 flex items-center justify-between text-[11px] font-mono text-ink">
-          <span className="text-[10px] uppercase font-black text-ink-muted">SWITCH:</span>
+        {/* Quick-Switch Tabs */}
+        <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+          <span className="text-[10px] uppercase font-bold text-slate-500">TERMINAL:</span>
           <div className="flex items-center gap-1.5">
             {spotlightEvents.map((evt, idx) => (
               <button
                 key={evt.id}
                 onClick={() => setCurrentIndex(idx)}
-                className={`px-2.5 py-0.5 rounded-full text-[10px] font-black transition-all cursor-pointer border-2 border-ink ${
+                className={`px-2.5 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer border ${
                   currentIndex === idx
-                    ? "bg-ink text-paper shadow-[2px_2px_0_#14140f] -translate-y-0.5"
-                    : "bg-white text-ink hover:bg-paper"
+                    ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/50 shadow-[0_0_8px_rgba(0,240,255,0.3)]"
+                    : "bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700"
                 }`}
               >
                 {idx === 0 ? "01. Wartech" : "02. Inductions"}

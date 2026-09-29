@@ -1,41 +1,64 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* CEAR Core Design Tokens */
-  --paper: #f4f3ef;
-  --paper-card: #ffffff;
-  --paper-subtle: #eae8e1;
-  --paper-muted: #dfddd6;
-  --ink: #14140f;
-  --ink-pure: #000000;
-  --ink-muted: #5a5a50;
-  --red: #c0342a;
-  --follow: #2b5a9b;
-  --convert: #9abeef;
-  --y1: #f8e08a;
-  --y2: #f2c31a;
-  --y3: #c98f06;
-  --emerald: #10b981;
-  --btn-h: 44px;
-  --lift: 5px;
+  /* =========================================================================
+     SLEEK DARK SCI-FI & AUTONOMOUS ROBOTICS DESIGN TOKENS
+     ========================================================================= */
+  --bg-void: #04060a;
+  --bg-base: #060911;
+  --bg-surface: #0a0f1d;
+  --bg-card: rgba(13, 20, 36, 0.72);
+  --bg-card-hover: rgba(18, 28, 50, 0.85);
+
+  --cyan: #00f0ff;
+  --cyan-glow: rgba(0, 240, 255, 0.35);
+  --cyan-dim: rgba(0, 240, 255, 0.12);
+
+  --emerald: #00ff9d;
+  --emerald-glow: rgba(0, 255, 157, 0.3);
+  --emerald-dim: rgba(0, 255, 157, 0.12);
+
+  --crimson: #ff3366;
+  --crimson-glow: rgba(255, 51, 102, 0.35);
+
+  --amber: #f59e0b;
+  --amber-glow: rgba(245, 158, 11, 0.3);
+
+  --border-subtle: rgba(56, 189, 248, 0.14);
+  --border-glow: rgba(0, 240, 255, 0.45);
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Aliased Legacy Tokens to Guarantee Flawless Dark Sci-Fi Rendering */
+  --paper: #060911;
+  --paper-card: #0d1424;
+  --paper-subtle: #111a2e;
+  --paper-muted: #17233d;
+  --ink: #f1f5f9;
+  --ink-pure: #ffffff;
+  --ink-muted: #94a3b8;
+  --red: #ff3366;
 
   --display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --body: 'Space Grotesk', 'Nunito', system-ui, sans-serif;
+  --body: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --mono: 'Space Mono', 'JetBrains Mono', monospace;
 }
 
 html {
   scroll-behavior: smooth;
-  color-scheme: light;
-  background-color: var(--paper);
+  color-scheme: dark;
+  background-color: var(--bg-base);
 }
 
 body {
-  background-color: var(--paper);
-  color: var(--ink);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
   font-family: var(--body);
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
@@ -43,54 +66,39 @@ body {
 }
 
 ::selection {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--cyan);
+  color: #04060a;
 }
 
-/* Tactile Paper Canvas Texture */
-.canvas-paper {
-  background-color: var(--paper);
-  background-image: radial-gradient(rgba(20, 20, 15, 0.04) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-.canvas-tech-grid {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(20, 20, 15, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(20, 20, 15, 0.06) 1px, transparent 1px);
-}
-
-/* Custom Tactile Ink Scrollbar */
+/* Custom Sleek Neon Scrollbar */
 ::-webkit-scrollbar {
-  width: 9px;
+  width: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--paper-subtle);
-  border-left: 2px solid var(--ink);
+  background: #060911;
+  border-left: 1px solid rgba(56, 189, 248, 0.12);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--ink);
+  background: rgba(0, 240, 255, 0.35);
   border-radius: 4px;
-  border: 2px solid var(--paper-subtle);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--red);
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
 }
 
 /* Typography Utilities */
-.font-display,
-.font-cartoon {
+.font-display {
   font-family: var(--display);
   letter-spacing: -0.02em;
 }
 
 .font-tech {
-  font-family: 'Space Grotesk', var(--body);
-  letter-spacing: -0.02em;
+  font-family: var(--display);
+  letter-spacing: -0.015em;
 }
 
 .font-body {
@@ -98,295 +106,405 @@ body {
 }
 
 .font-mono {
-  font-family: 'Space Mono', 'JetBrains Mono', monospace;
-}
-
-/* Paper Text Shadow Halo */
-.paper-halo {
-  text-shadow: 0 0 9px var(--paper), 0 0 17px var(--paper);
+  font-family: var(--mono);
 }
 
 /* =========================================================================
-   TACTILE PAPER BUTTONS
+   SLEEK CYBER CARDS & GLASSMORPHIC PANELS
    ========================================================================= */
 
-.btn-paper-primary {
-  --lift: 4px;
-  appearance: none;
-  font-family: 'Space Grotesk', var(--display);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.045em;
-  font-size: 14px;
-  padding: 0 24px;
-  height: var(--btn-h);
-  border: 2.5px solid var(--ink);
-  border-radius: 24px 30px 22px 28px / 30px 22px 28px 24px;
-  cursor: pointer;
-  background: #000000;
-  color: var(--paper);
-  transform: rotate(-1.1deg) translate(0, 0);
-  box-shadow: var(--lift) calc(var(--lift) + 1px) 0 #000;
+.cyber-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.cyber-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(0, 240, 255, 0.35);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.14), 0 12px 35px -10px rgba(0, 0, 0, 0.7);
+}
+
+.cyber-card-glow {
+  position: relative;
+}
+
+.cyber-card-glow::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.4), transparent 50%, rgba(0, 255, 157, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Corner HUD Brackets for Military Robotics Panels */
+.cyber-bracket-top-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid var(--cyan);
+  border-left: 2px solid var(--cyan);
+  pointer-events: none;
+}
+
+.cyber-bracket-bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-bottom: 2px solid var(--cyan);
+  border-right: 2px solid var(--cyan);
+  pointer-events: none;
+}
+
+/* =========================================================================
+   SLEEK CYBER BUTTONS
+   ========================================================================= */
+
+.cyber-btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition:
-    transform 130ms ease-out,
-    box-shadow 130ms ease-out,
-    background 150ms ease,
-    color 150ms ease;
+  padding: 0 1.5rem;
+  height: 44px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #04060a;
+  background: linear-gradient(135deg, #00f0ff 0%, #00d2df 100%);
+  border: 1px solid #00f0ff;
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 180ms ease;
   user-select: none;
+  text-decoration: none;
+}
+
+.cyber-btn-primary:hover {
+  background: #ffffff;
+  color: #04060a;
+  box-shadow: 0 0 28px rgba(0, 240, 255, 0.7);
+  transform: translateY(-1.5px);
+}
+
+.cyber-btn-primary:active {
+  transform: translateY(0);
+}
+
+.cyber-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1.4rem;
+  height: 44px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f1f5f9;
+  background: rgba(13, 20, 36, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: all 180ms ease;
+  user-select: none;
+  text-decoration: none;
+}
+
+.cyber-btn-secondary:hover {
+  background: rgba(20, 32, 56, 0.95);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+  transform: translateY(-1.5px);
+}
+
+.cyber-btn-secondary:active {
+  transform: translateY(0);
+}
+
+.cyber-btn-crimson {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1.5rem;
+  height: 44px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff3366 0%, #e6194c 100%);
+  border: 1px solid #ff3366;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+  cursor: pointer;
+  transition: all 180ms ease;
+  user-select: none;
+  text-decoration: none;
+}
+
+.cyber-btn-crimson:hover {
+  background: #ff4d79;
+  box-shadow: 0 0 30px rgba(255, 51, 102, 0.7);
+  transform: translateY(-1.5px);
+}
+
+/* =========================================================================
+   TELEMETRY HUD CHIPS & STATUS BADGES
+   ========================================================================= */
+
+.cyber-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(13, 20, 36, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 9999px;
+  color: #94a3b8;
+  backdrop-filter: blur(8px);
+}
+
+.cyber-badge-cyan {
+  border-color: rgba(0, 240, 255, 0.4);
+  color: var(--cyan);
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.cyber-badge-emerald {
+  border-color: rgba(0, 255, 157, 0.4);
+  color: var(--emerald);
+  background: rgba(0, 255, 157, 0.08);
+}
+
+.cyber-badge-crimson {
+  border-color: rgba(255, 51, 102, 0.4);
+  color: var(--crimson);
+  background: rgba(255, 51, 102, 0.08);
+}
+
+/* Neon Text Glows */
+.neon-cyan {
+  color: #00f0ff;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.2);
+}
+
+.neon-emerald {
+  color: #00ff9d;
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.5), 0 0 20px rgba(0, 255, 157, 0.2);
+}
+
+.neon-crimson {
+  color: #ff3366;
+  text-shadow: 0 0 10px rgba(255, 51, 102, 0.5), 0 0 20px rgba(255, 51, 102, 0.2);
+}
+
+/* =========================================================================
+   COMPATIBILITY ALIASES (Overhauls existing paper classes to Dark Sci-Fi)
+   ========================================================================= */
+
+.paper-card {
+  background: rgba(13, 20, 36, 0.75);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 200ms ease;
+  transform: none !important;
+}
+
+.paper-card:hover {
+  background: rgba(18, 28, 50, 0.88);
+  border-color: rgba(0, 240, 255, 0.38);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.16), 0 12px 35px -10px rgba(0, 0, 0, 0.7);
+  transform: translateY(-2px) !important;
+}
+
+.paper-card-subtle {
+  background: rgba(10, 16, 30, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px -8px rgba(0, 0, 0, 0.5);
+  transform: none !important;
+}
+
+.paper-card-tilt-left,
+.paper-card-tilt-right {
+  transform: none !important;
+}
+
+.btn-paper-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1.5rem;
+  height: 44px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #04060a;
+  background: linear-gradient(135deg, #00f0ff 0%, #00d2df 100%);
+  border: 1px solid #00f0ff;
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.4);
+  cursor: pointer;
+  transition: all 180ms ease;
+  transform: none !important;
   text-decoration: none;
 }
 
 .btn-paper-primary:hover {
-  transform: rotate(-1.1deg) translate(2px, 2px);
-  box-shadow: 2px 3px 0 #000;
-}
-
-.btn-paper-primary:active {
-  transform: rotate(-1.1deg) translate(var(--lift), calc(var(--lift) + 1px));
-  box-shadow: 0 0 0 #000;
+  background: #ffffff;
+  color: #04060a;
+  box-shadow: 0 0 28px rgba(0, 240, 255, 0.7);
+  transform: translateY(-1.5px) !important;
 }
 
 .btn-paper-secondary {
-  --lift: 4px;
-  appearance: none;
-  font-family: 'Space Grotesk', var(--display);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.045em;
-  font-size: 14px;
-  padding: 0 22px;
-  height: var(--btn-h);
-  border: 2.5px solid var(--ink);
-  border-radius: 24px 30px 22px 28px / 30px 22px 28px 24px;
-  cursor: pointer;
-  background: #ffffff;
-  color: var(--ink);
-  transform: rotate(1.1deg) translate(0, 0);
-  box-shadow: var(--lift) calc(var(--lift) + 1px) 0 var(--ink);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition:
-    transform 130ms ease-out,
-    box-shadow 130ms ease-out,
-    background 150ms ease,
-    color 150ms ease;
-  user-select: none;
+  padding: 0 1.4rem;
+  height: 44px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f1f5f9;
+  background: rgba(13, 20, 36, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: all 180ms ease;
+  transform: none !important;
   text-decoration: none;
 }
 
 .btn-paper-secondary:hover {
-  background: var(--ink);
-  border-color: var(--paper);
-  color: var(--paper);
-  transform: rotate(1.1deg) translate(2px, 2px);
-  box-shadow: 2px 3px 0 var(--ink);
-}
-
-.btn-paper-secondary:active {
-  transform: rotate(1.1deg) translate(var(--lift), calc(var(--lift) + 1px));
-  box-shadow: 0 0 0 var(--ink);
+  background: rgba(20, 32, 56, 0.95);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+  transform: translateY(-1.5px) !important;
 }
 
 .btn-paper-red {
-  --lift: 4px;
-  appearance: none;
-  font-family: 'Space Grotesk', var(--display);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.045em;
-  font-size: 14px;
-  padding: 0 22px;
-  height: var(--btn-h);
-  border: 2.5px solid var(--ink);
-  border-radius: 24px 30px 22px 28px / 30px 22px 28px 24px;
-  cursor: pointer;
-  background: var(--red);
-  color: #ffffff;
-  transform: rotate(-0.9deg) translate(0, 0);
-  box-shadow: var(--lift) calc(var(--lift) + 1px) 0 var(--ink);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition:
-    transform 130ms ease-out,
-    box-shadow 130ms ease-out,
-    background 150ms ease;
-  user-select: none;
+  padding: 0 1.5rem;
+  height: 44px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff3366 0%, #e6194c 100%);
+  border: 1px solid #ff3366;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+  cursor: pointer;
+  transition: all 180ms ease;
+  transform: none !important;
   text-decoration: none;
 }
 
 .btn-paper-red:hover {
-  background: #a32920;
-  transform: rotate(-0.9deg) translate(2px, 2px);
-  box-shadow: 2px 3px 0 var(--ink);
+  background: #ff4d79;
+  box-shadow: 0 0 30px rgba(255, 51, 102, 0.7);
+  transform: translateY(-1.5px) !important;
 }
-
-.btn-paper-red:active {
-  transform: rotate(-0.9deg) translate(var(--lift), calc(var(--lift) + 1px));
-  box-shadow: 0 0 0 var(--ink);
-}
-
-/* =========================================================================
-   TACTILE PAPER CARDS & CONTAINERS
-   ========================================================================= */
-
-.paper-card {
-  background: #ffffff;
-  border: 2.5px solid var(--ink);
-  border-radius: 22px 27px 20px 25px / 27px 20px 25px 22px;
-  box-shadow: 5px 6px 0 var(--ink);
-  transition: transform 140ms ease-out, box-shadow 140ms ease-out;
-}
-
-.paper-card-subtle {
-  background: var(--paper-subtle);
-  border: 2px solid var(--ink);
-  border-radius: 18px 24px 17px 21px / 24px 17px 21px 18px;
-  box-shadow: 3px 4px 0 var(--ink);
-}
-
-.paper-card-tilt-left {
-  transform: rotate(-0.8deg);
-}
-
-.paper-card-tilt-right {
-  transform: rotate(0.8deg);
-}
-
-.paper-card-interactive:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 8px 0 var(--ink);
-}
-
-/* =========================================================================
-   SPEECH BUBBLES & STICKER CALLOUTS
-   ========================================================================= */
-
-.paper-bubble {
-  position: relative;
-  background: var(--y1);
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 15px 19px 14px 17px / 18px 14px 17px 15px;
-  box-shadow: 3px 4px 0 rgba(20, 20, 15, 0.9);
-  font-family: var(--body);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.45;
-}
-
-.paper-bubble-red {
-  background: var(--red);
-  color: var(--paper);
-}
-
-.paper-bubble-blue {
-  background: var(--convert);
-  color: var(--ink);
-}
-
-/* Speech bubble tail */
-.ttail {
-  position: absolute;
-  width: 18px;
-  height: 14px;
-  overflow: visible;
-  bottom: -11px;
-  right: 20px;
-}
-
-.ttail-fill {
-  fill: var(--y1);
-}
-
-.ttail-line {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 2px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-
-/* =========================================================================
-   TACTILE PROGRESS TRACK
-   ========================================================================= */
-
-.paper-track {
-  position: relative;
-  height: 13px;
-  background: #ffffff;
-  border: 2.5px solid var(--ink);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.paper-track-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  background: var(--ink);
-  transition: width 220ms ease;
-}
-
-.paper-track-need {
-  position: absolute;
-  top: -3px;
-  bottom: -3px;
-  width: 3.5px;
-  margin-left: -1.75px;
-  background: var(--red);
-  transition: left 300ms ease;
-}
-
-/* =========================================================================
-   BADGES & CHIPS (Tactile Drawn Style - Monochrome & Red Accent)
-   ========================================================================= */
 
 .paper-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  border: 2px solid var(--ink);
-  border-radius: 15px 19px 14px 17px / 18px 14px 17px 15px;
-  box-shadow: 2px 2.5px 0 var(--ink);
-  font-family: 'Space Grotesk', var(--body);
-  font-weight: 800;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--mono);
   font-size: 11px;
-  padding: 0.2rem 0.65rem;
-  background-color: #ffffff;
-  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(13, 20, 36, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 9999px;
+  color: #94a3b8;
+  box-shadow: none !important;
 }
 
 .paper-badge-ink {
-  background-color: var(--ink);
-  color: #ffffff;
+  background-color: rgba(0, 240, 255, 0.12);
+  color: var(--cyan);
+  border-color: rgba(0, 240, 255, 0.35);
 }
 
 .paper-badge-red {
-  background-color: var(--red);
-  color: #ffffff;
+  background-color: rgba(255, 51, 102, 0.12);
+  color: var(--crimson);
+  border-color: rgba(255, 51, 102, 0.35);
 }
 
 .paper-badge-yellow {
-  background-color: var(--y1);
-  color: var(--ink);
+  background-color: rgba(245, 158, 11, 0.12);
+  color: var(--amber);
+  border-color: rgba(245, 158, 11, 0.35);
 }
 
 .paper-badge-paper {
-  background-color: var(--paper-subtle);
-  color: var(--ink);
+  background-color: rgba(13, 20, 36, 0.85);
+  color: #94a3b8;
+  border-color: rgba(56, 189, 248, 0.18);
+}
+
+.hazard-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    #ff3366,
+    #ff3366 10px,
+    #060911 10px,
+    #060911 20px
+  );
 }
 
 /* =========================================================================
-   ANIMATIONS & KEYFRAMES (Rich, Playful, Tactile Physics)
+   KEYFRAME ANIMATIONS
    ========================================================================= */
 
 @keyframes marquee {
@@ -399,202 +517,20 @@ body {
   100% { transform: translateX(0%); }
 }
 
-.animate-marquee-infinite {
-  display: flex;
-  width: max-content;
-  animation: marquee 24s linear infinite;
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.97); }
 }
 
-.animate-marquee-reverse {
-  display: flex;
-  width: max-content;
-  animation: marquee-reverse 26s linear infinite;
-}
-
-.animate-marquee-infinite:hover,
-.animate-marquee-reverse:hover {
-  animation-play-state: paused;
-}
-
-/* Floating bobbing idle */
-@keyframes float-slow {
-  0%, 100% {
-    transform: translateY(0px) rotate(-0.5deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(1deg);
-  }
-}
-
-@keyframes float-reverse {
-  0%, 100% {
-    transform: translateY(0px) rotate(1deg);
-  }
-  50% {
-    transform: translateY(8px) rotate(-1deg);
-  }
-}
-
-.animate-float-slow {
-  animation: float-slow 4s ease-in-out infinite;
-}
-
-.animate-float-reverse {
-  animation: float-reverse 4.5s ease-in-out infinite;
-}
-
-/* Playful wiggle on hover */
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-4deg); }
-  75% { transform: rotate(4deg); }
-}
-
-.animate-wiggle {
-  animation: wiggle 0.5s ease-in-out infinite;
-}
-
-.hover-wiggle:hover {
-  animation: wiggle 0.35s ease-in-out infinite;
-}
-
-/* Slow mechanical spin for radars & reticles */
-@keyframes spin-slow {
+@keyframes radarSpin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-.animate-spin-slow {
-  animation: spin-slow 18s linear infinite;
+.animate-radar {
+  animation: radarSpin 6s linear infinite;
 }
 
-/* Animated hazard diagonal stripes on tracks */
-@keyframes hazard-move {
-  0% { background-position: 0 0; }
-  100% { background-position: 28px 0; }
-}
-
-.hazard-stripes {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    var(--ink),
-    var(--ink) 7px,
-    #ffffff 7px,
-    #ffffff 14px
-  );
-  background-size: 28px 28px;
-  animation: hazard-move 1.2s linear infinite;
-}
-
-/* Blink & nod animations for interactive elements */
-@keyframes robot-wink {
-  0%, 88%, 94%, 100% { transform: scaleY(1); }
-  90%, 92% { transform: scaleY(0.08); }
-}
-
-.animate-blink {
-  transform-origin: center;
-  animation: robot-wink 3.8s infinite;
-}
-
-/* Stamp drop-in feel */
-@keyframes stamp-pop {
-  0% { transform: scale(0.92) rotate(-2deg); opacity: 0; }
-  70% { transform: scale(1.04) rotate(1deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-
-.animate-stamp {
-  animation: stamp-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* =========================================================================
-   CEAR (AI & ROBOTICS) SPECIALIZED BACKGROUND ANIMATIONS
-   ========================================================================= */
-
-/* Continuous 360° Radar / LiDAR Scan Sweep */
-@keyframes radar-sweep {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.animate-radar-sweep {
-  transform-origin: center;
-  animation: radar-sweep 8s linear infinite;
-}
-
-/* Dashed Autonomous Waypoint Navigation Path Flow */
-@keyframes dash-flow {
-  0% { stroke-dashoffset: 60; }
-  100% { stroke-dashoffset: 0; }
-}
-
-.animate-dash-flow {
-  animation: dash-flow 3s linear infinite;
-}
-
-/* Counter-rotating Precision Mechanical Gears */
-@keyframes gear-spin-cw {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes gear-spin-ccw {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(-360deg); }
-}
-
-.animate-gear-cw {
-  transform-origin: center;
-  animation: gear-spin-cw 20s linear infinite;
-}
-
-.animate-gear-ccw {
-  transform-origin: center;
-  animation: gear-spin-ccw 20s linear infinite;
-}
-
-/* Articulated Robotic Arm Kinematics Joints */
-@keyframes arm-joint-1 {
-  0%, 100% { transform: rotate(0deg); }
-  35% { transform: rotate(18deg); }
-  70% { transform: rotate(-12deg); }
-}
-
-@keyframes arm-joint-2 {
-  0%, 100% { transform: rotate(0deg); }
-  45% { transform: rotate(-24deg); }
-  85% { transform: rotate(15deg); }
-}
-
-.animate-arm-joint-1 {
-  transform-origin: 20px 80px;
-  animation: arm-joint-1 9s ease-in-out infinite;
-}
-
-.animate-arm-joint-2 {
-  transform-origin: 75px 45px;
-  animation: arm-joint-2 7s ease-in-out infinite;
-}
-
-/* Autonomous Drone Flight / Hover Sway */
-@keyframes drone-hover {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(6px, -10px) rotate(2deg); }
-  50% { transform: translate(-4px, -16px) rotate(-1.5deg); }
-  75% { transform: translate(-8px, -6px) rotate(1deg); }
-}
-
-.animate-drone-hover {
-  animation: drone-hover 8s ease-in-out infinite;
-}
-
-/* Circuit Data Signal Packet Pulse */
-@keyframes signal-pulse {
-  0%, 100% { opacity: 0.2; transform: scale(0.85); }
-  50% { opacity: 1; transform: scale(1.15); }
-}
-
-.animate-signal-pulse {
-  animation: signal-pulse 2s ease-in-out infinite;
+.animate-pulse-subtle {
+  animation: pulseSubtle 2.5s ease-in-out infinite;
 }

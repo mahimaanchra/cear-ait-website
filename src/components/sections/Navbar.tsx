@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
-import { siteConfig } from "@/data/siteData";
+import { Menu, X, ArrowRight, Radio, Shield } from "lucide-react";
 import { CearLogo } from "@/components/ui/CearLogo";
 
 interface NavbarProps {
@@ -16,7 +15,7 @@ const navLinks = [
   { name: "Team", href: "#team" },
   { name: "Projects", href: "#projects" },
   { name: "Events", href: "#events" },
-  { name: "Wartech", href: "#wartech" },
+  { name: "Wartech '26", href: "#wartech", isFlagship: true },
 ];
 
 export function Navbar({ onOpenRegister }: NavbarProps) {
@@ -48,36 +47,36 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-[#f4f3ef]/95 backdrop-blur-md border-b-[2.5px] border-ink shadow-[0_3px_0_rgba(20,20,15,0.06)] py-2.5"
-            : "bg-[#f4f3ef]/90 backdrop-blur-sm border-b-2 border-ink/80 py-3.5"
+            ? "bg-[#060911]/90 backdrop-blur-xl border-b border-cyan-500/25 shadow-[0_4px_30px_rgba(0,0,0,0.8),0_1px_15px_rgba(0,240,255,0.12)] py-2.5"
+            : "bg-[#060911]/70 backdrop-blur-md border-b border-cyan-500/15 py-3.5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Left: CEAR Logo + CEAR text branding with active dot */}
-          <Link href="#hero" className="flex items-center gap-2.5 group">
-            <div className="relative p-0.5 rounded-lg border-2 border-ink bg-white shadow-[2px_2px_0_#14140f] group-hover:rotate-[-4deg] transition-transform">
+          {/* Left: CEAR High-Tech Branding */}
+          <Link href="#hero" className="flex items-center gap-3 group">
+            <div className="relative p-1 rounded-lg border border-cyan-500/40 bg-[#0a0f1d] shadow-[0_0_12px_rgba(0,240,255,0.25)] group-hover:border-cyan-400 group-hover:shadow-[0_0_18px_rgba(0,240,255,0.45)] transition-all">
               <CearLogo className="w-8 h-8" size={32} priority />
+              <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#00ff9d]" />
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="font-tech text-lg font-black tracking-tight text-ink group-hover:text-alarm transition-colors">
+              <div className="flex items-center gap-2">
+                <span className="font-tech text-lg font-black tracking-wider text-slate-100 group-hover:text-cyan-400 transition-colors">
                   CEAR
                 </span>
-                <span
-                  className="w-2.5 h-2.5 rounded-full bg-alarm border border-ink shadow-[1px_1px_0_#14140f] animate-ping"
-                  title="Systems Operational"
-                />
+                <span className="px-1.5 py-0.2 text-[9px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded">
+                  SYS: ONLINE
+                </span>
               </div>
-              <span className="text-[10px] font-mono text-ink/60 font-bold tracking-wider uppercase">
-                AIT PUNE • LAB 104
+              <span className="text-[10px] font-mono text-slate-400 tracking-wider uppercase">
+                AIT PUNE • LAB 104 • LAT: 18.60°N
               </span>
             </div>
           </Link>
 
-          {/* Middle/Right: Quick links */}
-          <nav className="hidden md:flex items-center gap-1 sm:gap-1.5">
+          {/* Middle: Futuristic Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1.5 bg-[#0a0f1d]/80 border border-slate-800/80 rounded-full px-2 py-1 shadow-inner">
             {navLinks.map((link) => {
               const targetId = link.href.replace("#", "");
               const isActive = activeSection === targetId;
@@ -86,33 +85,40 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-3.5 py-1 text-xs font-black font-tech transition-all relative rounded-full ${
+                  className={`px-3.5 py-1 text-xs font-bold font-tech tracking-wide transition-all relative rounded-full ${
                     isActive
-                      ? "text-white bg-ink border-2 border-ink shadow-[2px_2px_0_#14140f] -rotate-1"
-                      : "text-ink/80 hover:text-ink hover:bg-white border-2 border-transparent hover:border-ink/30"
+                      ? "text-cyan-300 bg-cyan-500/15 border border-cyan-400/40 shadow-[0_0_12px_rgba(0,240,255,0.25)]"
+                      : link.isFlagship
+                      ? "text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/30"
+                      : "text-slate-300 hover:text-slate-100 hover:bg-slate-800/60 border border-transparent"
                   }`}
                 >
-                  <span>{link.name}</span>
+                  <span className="flex items-center gap-1.5">
+                    {link.isFlagship && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+                    )}
+                    {link.name}
+                  </span>
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right: CTA Button with Tactile Physics */}
+          {/* Right: Telemetry / Action CTA */}
           <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={onOpenRegister}
-              className="btn-paper-primary !h-[38px] !text-xs !py-0 !px-4 hover-wiggle"
+              className="cyber-btn-primary !h-[38px] !text-xs !py-0 !px-4.5"
             >
-              <span>Register</span>
-              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>INITIALIZE</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl border-2 border-ink bg-white shadow-[2px_2px_0_#14140f] text-ink transition-transform active:translate-x-0.5 active:translate-y-0.5"
+            className="md:hidden p-2 rounded-lg border border-cyan-500/30 bg-[#0d1424] text-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.2)]"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -128,7 +134,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-[60px] z-40 bg-paper border-b-[2.5px] border-ink p-4 shadow-[0_5px_0_#14140f] md:hidden"
+            className="fixed inset-x-0 top-[60px] z-40 bg-[#080d1a]/95 backdrop-blur-2xl border-b border-cyan-500/30 p-4 shadow-[0_10px_40px_rgba(0,0,0,0.9)] md:hidden"
           >
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
@@ -136,21 +142,25 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border-2 border-ink bg-white shadow-[2px_2px_0_#14140f] text-sm font-bold font-tech text-ink flex items-center justify-between"
+                  className="px-4 py-2.5 rounded-lg border border-slate-800 bg-[#0d1424] text-sm font-bold font-tech text-slate-200 hover:text-cyan-400 hover:border-cyan-500/40 flex items-center justify-between"
                 >
-                  <span>{link.name}</span>
+                  <span className="flex items-center gap-2">
+                    {link.isFlagship && <span className="w-2 h-2 rounded-full bg-rose-500" />}
+                    {link.name}
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-slate-500" />
                 </Link>
               ))}
 
-              <div className="pt-3 border-t-2 border-ink/10 mt-1">
+              <div className="pt-3 border-t border-slate-800 mt-1">
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     onOpenRegister?.();
                   }}
-                  className="w-full btn-paper-primary !h-[42px] text-sm"
+                  className="w-full cyber-btn-primary !h-[42px] text-sm"
                 >
-                  <span>Register</span>
+                  <span>INITIALIZE REGISTRATION</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

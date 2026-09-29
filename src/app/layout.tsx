@@ -69,7 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${nunito.variable} ${spaceGrotesk.variable} ${spaceMono.variable} font-body bg-paper text-ink antialiased min-h-screen selection:bg-ink selection:text-paper`}
+        className={`${nunito.variable} ${spaceGrotesk.variable} ${spaceMono.variable} font-body bg-[#060911] text-slate-100 antialiased min-h-screen selection:bg-cyan-400 selection:text-slate-950`}
       >
         <SiteContentProvider>
           <Preloader />

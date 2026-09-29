@@ -20,7 +20,7 @@ export function PerceptionCard({
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative group bg-white rounded-[20px_24px_18px_22px_/_24px_18px_22px_20px] border-[2.5px] border-ink shadow-[4px_5px_0_#14140f] hover:shadow-[6px_7px_0_#14140f] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150 overflow-hidden ${className}`}
+      className={`relative group bg-[#0c1222]/85 rounded-xl border border-cyan-500/20 hover:border-cyan-400/50 shadow-[0_8px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_0_22px_rgba(0,240,255,0.2)] hover:-translate-y-1 transition-all duration-200 overflow-hidden backdrop-blur-xl ${className}`}
     >
       {/* Laser Perception Scanline */}
       {enableScan && (
@@ -39,15 +39,15 @@ export function PerceptionCard({
             repeat: isHovered ? Infinity : 0,
             repeatDelay: 0.5,
           }}
-          className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-alarm to-transparent z-20"
+          className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent z-20 shadow-[0_0_8px_#00f0ff]"
         />
       )}
 
-      {/* Tactile Corner Registration Ticks */}
-      <div className="pointer-events-none absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-ink/40 group-hover:border-ink transition-colors z-10" />
-      <div className="pointer-events-none absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-ink/40 group-hover:border-ink transition-colors z-10" />
-      <div className="pointer-events-none absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-ink/40 group-hover:border-ink transition-colors z-10" />
-      <div className="pointer-events-none absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-ink/40 group-hover:border-ink transition-colors z-10" />
+      {/* Cyber Corner HUD Ticks */}
+      <div className="pointer-events-none absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-cyan-500/40 group-hover:border-cyan-400 transition-colors z-10" />
+      <div className="pointer-events-none absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-cyan-500/40 group-hover:border-cyan-400 transition-colors z-10" />
+      <div className="pointer-events-none absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-cyan-500/40 group-hover:border-cyan-400 transition-colors z-10" />
+      <div className="pointer-events-none absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-cyan-500/40 group-hover:border-cyan-400 transition-colors z-10" />
 
       {/* Card Content */}
       <div className="relative z-10">{children}</div>
