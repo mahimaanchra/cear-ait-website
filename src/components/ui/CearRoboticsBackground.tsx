@@ -6,11 +6,7 @@ export type BotType =
   | "boxchibi"    // Classic Square Bot with walking legs & top antenna (No face, monochrome)
   | "towerchibi"  // Tall Cuboid Bot with dual sensor pegs & walking legs (No face, monochrome)
   | "visorchibi"  // Wide Box Bot with horizontal sensor slit & walking legs (No face, monochrome)
-  | "minichibi"   // Compact Cube Bot with sensor peg & walking legs (No face, monochrome)
-  | "treadbot"    // Square-body tank rover with 3 rolling wheels in tread (No face, monochrome)
-  | "ufobot"      // Floating sleek saucer drone with dome & antenna (No face, monochrome)
-  | "spiderchibi" // Compact quad-leg walking bot (No face, monochrome)
-  | "unibot";     // Box-body monocycle bot on single rolling wheel (No face, monochrome)
+  | "minichibi";  // Compact Cube Bot with sensor peg & walking legs (No face, monochrome)
 
 interface SpeechBubble {
   text: string;
@@ -37,7 +33,7 @@ interface DoodleBot {
   antennaWobble: number;
   speechBubble?: SpeechBubble;
   chatPartnerId?: number;
-  alertBubbleTimer: number; // Clean monochrome [ ! ] alert bubble
+  alertBubbleTimer: number;
 }
 
 interface FloatingDoodleItem {
@@ -148,16 +144,19 @@ export function CearRoboticsBackground() {
     };
     window.addEventListener("wheel", handleWheel, { passive: true });
 
-    // Pure Monochrome Color Palette: Dull Gray / Charcoal Ink & Warm Paper (No Colors)
+    // Pure Monochrome Color Palette: Dull Gray / Charcoal Ink & Warm Paper (Zero Colors)
     const INK_MAIN = "rgba(42, 46, 54, 0.86)";       // Dense charcoal-black marker ink
     const INK_LIGHT = "rgba(95, 102, 112, 0.55)";   // Secondary sketch lines
     const FILL_PAPER = "rgba(255, 255, 255, 0.85)";  // Solid paper body fill
     const FILL_SHADE = "rgba(215, 220, 228, 0.45)";  // Soft dull gray paper shadow
 
-    // Crowd of Square Shape Bots with Legs (Strictly Monochrome, No Faces)
+    // Exclusively Square Shape Bots with Walking Legs (No Circular Bots, No Faces)
     const bots: DoodleBot[] = [];
     const botTypes: BotType[] = [
       "boxchibi",
+      "towerchibi",
+      "visorchibi",
+      "minichibi",
       "boxchibi",
       "towerchibi",
       "visorchibi",
@@ -165,42 +164,52 @@ export function CearRoboticsBackground() {
       "boxchibi",
       "towerchibi",
       "visorchibi",
-      "boxchibi",
-      "treadbot",
-      "ufobot",
-      "spiderchibi",
-      "unibot",
-      "boxchibi",
       "minichibi",
-      "towerchibi",
-      "visorchibi",
+      "boxchibi",
       "boxchibi",
     ];
 
-    const botCount = 18;
+    const botCount = 14;
     for (let i = 0; i < botCount; i++) {
       const type = botTypes[i % botTypes.length];
-      const scale = 0.92 + (i % 3) * 0.12;
+      const scale = 0.94 + (i % 3) * 0.10;
       const alpha = 0.82 + (i % 2) * 0.10;
-      const speed = 0.48 + Math.random() * 0.32;
+      const speed = 0.46 + Math.random() * 0.28;
 
-      const rowY = (i / botCount) * (height - 180) + 90;
-      const botY = Math.max(75, Math.min(height - 95, rowY + (Math.random() - 0.5) * 40));
+      // Spawn with guaranteed spacing so no bots ever spawn overlapping
+      let spawnX = 0;
+      let spawnY = 0;
+      let attempts = 0;
+      let valid = false;
+
+      while (!valid && attempts < 80) {
+        spawnX = Math.random() * (width - 240) + 120;
+        spawnY = Math.random() * (height - 180) + 90;
+        valid = true;
+        for (const existing of bots) {
+          if (Math.hypot(existing.x - spawnX, existing.y - spawnY) < 72) {
+            valid = false;
+            break;
+          }
+        }
+        attempts++;
+      }
+
       const facing = Math.random() > 0.5 ? 1 : -1;
 
       bots.push({
         id: i + 1,
-        x: Math.random() * (width - 240) + 120,
-        y: botY,
+        x: spawnX,
+        y: spawnY,
         vx: facing * speed,
-        vy: type === "ufobot" ? (Math.random() - 0.5) * 0.25 : (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
         type,
         facing,
         state: "moving",
         stateTimer: Math.random() * 240 + 160,
         walkCycle: Math.random() * 30,
-        targetX: Math.random() * width,
-        targetY: botY,
+        targetX: Math.random() * (width - 240) + 120,
+        targetY: Math.random() * (height - 180) + 90,
         scale,
         alpha,
         speed,
@@ -237,7 +246,7 @@ export function CearRoboticsBackground() {
       });
     }
 
-    // Interactive Dropped Tokens (Pure Monochrome Hardware: Gears, Nuts, Washers)
+    // Interactive Dropped Tokens (Hardware Line-Art: Gears, Nuts, Washers)
     const droppedTokens: DroppedDoodleToken[] = [];
 
     const spawnDoodleTokens = (worldX: number, worldY: number, count = 3) => {
@@ -260,7 +269,7 @@ export function CearRoboticsBackground() {
       }
     };
 
-    // Click / Tap: Spawns Hardware Tokens & Smoothly Zooms Camera In
+    // Click / Tap: Spawns Tokens & Smoothly Zooms Camera In
     const handlePointerDown = (e: MouseEvent | TouchEvent) => {
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
@@ -299,7 +308,7 @@ export function CearRoboticsBackground() {
         }
       }
 
-      for (let k = 1; k < Math.min(4, sortedBots.length); k++) {
+      for (let k = 1; k < Math.min(3, sortedBots.length); k++) {
         const other = sortedBots[k];
         const dist = Math.hypot(other.x - worldX, other.y - worldY);
         if (dist < 420) {
@@ -365,7 +374,7 @@ export function CearRoboticsBackground() {
     };
 
     // =========================================================================
-    // TACTILE SPEECH BUBBLE (Monochrome, dontlookup.app style, continuous tail)
+    // TACTILE SPEECH BUBBLE (Monochrome, continuous tail)
     // =========================================================================
     const drawSpeechBubble = (
       x: number,
@@ -385,13 +394,11 @@ export function CearRoboticsBackground() {
       const bubbleX = x - bubbleW / 2;
       const bubbleY = y - 44;
 
-      // Hard offset paper shadow
       ctx.fillStyle = "rgba(20, 20, 15, 0.28)";
       ctx.beginPath();
       ctx.roundRect(bubbleX + 2, bubbleY + 2.5, bubbleW, bubbleH, 6);
       ctx.fill();
 
-      // Paper white background
       ctx.fillStyle = "#ffffff";
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.2;
@@ -403,7 +410,6 @@ export function CearRoboticsBackground() {
       ctx.fill();
       ctx.stroke();
 
-      // Continuous tail
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
       ctx.moveTo(x - 5, bubbleY + bubbleH - 0.5);
@@ -425,7 +431,6 @@ export function CearRoboticsBackground() {
       ctx.lineTo(x + 4, bubbleY + bubbleH - 0.5);
       ctx.stroke();
 
-      // Text in dense charcoal ink
       ctx.fillStyle = INK_MAIN;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -457,7 +462,6 @@ export function CearRoboticsBackground() {
       ctx.fill();
       ctx.stroke();
 
-      // Tail
       ctx.beginPath();
       ctx.moveTo(-2.5, 7);
       ctx.lineTo(-4, 11);
@@ -466,7 +470,6 @@ export function CearRoboticsBackground() {
       ctx.fill();
       ctx.stroke();
 
-      // Exclamation Mark [ ! ] in dark ink
       ctx.fillStyle = INK_MAIN;
       ctx.font = "800 11px 'Space Grotesk', monospace";
       ctx.textAlign = "center";
@@ -477,29 +480,27 @@ export function CearRoboticsBackground() {
     };
 
     // =========================================================================
-    // SQUARE SHAPE BOTS WITH WALKING LEGS (NO FACES, NO COLORS)
+    // SQUARE SHAPE BOTS WITH WALKING LEGS (NO CIRCULAR BOTS, NO FACES)
     // =========================================================================
 
-    // 1. CLASSIC SQUARE SHAPE BOT WITH LEGS (Clean geometric architectural body, NO face)
+    // 1. CLASSIC SQUARE SHAPE BOT WITH LEGS (Architectural Mechatronic Body)
     const drawBoxChibi = (bot: DoodleBot) => {
       ctx.save();
       ctx.translate(bot.x, bot.y);
       ctx.scale(bot.facing * bot.scale, bot.scale);
       ctx.globalAlpha = bot.alpha;
 
-      // Realistic walking gait & bobbing
       const stepPhase = bot.walkCycle * 3.4;
       const walkBob = Math.abs(Math.sin(stepPhase)) * 3;
       const legSwing = Math.sin(stepPhase) * 7;
       ctx.translate(0, -walkBob);
 
-      // Ground shadow
       ctx.fillStyle = FILL_SHADE;
       ctx.beginPath();
       ctx.ellipse(0, 24 + walkBob, 22, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // TWO CUTE WALKING LEGS WITH SHOES
+      // Walking legs with foot pads
       [-7, 7].forEach((lx, i) => {
         const swing = i === 0 ? legSwing : -legSwing;
         const lift = Math.max(0, -Math.cos(stepPhase + (i === 0 ? 0 : Math.PI))) * 3.5;
@@ -516,16 +517,15 @@ export function CearRoboticsBackground() {
         ctx.lineTo(footX, footY);
         ctx.stroke();
 
-        // Rectangular foot pad
         drawDoodleRect(footX - 3.5, footY - 1, 7.5, 4.5, 2, FILL_PAPER, INK_MAIN, 2.0);
       });
 
-      // CLEAN SQUARE BODY (NO FACE: Architectural Mechatronic Panel)
+      // Square Body (No Face)
       const bodyW = 28;
       const bodyH = 26;
       drawDoodleRect(-bodyW / 2, -14, bodyW, bodyH, 4, FILL_PAPER, INK_MAIN, 2.5);
 
-      // Clean horizontal division seam / panel line
+      // Horizontal division panel seam
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 1.8;
       ctx.beginPath();
@@ -533,7 +533,7 @@ export function CearRoboticsBackground() {
       ctx.lineTo(bodyW / 2, -2);
       ctx.stroke();
 
-      // Minimalist hardware indicator slits / rivets (Tech details, NOT a face)
+      // Minimalist hardware indicator slits (Tech details, NOT a face)
       [-6, 6].forEach((rx) => {
         ctx.beginPath();
         ctx.moveTo(rx - 2, -7);
@@ -543,12 +543,11 @@ export function CearRoboticsBackground() {
         ctx.stroke();
       });
 
-      // Lower panel rivet dots
       [-6, 6].forEach((bx) => {
         drawDoodleCircle(bx, 5, 1.4, INK_MAIN, INK_MAIN, 1);
       });
 
-      // Side pipe arms that swing with stride
+      // Side pipe arms swinging with stride
       const armSwing = Math.sin(stepPhase) * 6;
       [-14, 14].forEach((ax, i) => {
         const dir = i === 0 ? -1 : 1;
@@ -562,7 +561,6 @@ export function CearRoboticsBackground() {
         ctx.lineTo(ax + dir * 7, 7 + swing);
         ctx.stroke();
 
-        // Clean clamp hand
         ctx.beginPath();
         ctx.arc(
           ax + dir * 9,
@@ -615,7 +613,6 @@ export function CearRoboticsBackground() {
       ctx.ellipse(0, 25 + walkBob, 20, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Walking legs
       [-7, 7].forEach((lx, i) => {
         const swing = i === 0 ? legSwing : -legSwing;
         ctx.strokeStyle = INK_MAIN;
@@ -630,7 +627,6 @@ export function CearRoboticsBackground() {
       // Tall cuboid body
       drawDoodleRect(-13, -18, 26, 32, 4, FILL_PAPER, INK_MAIN, 2.5);
 
-      // Clean horizontal seam
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 1.8;
       ctx.beginPath();
@@ -638,11 +634,9 @@ export function CearRoboticsBackground() {
       ctx.lineTo(13, -4);
       ctx.stroke();
 
-      // Sensor meter slits (NO FACE)
       drawDoodleRect(-7, -13, 14, 5, 1.5, FILL_SHADE, INK_MAIN, 1.6);
       drawDoodleRect(-7, 3, 14, 5, 1.5, FILL_PAPER, INK_MAIN, 1.6);
 
-      // Dual corner sensor pegs
       const antWobble = Math.sin(bot.walkCycle * 2.5) * 2;
       [-7, 7].forEach((ax, i) => {
         const dir = i === 0 ? -1 : 1;
@@ -686,7 +680,6 @@ export function CearRoboticsBackground() {
       ctx.ellipse(0, 23 + walkBob, 24, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Walking legs
       [-8, 8].forEach((lx, i) => {
         const swing = i === 0 ? legSwing : -legSwing;
         ctx.strokeStyle = INK_MAIN;
@@ -701,19 +694,16 @@ export function CearRoboticsBackground() {
       // Wide box body
       drawDoodleRect(-17, -13, 34, 24, 4, FILL_PAPER, INK_MAIN, 2.5);
 
-      // Side ear brackets
       [-20, 17].forEach((nx) => {
         drawDoodleRect(nx, -5, 3.5, 8, 1.8, FILL_PAPER, INK_MAIN, 2.0);
       });
 
-      // Sleek horizontal sensor optical band (LiDAR / optical slit, NOT a face)
       drawDoodleRect(-12, -7, 24, 5, 2, FILL_SHADE, INK_MAIN, 1.8);
       ctx.fillStyle = INK_MAIN;
       ctx.beginPath();
       ctx.arc(0, -4.5, 1.5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Top antenna
       const antWobble = Math.sin(bot.walkCycle * 2.8) * 2;
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.0;
@@ -768,7 +758,6 @@ export function CearRoboticsBackground() {
       // Compact cube body
       drawDoodleRect(-11, -11, 22, 20, 3.5, FILL_PAPER, INK_MAIN, 2.4);
 
-      // Clean tech panel lines (NO FACE)
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 1.6;
       ctx.beginPath();
@@ -778,7 +767,6 @@ export function CearRoboticsBackground() {
 
       drawDoodleCircle(0, -6, 1.8, INK_MAIN, INK_MAIN, 1);
 
-      // Single sensor pin
       const curl = Math.sin(bot.walkCycle * 3.5) * 2;
       ctx.strokeStyle = INK_MAIN;
       ctx.lineWidth = 2.0;
@@ -802,254 +790,13 @@ export function CearRoboticsBackground() {
       }
     };
 
-    // 5. TANK ROVER WITH 3 ROLLING WHEELS (NO FACE)
-    const drawTreadBot = (bot: DoodleBot) => {
-      ctx.save();
-      ctx.translate(bot.x, bot.y);
-      ctx.scale(bot.facing * bot.scale, bot.scale);
-      ctx.globalAlpha = bot.alpha;
-
-      const bob = Math.sin(bot.walkCycle * 3.5) * 1.5;
-      ctx.translate(0, bob);
-
-      ctx.fillStyle = FILL_SHADE;
-      ctx.beginPath();
-      ctx.ellipse(0, 26, 32, 5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Rubber Tank Tread
-      drawDoodleRect(-28, 12, 56, 17, 8.5, FILL_PAPER, INK_MAIN, 2.6);
-
-      // 3 Rolling spoke wheels
-      const wheelRot = bot.walkCycle * 2.8;
-      [-17, 0, 17].forEach((wx) => {
-        ctx.save();
-        ctx.translate(wx, 20.5);
-        ctx.rotate(wheelRot);
-        drawDoodleCircle(0, 0, 6.2, FILL_PAPER, INK_MAIN, 2.0);
-        ctx.beginPath();
-        ctx.moveTo(-4.5, 0);
-        ctx.lineTo(4.5, 0);
-        ctx.moveTo(0, -4.5);
-        ctx.lineTo(0, 4.5);
-        ctx.stroke();
-        ctx.fillStyle = INK_MAIN;
-        ctx.beginPath();
-        ctx.arc(0, 0, 1.8, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      });
-
-      drawDoodleRect(-17, -9, 34, 21, 4, FILL_PAPER, INK_MAIN, 2.5);
-      drawDoodleRect(-24, -36, 48, 22, 4, FILL_PAPER, INK_MAIN, 2.6);
-
-      // Clean horizontal sensor slit (NO FACE)
-      drawDoodleRect(-16, -27, 32, 6, 2, FILL_SHADE, INK_MAIN, 1.8);
-
-      const antWobble = Math.sin(bot.walkCycle * 2.5) * 2;
-      ctx.strokeStyle = INK_MAIN;
-      ctx.lineWidth = 2.2;
-      ctx.beginPath();
-      ctx.moveTo(0, -36);
-      ctx.lineTo(antWobble, -47);
-      ctx.stroke();
-      drawDoodleCircle(antWobble, -49, 3.5, FILL_PAPER, INK_MAIN, 2.0);
-
-      ctx.restore();
-
-      if (bot.speechBubble && bot.speechBubble.timer > 0) {
-        drawSpeechBubble(
-          bot.x,
-          bot.y - 36 * bot.scale,
-          bot.speechBubble.text,
-          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1
-        );
-      } else if (bot.alertBubbleTimer > 0) {
-        drawAlertBubble(bot.x, bot.y, bot.alertBubbleTimer);
-      }
-    };
-
-    // 6. FLOATING SAUCER DRONE (NO FACE)
-    const drawUfoBot = (bot: DoodleBot) => {
-      ctx.save();
-      ctx.translate(bot.x, bot.y);
-      ctx.scale(bot.facing * bot.scale, bot.scale);
-      ctx.globalAlpha = bot.alpha;
-
-      const hoverBob = Math.sin(bot.walkCycle * 2.2) * 6;
-      const tilt = Math.sin(bot.walkCycle * 1.5) * 0.10;
-      ctx.translate(0, hoverBob);
-      ctx.rotate(tilt);
-
-      ctx.fillStyle = FILL_SHADE;
-      ctx.beginPath();
-      ctx.ellipse(0, 58 - hoverBob, 28, 5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(0, 4, 18, 0.15 * Math.PI, 0.85 * Math.PI);
-      ctx.fillStyle = FILL_SHADE;
-      ctx.fill();
-      ctx.strokeStyle = INK_MAIN;
-      ctx.lineWidth = 2.2;
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.ellipse(0, 3, 38, 11, 0, 0, Math.PI * 2);
-      ctx.fillStyle = FILL_PAPER;
-      ctx.fill();
-      ctx.strokeStyle = INK_MAIN;
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      [-23, -8, 8, 23].forEach((px) => {
-        drawDoodleCircle(px, 3, 3.2, FILL_PAPER, INK_MAIN, 1.8);
-      });
-
-      // Clear dome (NO FACE inside)
-      ctx.beginPath();
-      ctx.arc(0, -4, 18, Math.PI, 0);
-      ctx.closePath();
-      ctx.fillStyle = FILL_PAPER;
-      ctx.fill();
-      ctx.strokeStyle = INK_MAIN;
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      const antWobble = Math.sin(bot.walkCycle * 3) * 2;
-      ctx.strokeStyle = INK_MAIN;
-      ctx.lineWidth = 2.2;
-      ctx.beginPath();
-      ctx.moveTo(0, -22);
-      ctx.quadraticCurveTo(antWobble, -30, antWobble * 0.5, -34);
-      ctx.stroke();
-      drawDoodleCircle(antWobble * 0.5, -36, 3.5, FILL_PAPER, INK_MAIN, 2.0);
-
-      ctx.restore();
-
-      if (bot.speechBubble && bot.speechBubble.timer > 0) {
-        drawSpeechBubble(
-          bot.x,
-          bot.y - 36 * bot.scale,
-          bot.speechBubble.text,
-          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1
-        );
-      } else if (bot.alertBubbleTimer > 0) {
-        drawAlertBubble(bot.x, bot.y, bot.alertBubbleTimer);
-      }
-    };
-
-    // 7. COMPACT QUAD-LEG BOT (NO FACE)
-    const drawSpiderChibi = (bot: DoodleBot) => {
-      ctx.save();
-      ctx.translate(bot.x, bot.y);
-      ctx.scale(bot.facing * bot.scale, bot.scale);
-      ctx.globalAlpha = bot.alpha;
-
-      const pitterPatter = Math.abs(Math.sin(bot.walkCycle * 3.8)) * 3.5;
-      ctx.translate(0, -pitterPatter);
-
-      ctx.fillStyle = FILL_SHADE;
-      ctx.beginPath();
-      ctx.ellipse(0, 22 + pitterPatter, 28, 5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      const legCycle = bot.walkCycle * 3.8;
-      [-15, -6, 6, 15].forEach((lx, i) => {
-        const swing = Math.sin(legCycle + i * 1.5) * 5;
-        const lift = Math.max(0, -Math.cos(legCycle + i * 1.5)) * 4;
-        const footX = lx + swing;
-        const footY = 17 - lift;
-
-        ctx.strokeStyle = INK_MAIN;
-        ctx.lineWidth = 2.4;
-        ctx.beginPath();
-        ctx.moveTo(lx * 0.7, 4);
-        ctx.quadraticCurveTo(lx * 1.2, 8, footX, footY);
-        ctx.stroke();
-        drawDoodleCircle(footX, footY, 2.2, INK_MAIN, INK_MAIN, 1);
-      });
-
-      // Rounded geometric chassis (NO FACE)
-      drawDoodleCircle(0, -2, 21, FILL_PAPER, INK_MAIN, 2.6);
-
-      // Chassis division seam
-      ctx.strokeStyle = INK_MAIN;
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.arc(0, -2, 14, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.restore();
-
-      if (bot.speechBubble && bot.speechBubble.timer > 0) {
-        drawSpeechBubble(
-          bot.x,
-          bot.y - 32 * bot.scale,
-          bot.speechBubble.text,
-          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1
-        );
-      } else if (bot.alertBubbleTimer > 0) {
-        drawAlertBubble(bot.x, bot.y, bot.alertBubbleTimer);
-      }
-    };
-
-    // 8. UNIBOT ON SINGLE ROLLING WHEEL (NO FACE)
-    const drawUniBot = (bot: DoodleBot) => {
-      ctx.save();
-      ctx.translate(bot.x, bot.y);
-      ctx.scale(bot.facing * bot.scale, bot.scale);
-      ctx.globalAlpha = bot.alpha;
-
-      const bounce = Math.abs(Math.sin(bot.walkCycle * 3.2)) * 4;
-      ctx.translate(0, -bounce);
-
-      ctx.fillStyle = FILL_SHADE;
-      ctx.beginPath();
-      ctx.ellipse(0, 36 + bounce, 24, 5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      const wheelRot = bot.walkCycle * 3.6;
-      ctx.save();
-      ctx.translate(0, 24);
-      ctx.rotate(wheelRot);
-      drawDoodleCircle(0, 0, 13, FILL_PAPER, INK_MAIN, 2.6);
-      drawDoodleCircle(0, 0, 6.5, FILL_PAPER, INK_MAIN, 2.0);
-      ctx.restore();
-
-      ctx.strokeStyle = INK_MAIN;
-      ctx.lineWidth = 2.4;
-      ctx.beginPath();
-      ctx.moveTo(0, 12);
-      ctx.lineTo(0, 24);
-      ctx.stroke();
-
-      // Box body & screen (NO FACE: Oscilloscope grid)
-      drawDoodleRect(-17, -9, 34, 21, 4, FILL_PAPER, INK_MAIN, 2.5);
-      drawDoodleRect(-22, -37, 44, 24, 4, FILL_PAPER, INK_MAIN, 2.6);
-      drawDoodleRect(-17, -32, 34, 14, 2, FILL_SHADE, INK_MAIN, 1.8);
-
-      ctx.restore();
-
-      if (bot.speechBubble && bot.speechBubble.timer > 0) {
-        drawSpeechBubble(
-          bot.x,
-          bot.y - 36 * bot.scale,
-          bot.speechBubble.text,
-          bot.speechBubble.timer < 25 ? bot.speechBubble.timer / 25 : 1
-        );
-      } else if (bot.alertBubbleTimer > 0) {
-        drawAlertBubble(bot.x, bot.y, bot.alertBubbleTimer);
-      }
-    };
-
     // =========================================================================
-    // MAIN ANIMATION LOOP WITH DYNAMIC ZOOM IN & OUT
+    // MAIN ANIMATION LOOP WITH ANTI-OVERLAP PHYSICS & DYNAMIC ZOOM
     // =========================================================================
     const loop = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Compute Dynamic Breathing Zoom & Camera Pan
+      // 1. Dynamic Breathing Zoom & Camera Pan
       baseZoomPhase += 0.005;
       const ambientBreathingZoom = 1.0 + Math.sin(baseZoomPhase * 0.4) * 0.14;
 
@@ -1076,7 +823,7 @@ export function CearRoboticsBackground() {
       ctx.scale(currentZoom, currentZoom);
       ctx.translate(-cx - cameraPanX, -cy - cameraPanY);
 
-      // 2. Render Floating Background Doodle Accents (Pure Monochrome Dull Gray)
+      // 2. Render Floating Background Doodle Accents
       for (const item of floatingDoodles) {
         item.rotation += item.vRot;
         item.floatPhase += 0.02;
@@ -1113,7 +860,7 @@ export function CearRoboticsBackground() {
         }
       }
 
-      // 3. Render Dropped Interactive Tokens (Hardware Line-Art: Gears, Nuts, Washers)
+      // 3. Render Dropped Interactive Tokens (Hardware Line-Art)
       const floorY = height - 28;
       for (let i = droppedTokens.length - 1; i >= 0; i--) {
         const tok = droppedTokens[i];
@@ -1149,7 +896,6 @@ export function CearRoboticsBackground() {
           }
         }
 
-        // Clean monochrome hardware drawing (No yellow, No gold)
         ctx.save();
         ctx.translate(tok.x, tok.y);
         ctx.rotate(tok.rotation);
@@ -1177,14 +923,15 @@ export function CearRoboticsBackground() {
         ctx.restore();
       }
 
-      // 4. Social Interaction: Crowd of Square Bots Chatting
+      // 4. Social Interaction: Bots Chatting at a Safe Distance
       for (let i = 0; i < bots.length; i++) {
         for (let j = i + 1; j < bots.length; j++) {
           const b1 = bots[i];
           const b2 = bots[j];
           if (b1.state === "moving" && b2.state === "moving") {
             const dist = Math.hypot(b1.x - b2.x, b1.y - b2.y);
-            if (dist < 80 && Math.random() < 0.007) {
+            // Chat distance safely outside collision boundary
+            if (dist > 68 && dist < 96 && Math.random() < 0.007) {
               b1.state = "chatting";
               b2.state = "chatting";
               b1.stateTimer = 160;
@@ -1208,11 +955,8 @@ export function CearRoboticsBackground() {
         }
       }
 
-      // 5. Y-Sort All Bots for 2.5D Depth Ordering
-      const sortedBots = [...bots].sort((a, b) => a.y - b.y);
-
-      // 6. Update & Render All Square Shape Bots
-      for (const bot of sortedBots) {
+      // 5. Update State & Movement for All Square Bots
+      for (const bot of bots) {
         bot.stateTimer--;
         if (bot.alertBubbleTimer > 0) {
           bot.alertBubbleTimer--;
@@ -1233,7 +977,7 @@ export function CearRoboticsBackground() {
           } else {
             bot.state = "moving";
             bot.stateTimer = Math.random() * 260 + 160;
-            bot.targetX = Math.random() * (width - 180) + 90;
+            bot.targetX = Math.random() * (width - 240) + 120;
             bot.targetY = Math.random() * (height - 180) + 90;
           }
         }
@@ -1244,7 +988,7 @@ export function CearRoboticsBackground() {
           if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
             const dirX = Math.sign(dx);
             bot.vx = dirX * bot.speed;
-            bot.vy = Math.sign(dy) * (bot.speed * 0.4);
+            bot.vy = Math.sign(dy) * (bot.speed * 0.35);
             bot.facing = dirX as 1 | -1;
             bot.x += bot.vx;
             bot.y += bot.vy;
@@ -1254,9 +998,60 @@ export function CearRoboticsBackground() {
           }
         }
 
-        bot.x = Math.max(45, Math.min(width - 45, bot.x));
-        bot.y = Math.max(70, Math.min(height - 85, bot.y));
+        // Clamp inside visible bounds
+        bot.x = Math.max(50, Math.min(width - 50, bot.x));
+        bot.y = Math.max(75, Math.min(height - 90, bot.y));
+      }
 
+      // 6. ANTI-OVERLAP COLLISION AVOIDANCE PHYSICS PASS (Guarantees Bots NEVER Overlap)
+      const MIN_DISTANCE = 64; // Clearance so square bodies never overlap
+      // Run two relaxation passes to resolve multiple simultaneous proximities smoothly
+      for (let pass = 0; pass < 2; pass++) {
+        for (let i = 0; i < bots.length; i++) {
+          for (let j = i + 1; j < bots.length; j++) {
+            const b1 = bots[i];
+            const b2 = bots[j];
+            const dx = b2.x - b1.x;
+            const dy = b2.y - b1.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < MIN_DISTANCE && dist > 0.0001) {
+              const overlap = (MIN_DISTANCE - dist) * 0.5;
+              const nx = dx / dist;
+              const ny = dy / dist;
+
+              // Immediate positional separation pushing both bodies apart
+              b1.x -= nx * overlap;
+              b1.y -= ny * overlap;
+              b2.x += nx * overlap;
+              b2.y += ny * overlap;
+
+              // Deflect velocities away from collision axis
+              b1.vx -= nx * 0.25;
+              b1.vy -= ny * 0.25;
+              b2.vx += nx * 0.25;
+              b2.vy += ny * 0.25;
+
+              // Redirect movement goals so they steer clear of each other
+              b1.targetX += -nx * 40;
+              b1.targetY += -ny * 30;
+              b2.targetX += nx * 40;
+              b2.targetY += ny * 30;
+            }
+          }
+        }
+      }
+
+      // Ensure clamped within visible canvas bounds after separation
+      for (const bot of bots) {
+        bot.x = Math.max(50, Math.min(width - 50, bot.x));
+        bot.y = Math.max(75, Math.min(height - 90, bot.y));
+      }
+
+      // 7. Y-Sort All Bots for Depth Ordering & Render
+      const sortedBots = [...bots].sort((a, b) => a.y - b.y);
+
+      for (const bot of sortedBots) {
         switch (bot.type) {
           case "boxchibi":
             drawBoxChibi(bot);
@@ -1269,18 +1064,6 @@ export function CearRoboticsBackground() {
             break;
           case "minichibi":
             drawMiniChibi(bot);
-            break;
-          case "treadbot":
-            drawTreadBot(bot);
-            break;
-          case "ufobot":
-            drawUfoBot(bot);
-            break;
-          case "spiderchibi":
-            drawSpiderChibi(bot);
-            break;
-          case "unibot":
-            drawUniBot(bot);
             break;
           default:
             drawBoxChibi(bot);
