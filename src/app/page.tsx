@@ -14,7 +14,7 @@ import { Footer } from "@/components/sections/Footer";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
 import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
-import { CyberMatrixBackground } from "@/components/ui/CyberMatrixBackground";
+import { ArchitecturalCleanBackground } from "@/components/ui/ArchitecturalCleanBackground";
 
 export default function Home() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -31,9 +31,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060911] text-slate-100 font-body selection:bg-cyan-400 selection:text-slate-950 relative overflow-hidden">
-      {/* Sleek Cyber Matrix / Subtle Animated Grid Background */}
-      <CyberMatrixBackground />
+    <div className="min-h-screen bg-[#fafaf9] text-[#0d1321] font-body selection:bg-[#dcf836] selection:text-[#0d1321] relative overflow-hidden">
+      {/* Architectural Clean Vector Blueprint & Ambient Glow Background */}
+      <ArchitecturalCleanBackground />
 
       {/* 1. Sticky Navigation Bar */}
       <Navbar onOpenRegister={() => handleOpenRegister()} />
