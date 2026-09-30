@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import { CyberMatrixBackground } from "@/components/ui/CyberMatrixBackground";
+import { ArchitecturalCleanBackground } from "@/components/ui/ArchitecturalCleanBackground";
 
 export function BackgroundGrid() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Deep Obsidian Canvas Backdrop */}
-      <div className="absolute inset-0 bg-[#060911]" />
+      {/* Pure Off-White Backdrop */}
+      <div className="absolute inset-0 bg-[#fafaf9]" />
 
-      {/* Cyber Matrix Background with Telemetry & Laser Grid */}
-      <CyberMatrixBackground />
+      {/* Architectural Clean Vector Blueprint & Glow Background */}
+      <ArchitecturalCleanBackground />
     </div>
   );
 }

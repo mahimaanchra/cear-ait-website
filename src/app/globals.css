@@ -6,44 +6,38 @@
 
 :root {
   /* =========================================================================
-     SLEEK DARK SCI-FI & AUTONOMOUS ROBOTICS DESIGN TOKENS
+     CELVIA & INFACES MINIMALIST DESIGN TOKENS
+     Pure Off-White Canvas with CEAR Logo Dark Navy & Volt Lime
      ========================================================================= */
-  --bg-void: #04060a;
-  --bg-base: #060911;
-  --bg-surface: #0a0f1d;
-  --bg-card: rgba(13, 20, 36, 0.72);
-  --bg-card-hover: rgba(18, 28, 50, 0.85);
+  --bg-base: #fafaf9;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fafaf9;
 
-  --cyan: #00f0ff;
-  --cyan-glow: rgba(0, 240, 255, 0.35);
-  --cyan-dim: rgba(0, 240, 255, 0.12);
+  --navy: #0d1321;
+  --navy-dark: #070b14;
+  --navy-light: #1a2640;
+  --navy-soft: rgba(13, 19, 33, 0.05);
 
-  --emerald: #00ff9d;
-  --emerald-glow: rgba(0, 255, 157, 0.3);
-  --emerald-dim: rgba(0, 255, 157, 0.12);
+  --lime: #dcf836;
+  --lime-hover: #c9e828;
+  --lime-soft: rgba(220, 248, 54, 0.2);
 
-  --crimson: #ff3366;
-  --crimson-glow: rgba(255, 51, 102, 0.35);
+  --border-subtle: rgba(13, 19, 33, 0.08);
+  --border-medium: rgba(13, 19, 33, 0.16);
 
-  --amber: #f59e0b;
-  --amber-glow: rgba(245, 158, 11, 0.3);
+  --text-primary: #0d1321;
+  --text-secondary: #4b556b;
+  --text-muted: #808c9f;
 
-  --border-subtle: rgba(56, 189, 248, 0.14);
-  --border-glow: rgba(0, 240, 255, 0.45);
-
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-
-  /* Aliased Legacy Tokens to Guarantee Flawless Dark Sci-Fi Rendering */
-  --paper: #060911;
-  --paper-card: #0d1424;
-  --paper-subtle: #111a2e;
-  --paper-muted: #17233d;
-  --ink: #f1f5f9;
-  --ink-pure: #ffffff;
-  --ink-muted: #94a3b8;
-  --red: #ff3366;
+  /* Aliased Legacy Tokens to Guarantee Flawless Rendering */
+  --paper: #fafaf9;
+  --paper-card: #ffffff;
+  --paper-subtle: #f4f4f2;
+  --paper-muted: #e5e5e2;
+  --ink: #0d1321;
+  --ink-pure: #000000;
+  --ink-muted: #64748b;
 
   --display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --body: 'Space Grotesk', 'Inter', system-ui, sans-serif;
@@ -52,7 +46,7 @@
 
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
+  color-scheme: light;
   background-color: var(--bg-base);
 }
 
@@ -66,39 +60,38 @@ body {
 }
 
 ::selection {
-  background: var(--cyan);
-  color: #04060a;
+  background: var(--lime);
+  color: #0d1321;
 }
 
-/* Custom Sleek Neon Scrollbar */
+/* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #060911;
-  border-left: 1px solid rgba(56, 189, 248, 0.12);
+  background: #fafaf9;
+  border-left: 1px solid rgba(13, 19, 33, 0.06);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 240, 255, 0.35);
+  background: rgba(13, 19, 33, 0.2);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--cyan);
-  box-shadow: 0 0 10px var(--cyan);
+  background: rgba(13, 19, 33, 0.4);
 }
 
 /* Typography Utilities */
 .font-display {
   font-family: var(--display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .font-tech {
   font-family: var(--display);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 .font-body {
@@ -110,137 +103,80 @@ body {
 }
 
 /* =========================================================================
-   SLEEK CYBER CARDS & GLASSMORPHIC PANELS
+   CLEAN MINIMALIST CARDS & PANELS
    ========================================================================= */
 
+.clean-card,
 .cyber-card {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
-  transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px -10px rgba(13, 19, 33, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.clean-card:hover,
 .cyber-card:hover {
-  background: var(--bg-card-hover);
-  border-color: rgba(0, 240, 255, 0.35);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.14), 0 12px 35px -10px rgba(0, 0, 0, 0.7);
-}
-
-.cyber-card-glow {
-  position: relative;
-}
-
-.cyber-card-glow::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(0, 240, 255, 0.4), transparent 50%, rgba(0, 255, 157, 0.3));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* Corner HUD Brackets for Military Robotics Panels */
-.cyber-bracket-top-left {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 12px;
-  height: 12px;
-  border-top: 2px solid var(--cyan);
-  border-left: 2px solid var(--cyan);
-  pointer-events: none;
-}
-
-.cyber-bracket-bottom-right {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  border-bottom: 2px solid var(--cyan);
-  border-right: 2px solid var(--cyan);
-  pointer-events: none;
+  border-color: rgba(13, 19, 33, 0.2);
+  box-shadow: 0 20px 40px -15px rgba(13, 19, 33, 0.08);
+  transform: translateY(-2px);
 }
 
 /* =========================================================================
-   SLEEK CYBER BUTTONS
+   BUTTON DESIGN SYSTEM (MINIMALIST & SLEEK)
    ========================================================================= */
 
-.cyber-btn-primary {
+.cyber-btn-primary,
+.paper-btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0 1.5rem;
-  height: 44px;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 13.5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #04060a;
-  background: linear-gradient(135deg, #00f0ff 0%, #00d2df 100%);
-  border: 1px solid #00f0ff;
-  border-radius: 8px;
-  box-shadow: 0 0 18px rgba(0, 240, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: #0d1321;
+  color: #ffffff;
+  font-family: var(--body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 1px solid #0d1321;
+  box-shadow: 0 2px 10px rgba(13, 19, 33, 0.1);
+  transition: all 0.25s ease;
   cursor: pointer;
-  transition: all 180ms ease;
-  user-select: none;
-  text-decoration: none;
 }
 
-.cyber-btn-primary:hover {
+.cyber-btn-primary:hover,
+.paper-btn-primary:hover {
+  background: #1a2640;
+  border-color: #1a2640;
+  box-shadow: 0 6px 20px rgba(13, 19, 33, 0.18);
+  transform: translateY(-1px);
+}
+
+.cyber-btn-secondary,
+.paper-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   background: #ffffff;
-  color: #04060a;
-  box-shadow: 0 0 28px rgba(0, 240, 255, 0.7);
-  transform: translateY(-1.5px);
-}
-
-.cyber-btn-primary:active {
-  transform: translateY(0);
-}
-
-.cyber-btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0 1.4rem;
-  height: 44px;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 13.5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #f1f5f9;
-  background: rgba(13, 20, 36, 0.8);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  border-radius: 8px;
-  backdrop-filter: blur(12px);
+  color: #0d1321;
+  font-family: var(--body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(13, 19, 33, 0.15);
+  box-shadow: 0 2px 8px rgba(13, 19, 33, 0.03);
+  transition: all 0.25s ease;
   cursor: pointer;
-  transition: all 180ms ease;
-  user-select: none;
-  text-decoration: none;
 }
 
-.cyber-btn-secondary:hover {
-  background: rgba(20, 32, 56, 0.95);
-  border-color: var(--cyan);
-  color: var(--cyan);
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
-  transform: translateY(-1.5px);
-}
-
-.cyber-btn-secondary:active {
-  transform: translateY(0);
+.cyber-btn-secondary:hover,
+.paper-btn-secondary:hover {
+  background: #fafaf9;
+  border-color: rgba(13, 19, 33, 0.3);
+  box-shadow: 0 4px 15px rgba(13, 19, 33, 0.08);
 }
 
 .cyber-btn-crimson {
@@ -248,289 +184,26 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0 1.5rem;
-  height: 44px;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 13.5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  background: #0d1321;
   color: #ffffff;
-  background: linear-gradient(135deg, #ff3366 0%, #e6194c 100%);
-  border: 1px solid #ff3366;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+  font-family: var(--body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 1px solid #0d1321;
+  box-shadow: 0 2px 10px rgba(13, 19, 33, 0.1);
+  transition: all 0.25s ease;
   cursor: pointer;
-  transition: all 180ms ease;
-  user-select: none;
-  text-decoration: none;
 }
 
 .cyber-btn-crimson:hover {
-  background: #ff4d79;
-  box-shadow: 0 0 30px rgba(255, 51, 102, 0.7);
-  transform: translateY(-1.5px);
+  background: #1a2640;
+  transform: translateY(-1px);
 }
 
-/* =========================================================================
-   TELEMETRY HUD CHIPS & STATUS BADGES
-   ========================================================================= */
-
-.cyber-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.25rem 0.75rem;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  background: rgba(13, 20, 36, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  border-radius: 9999px;
-  color: #94a3b8;
-  backdrop-filter: blur(8px);
-}
-
-.cyber-badge-cyan {
-  border-color: rgba(0, 240, 255, 0.4);
-  color: var(--cyan);
-  background: rgba(0, 240, 255, 0.08);
-}
-
-.cyber-badge-emerald {
-  border-color: rgba(0, 255, 157, 0.4);
-  color: var(--emerald);
-  background: rgba(0, 255, 157, 0.08);
-}
-
-.cyber-badge-crimson {
-  border-color: rgba(255, 51, 102, 0.4);
-  color: var(--crimson);
-  background: rgba(255, 51, 102, 0.08);
-}
-
-/* Neon Text Glows */
-.neon-cyan {
-  color: #00f0ff;
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.2);
-}
-
-.neon-emerald {
-  color: #00ff9d;
-  text-shadow: 0 0 10px rgba(0, 255, 157, 0.5), 0 0 20px rgba(0, 255, 157, 0.2);
-}
-
-.neon-crimson {
-  color: #ff3366;
-  text-shadow: 0 0 10px rgba(255, 51, 102, 0.5), 0 0 20px rgba(255, 51, 102, 0.2);
-}
-
-/* =========================================================================
-   COMPATIBILITY ALIASES (Overhauls existing paper classes to Dark Sci-Fi)
-   ========================================================================= */
-
-.paper-card {
-  background: rgba(13, 20, 36, 0.75);
-  border: 1px solid rgba(56, 189, 248, 0.18);
-  border-radius: 14px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: all 200ms ease;
-  transform: none !important;
-}
-
-.paper-card:hover {
-  background: rgba(18, 28, 50, 0.88);
-  border-color: rgba(0, 240, 255, 0.38);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.16), 0 12px 35px -10px rgba(0, 0, 0, 0.7);
-  transform: translateY(-2px) !important;
-}
-
-.paper-card-subtle {
-  background: rgba(10, 16, 30, 0.65);
-  border: 1px solid rgba(56, 189, 248, 0.14);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px -8px rgba(0, 0, 0, 0.5);
-  transform: none !important;
-}
-
-.paper-card-tilt-left,
-.paper-card-tilt-right {
-  transform: none !important;
-}
-
-.btn-paper-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0 1.5rem;
-  height: 44px;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 13.5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #04060a;
-  background: linear-gradient(135deg, #00f0ff 0%, #00d2df 100%);
-  border: 1px solid #00f0ff;
-  border-radius: 8px;
-  box-shadow: 0 0 18px rgba(0, 240, 255, 0.4);
-  cursor: pointer;
-  transition: all 180ms ease;
-  transform: none !important;
-  text-decoration: none;
-}
-
-.btn-paper-primary:hover {
-  background: #ffffff;
-  color: #04060a;
-  box-shadow: 0 0 28px rgba(0, 240, 255, 0.7);
-  transform: translateY(-1.5px) !important;
-}
-
-.btn-paper-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0 1.4rem;
-  height: 44px;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 13.5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #f1f5f9;
-  background: rgba(13, 20, 36, 0.8);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  border-radius: 8px;
-  backdrop-filter: blur(12px);
-  cursor: pointer;
-  transition: all 180ms ease;
-  transform: none !important;
-  text-decoration: none;
-}
-
-.btn-paper-secondary:hover {
-  background: rgba(20, 32, 56, 0.95);
-  border-color: var(--cyan);
-  color: var(--cyan);
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
-  transform: translateY(-1.5px) !important;
-}
-
-.btn-paper-red {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0 1.5rem;
-  height: 44px;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 13.5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #ffffff;
-  background: linear-gradient(135deg, #ff3366 0%, #e6194c 100%);
-  border: 1px solid #ff3366;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
-  cursor: pointer;
-  transition: all 180ms ease;
-  transform: none !important;
-  text-decoration: none;
-}
-
-.btn-paper-red:hover {
-  background: #ff4d79;
-  box-shadow: 0 0 30px rgba(255, 51, 102, 0.7);
-  transform: translateY(-1.5px) !important;
-}
-
-.paper-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.25rem 0.75rem;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  background: rgba(13, 20, 36, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  border-radius: 9999px;
-  color: #94a3b8;
-  box-shadow: none !important;
-}
-
-.paper-badge-ink {
-  background-color: rgba(0, 240, 255, 0.12);
-  color: var(--cyan);
-  border-color: rgba(0, 240, 255, 0.35);
-}
-
-.paper-badge-red {
-  background-color: rgba(255, 51, 102, 0.12);
-  color: var(--crimson);
-  border-color: rgba(255, 51, 102, 0.35);
-}
-
-.paper-badge-yellow {
-  background-color: rgba(245, 158, 11, 0.12);
-  color: var(--amber);
-  border-color: rgba(245, 158, 11, 0.35);
-}
-
-.paper-badge-paper {
-  background-color: rgba(13, 20, 36, 0.85);
-  color: #94a3b8;
-  border-color: rgba(56, 189, 248, 0.18);
-}
-
-.hazard-stripes {
-  background: repeating-linear-gradient(
-    -45deg,
-    #ff3366,
-    #ff3366 10px,
-    #060911 10px,
-    #060911 20px
-  );
-}
-
-/* =========================================================================
-   KEYFRAME ANIMATIONS
-   ========================================================================= */
-
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes marquee-reverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0%); }
-}
-
-@keyframes pulseSubtle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.97); }
-}
-
-@keyframes radarSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.animate-radar {
-  animation: radarSpin 6s linear infinite;
-}
-
-.animate-pulse-subtle {
-  animation: pulseSubtle 2.5s ease-in-out infinite;
+/* Backward compatibility placeholders */
+.cyber-bracket-top-left,
+.cyber-bracket-bottom-right {
+  display: none;
 }
