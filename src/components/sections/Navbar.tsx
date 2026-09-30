@@ -12,10 +12,10 @@ interface NavbarProps {
 
 const navLinks = [
   { name: "About", href: "#about" },
-  { name: "Domains", href: "#domains" },
-  { name: "Fleet", href: "#projects" },
+  { name: "Workshop", href: "#workshop" },
+  { name: "Projects", href: "#projects" },
   { name: "Wartech '26", href: "#wartech", isFlagship: true },
-  { name: "Cadre", href: "#team" },
+  { name: "Team", href: "#team" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -28,7 +28,17 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      const sections = ["hero", "about", "domains", "team", "projects", "events", "wartech", "contact"];
+      const sections = [
+        "hero",
+        "about",
+        "domains",
+        "workshop",
+        "projects",
+        "team",
+        "events",
+        "wartech",
+        "contact",
+      ];
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
         if (el) {

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
+import { WorkshopAndLab } from "@/components/sections/WorkshopAndLab";
 import { Team } from "@/components/sections/Team";
 import { ProjectsShowcase } from "@/components/sections/ProjectsShowcase";
 import { UpcomingEvents } from "@/components/sections/UpcomingEvents";
@@ -13,7 +14,6 @@ import { ContactAndFAQ } from "@/components/sections/ContactAndFAQ";
 import { Footer } from "@/components/sections/Footer";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
-import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
 import { ArchitecturalCleanBackground } from "@/components/ui/ArchitecturalCleanBackground";
 
 export default function Home() {
@@ -46,11 +46,14 @@ export default function Home() {
         {/* 3. About & Core Domains Section */}
         <About />
 
-        {/* 4. Team Hierarchy Section */}
-        <Team />
+        {/* 4. Club Room & Workshop Facilities (Photos & Video Showcase) */}
+        <WorkshopAndLab />
 
         {/* 5. Projects Showcase Section */}
         <ProjectsShowcase />
+
+        {/* 6. Team Leadership & Cadre */}
+        <Team />
 
         {/* 6. Key Events & Workshops Section */}
         <UpcomingEvents onOpenRegister={() => handleOpenRegister()} />
@@ -67,9 +70,6 @@ export default function Home() {
         {/* 9. Communications & FAQ */}
         <ContactAndFAQ />
       </main>
-
-      {/* Floating Autonomous Fleet Telemetry Beacon */}
-      <AutonomousStatusWidget />
 
       {/* 10. Footer (AIT Pune branding, socials, coordinates, copyright) */}
       <Footer />

@@ -54,17 +54,17 @@ export function Footer() {
             <ul className="space-y-2 text-xs font-body text-[#0d1321]/70">
               <li>
                 <Link href="#about" className="hover:text-[#0d1321] transition-colors">
-                  About Dossier
+                  About CEAR
                 </Link>
               </li>
               <li>
-                <Link href="#domains" className="hover:text-[#0d1321] transition-colors">
-                  Technical Domains
+                <Link href="#workshop" className="hover:text-[#0d1321] transition-colors">
+                  Workshop &amp; Lab 104
                 </Link>
               </li>
               <li>
                 <Link href="#projects" className="hover:text-[#0d1321] transition-colors">
-                  Robotics Fleet
+                  Projects &amp; Hardware
                 </Link>
               </li>
               <li>
@@ -74,7 +74,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="#team" className="hover:text-[#0d1321] transition-colors">
-                  Command Cadre
+                  Team &amp; Mentors
                 </Link>
               </li>
               <li>
