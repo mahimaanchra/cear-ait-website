@@ -46,7 +46,7 @@ export interface TeamMember {
   role: string;
   subRole?: string;
   tier: "faculty" | "secretary" | "joint_secretary" | "contributor";
-  quote: string;
+  quote?: string;
   specialization?: string;
   avatarBg?: string;
   avatarInitials?: string;
@@ -64,6 +64,16 @@ export interface EventItem {
   description: string;
   location: string;
   ctaText: string;
+}
+
+export interface WorkshopMediaItem {
+  id: string;
+  title: string;
+  category: "Club Room & Workbenches" | "Fabrication Bay" | "Bootcamps & Cadets" | "Testing Arena";
+  description: string;
+  imageUrl: string;
+  badge: string;
+  specs?: string[];
 }
 
 export const siteConfig = {
@@ -143,11 +153,9 @@ export const facultyIncharge: TeamMember = {
   role: "Faculty In-Charge & Head, CEAR",
   subRole: "Professor, Department of E&TC, AIT Pune",
   tier: "faculty",
-  quote: "Pioneering indigenous defense mechatronics and empowering cadets through real-world hands-on robotics research.",
   specialization: "Robotics Architecture, Control Systems & Embedded Automation",
   avatarInitials: "AP",
   avatarBg: "bg-blue-600 text-white",
-  linkedin: "https://linkedin.com",
 };
 
 // 2. Secretaries (Core executive leads)
@@ -158,12 +166,9 @@ export const secretaries: TeamMember[] = [
     role: "Secretary, CEAR",
     subRole: "Executive Lead • Hardware & Drive Systems",
     tier: "secretary",
-    quote: "Relentless hardware iteration and mechanical robustness win national championships.",
     specialization: "Chassis Fabrication, Drive Telemetry, High-Torque Kinematics",
     avatarInitials: "TJ",
     avatarBg: "bg-blue-700 text-white",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
   },
   {
     id: "sec-pragati",
@@ -171,12 +176,9 @@ export const secretaries: TeamMember[] = [
     role: "Secretary, CEAR",
     subRole: "Executive Lead • Autonomous Software",
     tier: "secretary",
-    quote: "Bridging mathematical control theory with high-speed autonomous field execution.",
     specialization: "Algorithmic Control, Sensor Calibration, Mission Architecture",
     avatarInitials: "PR",
     avatarBg: "bg-emerald-600 text-white",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
   },
 ];
 
@@ -188,12 +190,9 @@ export const jointSecretaries: TeamMember[] = [
     role: "Joint Secretary",
     subRole: "Domain Lead • Aquatics & Aerial Swarms",
     tier: "joint_secretary",
-    quote: "Mastering fluid dynamics and ROS2 multi-agent autonomous drone coordination.",
     specialization: "ROS2 Nav2, Hydrodynamic Hulls, Swarm Telemetry",
     avatarInitials: "PN",
     avatarBg: "bg-blue-600 text-white",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
   },
   {
     id: "js-aryan",
@@ -201,12 +200,9 @@ export const jointSecretaries: TeamMember[] = [
     role: "Joint Secretary",
     subRole: "Domain Lead • Fabrication & Chassis Engineering",
     tier: "joint_secretary",
-    quote: "Precision CNC milling, structural FEA, and rapid combat armor prototyping.",
     specialization: "CNC Milling, Stress Modeling, Hardened Combat Armor",
     avatarInitials: "AS",
     avatarBg: "bg-amber-600 text-white",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
   },
   {
     id: "js-rohan",
@@ -214,12 +210,9 @@ export const jointSecretaries: TeamMember[] = [
     role: "Joint Secretary",
     subRole: "Domain Lead • Mechanical & Combat Systems",
     tier: "joint_secretary",
-    quote: "High-durability sealed enclosures and torque transmission optimization.",
     specialization: "Thrust Vectoring, Sealed Enclosures, Power Distribution",
     avatarInitials: "RD",
     avatarBg: "bg-red-600 text-white",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
   },
   {
     id: "js-drishti",
@@ -227,12 +220,9 @@ export const jointSecretaries: TeamMember[] = [
     role: "Joint Secretary",
     subRole: "Domain Lead • Sensors & Firmware",
     tier: "joint_secretary",
-    quote: "Zero-latency sensor filtering and microsecond embedded communication.",
     specialization: "Optical Line Arrays, IMU Calibration, Low-Noise Telemetry",
     avatarInitials: "DR",
     avatarBg: "bg-emerald-600 text-white",
-    linkedin: "https://linkedin.com",
-    github: "https://github.com",
   },
 ];
 
@@ -244,11 +234,9 @@ export const coreContributors: TeamMember[] = [
     role: "Operations & Logistics Lead",
     subRole: "Wartech Event Direction",
     tier: "contributor",
-    quote: "Seamless logistical orchestration for 500+ national competitors.",
     specialization: "National Event Direction, Outstation Logistics",
     avatarInitials: "NA",
     avatarBg: "bg-slate-700 text-white",
-    linkedin: "https://linkedin.com",
   },
   {
     id: "contrib-aman",
@@ -256,11 +244,9 @@ export const coreContributors: TeamMember[] = [
     role: "Embedded Systems Specialist",
     subRole: "Custom PCB Architecture",
     tier: "contributor",
-    quote: "Routing high-density 4-layer PCBs for harsh electromagnetic environments.",
     specialization: "MOSFET Motor Bridges, KiCad Routing, STM32",
     avatarInitials: "AD",
     avatarBg: "bg-blue-600 text-white",
-    linkedin: "https://linkedin.com",
   },
   {
     id: "contrib-mantu",
@@ -268,11 +254,9 @@ export const coreContributors: TeamMember[] = [
     role: "Power & Electronics Lead",
     subRole: "Battery Management & Power Rails",
     tier: "contributor",
-    quote: "Ensuring stable 60A burst power delivery without voltage sags.",
     specialization: "LiPo Safety Arrays, Regulated DC Rails, Telemetry",
     avatarInitials: "MD",
     avatarBg: "bg-amber-600 text-white",
-    linkedin: "https://linkedin.com",
   },
   {
     id: "contrib-kshitij",
@@ -280,11 +264,9 @@ export const coreContributors: TeamMember[] = [
     role: "Combat Robotics Specialist",
     subRole: "Drive Dynamics & Weaponry",
     tier: "contributor",
-    quote: "Optimizing kinetic energy transfer and hardened steel defense wedges.",
     specialization: "Differential Drive Dynamics, Hardened Steel Wedges",
     avatarInitials: "KS",
     avatarBg: "bg-red-600 text-white",
-    linkedin: "https://linkedin.com",
   },
   {
     id: "fy-vikramaditya",
@@ -292,11 +274,9 @@ export const coreContributors: TeamMember[] = [
     role: "First Year Member",
     subRole: "Microcontrollers & Line Tracing",
     tier: "contributor",
-    quote: "Tuning millisecond PID loops for sub-millimeter trajectory accuracy.",
     specialization: "ESP32, PID Algorithms, Sensor Arrays",
     avatarInitials: "VK",
     avatarBg: "bg-slate-800 text-white",
-    linkedin: "https://linkedin.com",
   },
   {
     id: "fy-ananya",
@@ -304,11 +284,9 @@ export const coreContributors: TeamMember[] = [
     role: "First Year Member",
     subRole: "Computer Vision & ROS2",
     tier: "contributor",
-    quote: "Real-time edge neural inference for fast obstacle segmentation.",
     specialization: "OpenCV, YOLO Inference, ROS2 Nodes",
     avatarInitials: "AS",
     avatarBg: "bg-emerald-700 text-white",
-    linkedin: "https://linkedin.com",
   },
   {
     id: "fy-sahil",
@@ -316,11 +294,9 @@ export const coreContributors: TeamMember[] = [
     role: "First Year Member",
     subRole: "CAD & Rapid Prototyping",
     tier: "contributor",
-    quote: "Designing lightweight carbon-nylon 3D printed mechanical linkages.",
     specialization: "SolidWorks, FDM Prototyping, Kinematics",
     avatarInitials: "SV",
     avatarBg: "bg-blue-800 text-white",
-    linkedin: "https://linkedin.com",
   },
   {
     id: "fy-tanya",
@@ -328,11 +304,9 @@ export const coreContributors: TeamMember[] = [
     role: "First Year Member",
     subRole: "Sensors & Telemetry",
     tier: "contributor",
-    quote: "Building low-latency telemetry dashboards with wireless RF packets.",
     specialization: "Wireless RF, Telemetry UI, Sensor Calibration",
     avatarInitials: "TR",
     avatarBg: "bg-amber-700 text-white",
-    linkedin: "https://linkedin.com",
   },
 ];
 
@@ -357,7 +331,6 @@ export const projects: Project[] = [
       { label: "Latency", value: "< 12 ms" },
     ],
     githubUrl: "https://github.com/cear-ait/robotic-arm",
-    demoUrl: "https://github.com/cear-ait/robotic-arm#demo",
   },
   {
     id: "jalpari",
@@ -379,7 +352,6 @@ export const projects: Project[] = [
       { label: "Accolades", value: "3rd Place Podium + Unique Design Award" },
     ],
     githubUrl: "https://github.com/cear-ait/jalpari-aquatic-bot",
-    demoUrl: "https://github.com/cear-ait/jalpari-aquatic-bot#specs",
   },
   {
     id: "master-slave-arm",
@@ -401,7 +373,6 @@ export const projects: Project[] = [
       { label: "Safety System", value: "Watchdog Auto-Brake on Packet Loss" },
     ],
     githubUrl: "https://github.com/cear-ait/master-slave-teleop",
-    demoUrl: "https://github.com/cear-ait/master-slave-teleop#telemetry",
   },
   {
     id: "pipe-climbing-bot",
@@ -423,7 +394,6 @@ export const projects: Project[] = [
       { label: "Inspection Speed", value: "0.2 m/s steady scan" },
     ],
     githubUrl: "https://github.com/cear-ait/pipe-climbing-bot",
-    demoUrl: "https://github.com/cear-ait/pipe-climbing-bot#inspection",
   },
   {
     id: "drone-swarm",
@@ -445,7 +415,6 @@ export const projects: Project[] = [
       { label: "Communication", value: "5.8GHz Mesh Telemetry" },
     ],
     githubUrl: "https://github.com/cear-ait/swarm-quadcopters",
-    demoUrl: "https://github.com/cear-ait/swarm-quadcopters#swarm",
   },
   {
     id: "tactical-rover",
@@ -467,7 +436,6 @@ export const projects: Project[] = [
       { label: "Sensor Array", value: "Livox Mid-360 LiDAR + Depth Cam" },
     ],
     githubUrl: "https://github.com/cear-ait/tactical-ground-rover",
-    demoUrl: "https://github.com/cear-ait/tactical-ground-rover#rover",
   },
 ];
 
@@ -700,5 +668,58 @@ export const faqs = [
   {
     question: "How do external college teams register for Wartech?",
     answer: "Register directly through the Wartech portal section. Teams can have 1–4 members.",
+  },
+];
+
+export const workshopGallery: WorkshopMediaItem[] = [
+  {
+    id: "lab-overview",
+    title: "Multi-Disciplinary Electronics & Assembly Benches",
+    category: "Club Room & Workbenches",
+    description:
+      "Precision digital oscilloscopes, soldering stations, multimeters, and dual-monitor CAD stations where cadets develop robotics control architectures.",
+    imageUrl: "/media/workshop/lab-104-overview.jpg",
+    badge: "LAB 104 MAIN WING",
+    specs: ["Rigol & Keysight Scopes", "JBC Soldering Stations", "Dual CAD Workstations"],
+  },
+  {
+    id: "fabrication-bay",
+    title: "3D Printing & Chassis Prototyping Bay",
+    category: "Fabrication Bay",
+    description:
+      "Rapid prototyping line featuring multi-material FDM 3D printers, carbon-fiber composite brackets, and CNC assembly fixtures for combat chassis.",
+    imageUrl: "/media/workshop/fabrication-workshop.jpg",
+    badge: "RAPID PROTOTYPING",
+    specs: ["Multi-Material FDM Printers", "Carbon Fiber Rigging", "Aluminum Extrusions"],
+  },
+  {
+    id: "cadet-bootcamp",
+    title: "Autonomous Rover Induction & Hands-On Bootcamp",
+    category: "Bootcamps & Cadets",
+    description:
+      "First and second year cadets working alongside senior leads, programming line-following PID loops, sensor calibration, and microcontrollers.",
+    imageUrl: "/media/workshop/student-bootcamp.jpg",
+    badge: "CADET WORKSHOP",
+    specs: ["ESP32 / STM32 Architecture", "PID Loop Tuning", "Sensor Calibration"],
+  },
+  {
+    id: "testing-arena",
+    title: "Indoor Flight Gates & Dynamic Combat Proving Ground",
+    category: "Testing Arena",
+    description:
+      "Enclosed multi-tier testing arena featuring synthetic turf soccer pitch, safety-netted 3D drone gates, and combat armor trial cages.",
+    imageUrl: "/media/workshop/testing-arena.jpg",
+    badge: "PROVING GROUNDS",
+    specs: ["Enclosed Combat Dohyo", "LED Air Gates", "Polyvinyl Turf Pitch"],
+  },
+  {
+    id: "electronics-bench",
+    title: "4-Layer PCB Assembly & Micro-Soldering Station",
+    category: "Club Room & Workbenches",
+    description:
+      "High-density custom PCB surface-mount soldering, power distribution rail validation, and low-latency RF telemetry link testing.",
+    imageUrl: "/media/workshop/electronics-bench.jpg",
+    badge: "PRECISION HARDWARE",
+    specs: ["SMD Component Mount", "Digital Thermal Station", "RF Spectrum Analysis"],
   },
 ];
