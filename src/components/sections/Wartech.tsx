@@ -18,8 +18,7 @@ import {
   CheckCircle2,
   FileText,
   X,
-  Radio,
-  Crosshair,
+  ArrowUpRight,
 } from "lucide-react";
 import { wartechTracks, WartechTrack } from "@/data/siteData";
 
@@ -29,73 +28,66 @@ interface WartechProps {
 }
 
 const iconMap: Record<string, React.ReactNode> = {
-  Trophy: <Trophy className="w-5 h-5 text-cyan-400" />,
-  Flame: <Flame className="w-5 h-5 text-rose-500" />,
-  Compass: <Compass className="w-5 h-5 text-cyan-400" />,
-  ShieldAlert: <ShieldAlert className="w-5 h-5 text-rose-500" />,
-  Route: <Route className="w-5 h-5 text-cyan-400" />,
-  Grab: <Grab className="w-5 h-5 text-cyan-400" />,
-  Layers: <Layers className="w-5 h-5 text-cyan-400" />,
-  Zap: <Zap className="w-5 h-5 text-amber-400" />,
+  Trophy: <Trophy className="w-5 h-5 text-[#0d1321]" />,
+  Flame: <Flame className="w-5 h-5 text-[#0d1321]" />,
+  Compass: <Compass className="w-5 h-5 text-[#0d1321]" />,
+  ShieldAlert: <ShieldAlert className="w-5 h-5 text-[#0d1321]" />,
+  Route: <Route className="w-5 h-5 text-[#0d1321]" />,
+  Grab: <Grab className="w-5 h-5 text-[#0d1321]" />,
+  Layers: <Layers className="w-5 h-5 text-[#0d1321]" />,
+  Zap: <Zap className="w-5 h-5 text-[#0d1321]" />,
 };
 
 export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
   const [selectedTrackDetail, setSelectedTrackDetail] = useState<WartechTrack | null>(null);
 
   return (
-    <section id="wartech" className="relative py-24 sm:py-32 bg-transparent border-b border-cyan-500/20">
+    <section id="wartech" className="relative py-28 sm:py-36 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-        {/* Prominent Tactical Flagship Command Center Banner */}
-        <div className="rounded-2xl bg-[#090e1c]/90 border border-rose-500/35 p-8 sm:p-12 shadow-[0_15px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(255,51,102,0.18)] relative overflow-hidden backdrop-blur-xl">
-          {/* Top Animated Hazard Laser Strip */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400 shadow-[0_0_12px_#ff3366]" />
+        {/* Flagship Hero Card (Celvia / inFaces inspired) */}
+        <div className="rounded-3xl bg-white border border-[#0d1321]/[0.08] p-8 sm:p-14 shadow-[0_20px_60px_-15px_rgba(13,19,33,0.06)] relative overflow-hidden">
+          {/* Subtle top accent gradient */}
+          <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-[#dcf836] via-[#0d1321] to-[#dcf836]" />
 
-          {/* Corner HUD Brackets */}
-          <div className="cyber-bracket-top-left !border-rose-500" />
-          <div className="cyber-bracket-bottom-right !border-rose-500" />
-
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8 pt-2">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
             <div className="space-y-4 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/15 text-rose-400 text-xs font-mono font-bold uppercase tracking-wider border border-rose-500/40">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
-                <span>NATIONAL ROBOTICS CHAMPIONSHIP</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0d1321]/[0.05] text-[#0d1321] text-xs font-mono uppercase tracking-wider font-semibold">
+                <span className="w-2 h-2 rounded-full bg-[#0d1321]" />
+                <span>Flagship Championship // 2026 Edition</span>
               </div>
 
-              <h2 className="text-4xl sm:text-6xl font-black font-tech tracking-tight text-slate-100 leading-tight">
-                WARTECH{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400">
-                  2026
-                </span>
+              <h2 className="text-4xl sm:text-6xl font-black font-display tracking-tight text-[#0d1321] leading-tight">
+                WARTECH 2026
               </h2>
 
-              <p className="text-sm sm:text-base text-slate-300 font-body font-normal leading-relaxed">
-                8 battle-hardened arenas spanning autonomous combat robotics, high-speed circuit racing, autonomous aerial drone navigation, and algorithmic maze solving.
+              <p className="text-base sm:text-lg text-[#0d1321]/70 font-body leading-relaxed">
+                National inter-collegiate robotics tournament hosted at Army Institute of Technology, Pune. 8 technical battlegrounds across combat mechanics, autonomous drone navigation, and algorithm obstacle circuits.
               </p>
 
-              {/* Quick Stat Indicators */}
+              {/* Clean Metric Indicators */}
               <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-mono">
-                <div className="px-3.5 py-1.5 rounded-lg bg-[#070b14] border border-rose-500/30 text-slate-200 font-bold flex items-center gap-2">
-                  <span className="text-slate-400">PRIZE:</span>
-                  <span className="font-black text-rose-400">₹1,50,000+</span>
+                <div className="px-4 py-2 rounded-full bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-medium">
+                  <span className="text-[#0d1321]/50 mr-1.5">PRIZE POOL:</span>
+                  <span className="font-bold">₹1,50,000+</span>
                 </div>
 
-                <div className="px-3.5 py-1.5 rounded-lg bg-[#070b14] border border-cyan-500/30 text-slate-200 font-bold flex items-center gap-2">
-                  <span className="text-slate-400">TEAMS:</span>
-                  <span className="font-black text-cyan-300">120+ SQUADS</span>
+                <div className="px-4 py-2 rounded-full bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-medium">
+                  <span className="text-[#0d1321]/50 mr-1.5">ARENAS:</span>
+                  <span className="font-bold">8 TRACKS</span>
                 </div>
 
-                <div className="px-3.5 py-1.5 rounded-lg bg-[#070b14] border border-emerald-500/30 text-slate-200 font-bold flex items-center gap-2">
-                  <span className="text-slate-400">ARENAS:</span>
-                  <span className="font-black text-emerald-400">8 COMBAT TRACKS</span>
+                <div className="px-4 py-2 rounded-full bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-medium">
+                  <span className="text-[#0d1321]/50 mr-1.5">LOCATION:</span>
+                  <span className="font-bold">AIT PUNE CAMPUS</span>
                 </div>
               </div>
             </div>
 
-            {/* Direct CTAs */}
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-3.5 shrink-0">
+            {/* Clean Action Buttons */}
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
               <button
                 onClick={() => onOpenRegister?.("robo-soccer")}
-                className="cyber-btn-crimson !h-[46px] !text-sm !px-6"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm font-medium font-body bg-[#0d1321] text-white hover:bg-[#1a2640] transition-all shadow-sm hover:shadow-md cursor-pointer"
               >
                 <span>Register for Wartech</span>
                 <ArrowRight className="w-4 h-4" />
@@ -103,95 +95,78 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
 
               <button
                 onClick={onOpenRulebook}
-                className="cyber-btn-secondary !h-[46px] !text-sm !px-6"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm font-medium font-body bg-[#fafaf9] text-[#0d1321] border border-[#0d1321]/[0.15] hover:bg-white hover:border-[#0d1321]/30 transition-all cursor-pointer"
               >
-                <Download className="w-4 h-4 text-cyan-400" />
-                <span>Official Rulebook</span>
+                <FileText className="w-4 h-4" />
+                <span>View Rulebook &amp; Handbook</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Detailed Event Sub-Tracks Section */}
+        {/* Arenas Grid */}
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <Crosshair className="w-5 h-5 text-cyan-400" />
-              <h3 className="text-2xl font-black font-tech text-slate-100">
-                Combat &amp; Autonomous Arenas (8 Tracks)
-              </h3>
-            </div>
-            <span className="text-xs font-mono font-bold text-slate-400 hidden sm:inline-block">
-              [SELECT ARENA TO INSPECT TELEMETRY &amp; RULES]
+          <div className="flex items-center justify-between border-b border-[#0d1321]/[0.08] pb-4">
+            <h3 className="text-xl sm:text-2xl font-black font-display text-[#0d1321] tracking-tight">
+              Competition Arenas &amp; Tracks
+            </h3>
+            <span className="text-xs font-mono text-[#0d1321]/50">
+              8 SQUADS
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {wartechTracks.map((track) => {
-              return (
-                <motion.div
-                  key={track.id}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-[#0c1222]/85 rounded-xl border border-cyan-500/20 hover:border-cyan-400/50 shadow-[0_8px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_0_20px_rgba(0,240,255,0.18)] p-5 flex flex-col justify-between group cursor-default backdrop-blur-xl transition-all"
-                >
-                  <div className="space-y-3">
-                    {/* Track Header */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-950/40 px-2.5 py-0.5 rounded border border-cyan-500/30">
-                        {track.trackCode}
-                      </span>
-                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30">
-                        {track.prizePool}
-                      </span>
+            {wartechTracks.map((track) => (
+              <motion.div
+                key={track.id}
+                whileHover={{ y: -6 }}
+                className="group p-6 rounded-2xl bg-white border border-[#0d1321]/[0.08] shadow-[0_10px_30px_-10px_rgba(13,19,33,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(13,19,33,0.08)] hover:border-[#0d1321]/25 transition-all flex flex-col justify-between"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] flex items-center justify-center group-hover:bg-[#dcf836] transition-colors">
+                      {iconMap[track.iconName] || <Trophy className="w-5 h-5 text-[#0d1321]" />}
                     </div>
+                    <span className="text-xs font-mono font-bold text-[#0d1321]">
+                      {track.prizePool}
+                    </span>
+                  </div>
 
-                    <div className="flex items-center gap-2.5 pt-1">
-                      <div className="p-2 rounded-lg bg-[#070b14] border border-cyan-500/30 shadow-[0_0_8px_rgba(0,240,255,0.15)] group-hover:border-cyan-400 transition-colors">
-                        {iconMap[track.iconName] || <Trophy className="w-5 h-5 text-cyan-400" />}
-                      </div>
-                      <h4 className="font-tech text-base font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
-                        {track.title}
-                      </h4>
-                    </div>
-
-                    <p className="text-xs text-slate-400 font-body leading-relaxed line-clamp-3">
-                      {track.tagline}
+                  <div>
+                    <h4 className="font-display text-lg font-bold text-[#0d1321] tracking-tight">
+                      {track.title}
+                    </h4>
+                    <p className="text-xs text-[#0d1321]/60 font-body leading-relaxed mt-1.5 line-clamp-3">
+                      {track.description}
                     </p>
-
-                    <div className="pt-2 space-y-1 text-[11px] font-mono text-slate-400">
-                      <div>
-                        <span className="text-slate-300 font-semibold">Arena:</span> {track.arenaType}
-                      </div>
-                      <div>
-                        <span className="text-slate-300 font-semibold">Team Cap:</span> {track.teamSize}
-                      </div>
-                    </div>
                   </div>
 
-                  {/* Track Actions */}
-                  <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                    <button
-                      onClick={() => setSelectedTrackDetail(track)}
-                      className="text-xs font-mono font-bold text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
-                    >
-                      View Specs
-                    </button>
-
-                    <button
-                      onClick={() => onOpenRegister?.(track.id)}
-                      className="text-xs font-tech font-bold text-rose-400 hover:text-rose-300 transition-colors flex items-center gap-1 cursor-pointer"
-                    >
-                      <span>Register</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                  <div className="pt-2 flex items-center gap-3 text-xs font-mono text-[#0d1321]/50">
+                    <span className="flex items-center gap-1">
+                      <Users className="w-3.5 h-3.5" />
+                      <span>{track.teamSize}</span>
+                    </span>
                   </div>
-                </motion.div>
-              );
-            })}
+                </div>
+
+                <div className="pt-4 mt-5 border-t border-[#0d1321]/[0.06] flex items-center justify-between">
+                  <button
+                    onClick={() => setSelectedTrackDetail(track)}
+                    className="text-xs font-mono text-[#0d1321]/60 hover:text-[#0d1321] transition-colors cursor-pointer"
+                  >
+                    Details
+                  </button>
+
+                  <button
+                    onClick={() => onOpenRegister?.(track.id)}
+                    className="inline-flex items-center gap-1 text-xs font-medium font-body text-[#0d1321] hover:underline cursor-pointer"
+                  >
+                    <span>Register</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
@@ -199,86 +174,68 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
       {/* Track Details Modal */}
       <AnimatePresence>
         {selectedTrackDetail && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0d1321]/60 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0c1322] rounded-2xl border border-cyan-500/40 max-w-lg w-full p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(0,240,255,0.2)] relative max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 border border-[#0d1321]/[0.1] shadow-2xl space-y-6"
             >
-              <div className="cyber-bracket-top-left" />
-              <div className="cyber-bracket-bottom-right" />
-
-              <button
-                onClick={() => setSelectedTrackDetail(null)}
-                className="absolute top-4 right-4 p-1.5 rounded-lg border border-slate-800 bg-[#070b14] hover:bg-slate-800 text-slate-300 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-950/40 px-2.5 py-0.5 rounded border border-cyan-500/30">
-                    {selectedTrackDetail.trackCode}
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="text-[10px] font-mono tracking-widest uppercase text-[#0d1321]/50">
+                    Arena Specification
                   </span>
-                  <span className="text-xs font-mono font-bold text-rose-400 bg-rose-950/40 px-2.5 py-0.5 rounded border border-rose-500/30">
-                    PRIZE: {selectedTrackDetail.prizePool}
-                  </span>
+                  <h3 className="font-display text-2xl font-bold text-[#0d1321] mt-1">
+                    {selectedTrackDetail.title}
+                  </h3>
                 </div>
 
-                <h3 className="text-2xl font-black font-tech text-slate-100">
-                  {selectedTrackDetail.title}
-                </h3>
+                <button
+                  onClick={() => setSelectedTrackDetail(null)}
+                  className="p-1.5 rounded-full text-[#0d1321]/60 hover:text-[#0d1321] hover:bg-[#0d1321]/[0.05] transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-                <p className="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
-                  {selectedTrackDetail.description}
-                </p>
+              <p className="text-sm text-[#0d1321]/75 leading-relaxed font-body">
+                {selectedTrackDetail.description}
+              </p>
 
-                <div className="p-3.5 rounded-xl bg-[#070b14] border border-slate-800 space-y-1.5 text-xs font-mono">
-                  <div>
-                    <span className="text-slate-400">Arena:</span>{" "}
-                    <span className="text-slate-100 font-bold">{selectedTrackDetail.arenaType}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400">Team Cap:</span>{" "}
-                    <span className="text-slate-100 font-bold">{selectedTrackDetail.teamSize}</span>
-                  </div>
-                </div>
-
-                {/* Rules Highlights */}
-                <div className="space-y-2 pt-2">
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400">
-                    REGULATION HIGHLIGHTS
+              {selectedTrackDetail.rulesHighlight && selectedTrackDetail.rulesHighlight.length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-xs font-mono font-bold text-[#0d1321] uppercase">
+                    Key Regulations:
                   </span>
                   <ul className="space-y-1.5">
-                    {selectedTrackDetail.rulesHighlight.map((rule, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-xs font-mono text-slate-300">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                    {selectedTrackDetail.rulesHighlight.map((rule, i) => (
+                      <li key={i} className="text-xs text-[#0d1321]/70 flex items-start gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#0d1321] shrink-0 mt-0.5" />
                         <span>{rule}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
+              )}
 
-                <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
-                  <button
-                    onClick={() => setSelectedTrackDetail(null)}
-                    className="cyber-btn-secondary !h-[38px] !text-xs !py-0 !px-4"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={() => {
-                      const id = selectedTrackDetail.id;
-                      setSelectedTrackDetail(null);
-                      onOpenRegister?.(id);
-                    }}
-                    className="cyber-btn-crimson !h-[38px] !text-xs !py-0 !px-4"
-                  >
-                    <span>Register for this Track</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+              <div className="pt-4 border-t border-[#0d1321]/[0.08] flex items-center justify-between">
+                <div className="text-xs font-mono">
+                  <span className="text-[#0d1321]/50">Prize Pool: </span>
+                  <span className="font-bold text-[#0d1321]">{selectedTrackDetail.prizePool}</span>
                 </div>
+
+                <button
+                  onClick={() => {
+                    const trackId = selectedTrackDetail.id;
+                    setSelectedTrackDetail(null);
+                    onOpenRegister?.(trackId);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-medium text-white bg-[#0d1321] hover:bg-[#1a2640] transition-colors cursor-pointer"
+                >
+                  <span>Register Squad</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             </motion.div>
           </div>
