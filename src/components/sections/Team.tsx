@@ -3,282 +3,220 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Linkedin, Github, ShieldCheck, Users, Terminal } from "lucide-react";
+import { Linkedin, Github, ShieldCheck } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
 
 export function Team() {
   const { facultyIncharge, secretaries, jointSecretaries, coreContributors } = useSiteContent();
 
   return (
-    <section id="team" className="relative py-24 sm:py-32 bg-transparent border-b border-cyan-500/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="team" className="relative py-28 sm:py-36 bg-transparent">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0a101d] border border-cyan-500/35 text-xs font-mono font-bold text-cyan-300">
-            <Users className="w-3.5 h-3.5 text-cyan-400" />
-            <span>COMMAND CADRE</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#0d1321]/[0.08] pb-6">
+          <div className="space-y-2 max-w-2xl">
+            <span className="text-xs font-mono tracking-widest uppercase text-[#0d1321]/50">
+              03 // Personnel Directory
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black font-display text-[#0d1321] tracking-tight">
+              Engineering Leadership &amp; Cadre
+            </h2>
+            <p className="text-sm sm:text-base text-[#0d1321]/70 font-body leading-relaxed">
+              Faculty mentorship, student domain leads, and autonomous systems research contributors at AIT Pune.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-tech text-slate-100 tracking-tight">
-            Engineering Leadership
-          </h2>
-          <p className="text-sm sm:text-base text-slate-300 font-body leading-relaxed">
-            Faculty mentorship, student domain leads, and autonomous systems specialists at AIT Pune.
-          </p>
+
+          <div className="text-xs font-mono text-[#0d1321]/60 px-4 py-2 rounded-full bg-white border border-[#0d1321]/[0.08] shadow-xs shrink-0">
+            <span>Faculty &amp; Engineering Cadre</span>
+          </div>
         </div>
 
-        {/* 1. Faculty In-Charge */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-[1px] bg-cyan-500/20 w-16" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/40 px-3.5 py-0.5 rounded border border-cyan-500/30">
-              FACULTY COMMAND
-            </span>
-            <span className="h-[1px] bg-cyan-500/20 w-16" />
-          </div>
+        {/* 1. Faculty In-Charge Spotlight */}
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -4 }}
+            className="bg-white rounded-3xl border border-[#0d1321]/[0.08] p-8 sm:p-10 shadow-[0_20px_50px_-15px_rgba(13,19,33,0.05)] hover:border-[#0d1321]/25 transition-all flex flex-col sm:flex-row items-center sm:items-start gap-8"
+          >
+            <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-[#fafaf9] border border-[#0d1321]/[0.08] flex items-center justify-center text-[#0d1321] shrink-0 relative overflow-hidden">
+              {facultyIncharge.imageUrl ? (
+                <Image
+                  src={facultyIncharge.imageUrl}
+                  alt={facultyIncharge.name}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <span className="font-display text-3xl font-black tracking-tight text-[#0d1321]">
+                  {facultyIncharge.avatarInitials || "AP"}
+                </span>
+              )}
+            </div>
 
-          <div className="max-w-2xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="bg-[#0c1222]/90 rounded-2xl border border-cyan-500/30 shadow-[0_10px_35px_rgba(0,0,0,0.7),0_0_20px_rgba(0,240,255,0.12)] p-6 sm:p-7 relative overflow-hidden backdrop-blur-xl"
-            >
-              <div className="cyber-bracket-top-left" />
-              <div className="cyber-bracket-bottom-right" />
-
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl aspect-square bg-[#070b14] border border-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.2)] flex flex-col items-center justify-center text-cyan-300 shrink-0 relative overflow-hidden">
-                  {facultyIncharge.imageUrl ? (
-                    <Image
-                      src={facultyIncharge.imageUrl}
-                      alt={facultyIncharge.name}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <span className="font-tech text-2xl font-black tracking-tight">
-                      {facultyIncharge.avatarInitials || "AP"}
-                    </span>
-                  )}
-                  <div className="absolute bottom-2 right-2 z-10 bg-cyan-950 p-1 rounded-full border border-cyan-400">
-                    <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-                  </div>
-                </div>
-
-                <div className="space-y-2 text-center sm:text-left flex-1">
-                  <div>
-                    <h3 className="text-2xl font-black font-tech text-slate-100">
-                      {facultyIncharge.name}
-                    </h3>
-                    <p className="font-tech text-sm font-bold text-cyan-400">
-                      {facultyIncharge.role}
-                    </p>
-                    <p className="text-xs font-mono text-slate-400">
-                      {facultyIncharge.subRole}
-                    </p>
-                  </div>
-
-                  {facultyIncharge.specialization && (
-                    <p className="text-xs text-slate-300 font-mono pt-1">
-                      <span className="text-cyan-400 font-bold">Domain:</span> {facultyIncharge.specialization}
-                    </p>
-                  )}
-
-                  {facultyIncharge.linkedin && (
-                    <div className="pt-2 flex justify-center sm:justify-start">
-                      <a
-                        href={facultyIncharge.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-slate-200 bg-[#070b14] hover:bg-cyan-500/20 hover:text-cyan-300 px-3.5 py-1 rounded border border-cyan-500/30 transition-all"
-                      >
-                        <Linkedin className="w-3.5 h-3.5" />
-                        <span>Dossier</span>
-                      </a>
-                    </div>
-                  )}
-                </div>
+            <div className="space-y-3 text-center sm:text-left flex-1">
+              <div>
+                <span className="text-[10px] font-mono tracking-widest uppercase text-[#0d1321]/50 bg-[#fafaf9] px-2.5 py-1 rounded-full">
+                  Faculty Leadership
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#0d1321] mt-2">
+                  {facultyIncharge.name}
+                </h3>
+                <p className="text-xs sm:text-sm font-medium font-body text-[#0d1321]/70">
+                  {facultyIncharge.role} • {facultyIncharge.subRole}
+                </p>
               </div>
-            </motion.div>
-          </div>
-        </div>
 
-        {/* 2. Secretaries */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-[1px] bg-cyan-500/20 w-16" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/40 px-3.5 py-0.5 rounded border border-cyan-500/30">
-              SECRETARIES
-            </span>
-            <span className="h-[1px] bg-cyan-500/20 w-16" />
-          </div>
+              {facultyIncharge.specialization && (
+                <p className="text-xs text-[#0d1321]/60 font-mono">
+                  Domain: {facultyIncharge.specialization}
+                </p>
+              )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {secretaries.map((sec) => (
-              <motion.div
-                key={sec.id}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
-                className="bg-[#0c1222]/85 rounded-xl border border-cyan-500/20 hover:border-cyan-400/50 shadow-[0_8px_30px_rgba(0,0,0,0.6)] p-5 flex flex-col justify-between backdrop-blur-xl"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-xl aspect-square bg-[#070b14] border border-cyan-500/30 text-cyan-300 flex items-center justify-center shrink-0 relative overflow-hidden">
-                    {sec.imageUrl ? (
-                      <Image src={sec.imageUrl} alt={sec.name} fill className="object-cover" />
-                    ) : (
-                      <span className="font-tech text-lg font-black">{sec.avatarInitials || sec.name.slice(0, 2).toUpperCase()}</span>
-                    )}
-                  </div>
+              {facultyIncharge.quote && (
+                <p className="text-xs sm:text-sm text-[#0d1321]/75 italic font-body pt-1 border-t border-[#0d1321]/[0.06]">
+                  &ldquo;{facultyIncharge.quote}&rdquo;
+                </p>
+              )}
 
-                  <div className="space-y-0.5 flex-1">
-                    <h4 className="text-lg font-bold font-tech text-slate-100">
-                      {sec.name}
-                    </h4>
-                    <p className="text-xs font-tech font-bold text-cyan-400">
-                      {sec.role}
-                    </p>
-                    <p className="text-[11px] font-mono text-slate-400">
-                      {sec.subRole}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-3 mt-3 border-t border-slate-800 flex items-center justify-end gap-2">
-                  {sec.linkedin && (
-                    <a href={sec.linkedin} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg border border-slate-800 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-colors">
-                      <Linkedin className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                  {sec.github && (
-                    <a href={sec.github} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg border border-slate-800 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-colors">
-                      <Github className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* 3. Joint Secretaries */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-[1px] bg-cyan-500/20 w-16" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/40 px-3.5 py-0.5 rounded border border-cyan-500/30">
-              JOINT SECRETARIES
-            </span>
-            <span className="h-[1px] bg-cyan-500/20 w-16" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {jointSecretaries.map((js) => (
-              <motion.div
-                key={js.id}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
-                className="bg-[#0c1222]/85 rounded-xl border border-cyan-500/20 hover:border-cyan-400/50 shadow-[0_8px_25px_rgba(0,0,0,0.6)] p-4 flex flex-col justify-between backdrop-blur-xl"
-              >
-                <div>
-                  <div className="w-full aspect-square rounded-lg mb-3 bg-[#070b14] border border-cyan-500/25 flex items-center justify-center relative overflow-hidden">
-                    {js.imageUrl ? (
-                      <Image src={js.imageUrl} alt={js.name} fill className="object-cover" />
-                    ) : (
-                      <div className="w-12 h-12 rounded-lg bg-cyan-950/40 text-cyan-300 flex items-center justify-center font-tech font-bold text-base border border-cyan-500/30">
-                        {js.avatarInitials || js.name.slice(0, 2).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-
-                  <h4 className="font-tech text-base font-bold text-slate-100">
-                    {js.name}
-                  </h4>
-                  <p className="font-tech text-xs font-bold text-cyan-400 mt-0.5">
-                    {js.role}
-                  </p>
-                  <p className="font-mono text-[11px] text-slate-400 mt-0.5">
-                    {js.subRole}
-                  </p>
-                </div>
-
-                <div className="pt-3 mt-3 border-t border-slate-800 flex items-center justify-end gap-2">
-                  {js.linkedin && (
-                    <a href={js.linkedin} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg border border-slate-800 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-colors">
-                      <Linkedin className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                  {js.github && (
-                    <a href={js.github} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg border border-slate-800 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-colors">
-                      <Github className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* 4. Core Contributors */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-[1px] bg-cyan-500/20 w-16" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 bg-slate-900/60 px-3.5 py-0.5 rounded border border-slate-800">
-              CORE CONTRIBUTORS
-            </span>
-            <span className="h-[1px] bg-cyan-500/20 w-16" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {coreContributors.map((cc) => (
-              <motion.div
-                key={cc.id}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -3 }}
-                transition={{ duration: 0.15 }}
-                className="bg-[#0b101e]/80 rounded-lg border border-slate-800 hover:border-cyan-500/30 p-3 flex items-center justify-between gap-3 backdrop-blur-md"
-              >
-                <div className="flex items-center gap-3 truncate">
-                  <div className="w-10 h-10 rounded-lg aspect-square bg-[#070b14] border border-cyan-500/30 text-cyan-300 flex items-center justify-center font-tech font-bold text-xs shrink-0 relative overflow-hidden">
-                    {cc.imageUrl ? (
-                      <Image src={cc.imageUrl} alt={cc.name} fill className="object-cover" />
-                    ) : (
-                      <span>{cc.avatarInitials || cc.name.slice(0, 2).toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div className="truncate">
-                    <h4 className="font-tech text-sm font-bold text-slate-100 truncate">
-                      {cc.name}
-                    </h4>
-                    <p className="text-[11px] font-mono text-slate-400 truncate">
-                      {cc.role}
-                    </p>
-                  </div>
-                </div>
-
-                {cc.linkedin && (
+              {facultyIncharge.linkedin && (
+                <div className="pt-2">
                   <a
-                    href={cc.linkedin}
+                    href={facultyIncharge.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1 rounded border border-slate-800 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-colors shrink-0"
-                    title={`${cc.name} LinkedIn`}
+                    className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[#0d1321] hover:underline"
                   >
                     <Linkedin className="w-3.5 h-3.5" />
+                    <span>LinkedIn Profile</span>
                   </a>
-                )}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* 2. Secretaries & Student Leadership */}
+        <div className="space-y-8">
+          <div className="border-b border-[#0d1321]/[0.08] pb-3">
+            <h3 className="text-xl sm:text-2xl font-bold font-display text-[#0d1321]">
+              Secretaries &amp; Student Executive
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...secretaries, ...jointSecretaries].map((member, i) => (
+              <motion.div
+                key={member.id}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                whileHover={{ y: -5 }}
+                className="p-6 rounded-2xl bg-white border border-[#0d1321]/[0.08] shadow-[0_10px_30px_-10px_rgba(13,19,33,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(13,19,33,0.06)] hover:border-[#0d1321]/20 transition-all flex flex-col justify-between"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] flex items-center justify-center text-[#0d1321] font-display font-bold text-lg shrink-0 relative overflow-hidden">
+                      {member.imageUrl ? (
+                        <Image
+                          src={member.imageUrl}
+                          alt={member.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <span>{member.avatarInitials || member.name.slice(0, 2).toUpperCase()}</span>
+                      )}
+                    </div>
+
+                    <div>
+                      <h4 className="font-display text-lg font-bold text-[#0d1321] tracking-tight">
+                        {member.name}
+                      </h4>
+                      <p className="text-xs font-medium text-[#0d1321]/70 font-body">
+                        {member.role}
+                      </p>
+                      <span className="text-[10px] font-mono text-[#0d1321]/40 uppercase">
+                        {member.tier.replace("_", " ")}
+                      </span>
+                    </div>
+                  </div>
+
+                  {member.specialization && (
+                    <p className="text-xs text-[#0d1321]/60 font-mono">
+                      {member.specialization}
+                    </p>
+                  )}
+
+                  {member.quote && (
+                    <p className="text-xs text-[#0d1321]/70 italic line-clamp-2">
+                      &ldquo;{member.quote}&rdquo;
+                    </p>
+                  )}
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-[#0d1321]/[0.06] flex items-center gap-3">
+                  {member.linkedin && (
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-[#0d1321]/50 hover:text-[#0d1321] transition-colors flex items-center gap-1 font-mono"
+                    >
+                      <Linkedin className="w-3.5 h-3.5" />
+                      <span>LinkedIn</span>
+                    </a>
+                  )}
+                  {member.github && (
+                    <a
+                      href={member.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-[#0d1321]/50 hover:text-[#0d1321] transition-colors flex items-center gap-1 font-mono"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                      <span>GitHub</span>
+                    </a>
+                  )}
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
+
+        {/* 3. Core Contributors */}
+        {coreContributors.length > 0 && (
+          <div className="space-y-6">
+            <div className="border-b border-[#0d1321]/[0.08] pb-3">
+              <h3 className="text-xl font-bold font-display text-[#0d1321]">
+                Core Technical Contributors
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {coreContributors.map((c) => (
+                <div
+                  key={c.id}
+                  className="p-4 rounded-xl bg-white border border-[#0d1321]/[0.08] hover:border-[#0d1321]/20 transition-all flex items-center gap-3"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-[#fafaf9] border border-[#0d1321]/[0.08] flex items-center justify-center font-mono font-bold text-xs text-[#0d1321] shrink-0">
+                    {c.avatarInitials || c.name.slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-display text-sm font-bold text-[#0d1321] truncate">
+                      {c.name}
+                    </p>
+                    <p className="text-[11px] font-mono text-[#0d1321]/60 truncate">
+                      {c.role}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

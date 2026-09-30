@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, MapPin, ArrowRight, CheckCircle2, Clock, Sparkles, X, Radio } from "lucide-react";
-import { EventItem } from "@/data/siteData";
+import React from "react";
+import { motion } from "framer-motion";
+import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
 
 interface UpcomingEventsProps {
@@ -13,107 +12,83 @@ interface UpcomingEventsProps {
 export function UpcomingEvents({ onOpenRegister }: UpcomingEventsProps) {
   const { upcomingEvents } = useSiteContent();
 
-  const getStatusBadge = (status: EventItem["status"]) => {
-    switch (status) {
-      case "Ongoing":
-        return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-rose-500/15 text-rose-400 border border-rose-500/40">
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-            <span>OPERATIONAL // LIVE</span>
-          </span>
-        );
-      case "Upcoming":
-        return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/40">
-            <span className="w-2 h-2 rounded-full bg-cyan-400" />
-            <span>UPCOMING</span>
-          </span>
-        );
-      case "Completed":
-        return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700">
-            <span>CONCLUDED</span>
-          </span>
-        );
-    }
-  };
-
   return (
-    <section id="events" className="relative py-24 sm:py-32 bg-transparent border-b border-cyan-500/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+    <section id="events" className="relative py-28 sm:py-36 bg-transparent">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Section Header */}
-        <div className="max-w-2xl space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0a101d] border border-cyan-500/35 text-xs font-mono font-bold text-cyan-300">
-            <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-            <span>OPERATIONAL CALENDAR</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#0d1321]/[0.08] pb-6">
+          <div className="space-y-2 max-w-2xl">
+            <span className="text-xs font-mono tracking-widest uppercase text-[#0d1321]/50">
+              04 // Timeline &amp; Events
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black font-display text-[#0d1321] tracking-tight">
+              Workshops, Hackathons &amp; Bootcamps
+            </h2>
+            <p className="text-sm sm:text-base text-[#0d1321]/70 font-body leading-relaxed">
+              Hands-on autonomous systems workshops, cadet induction drives, and robotics competitions.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-tech text-slate-100 tracking-tight">
-            Events &amp; Workshops
-          </h2>
-          <p className="text-sm sm:text-base text-slate-300 font-body leading-relaxed">
-            Technical bootcamps, defense hackathons, and cadet selection inductions.
-          </p>
+
+          <div className="text-xs font-mono text-[#0d1321]/60 px-4 py-2 rounded-full bg-white border border-[#0d1321]/[0.08] shadow-xs shrink-0">
+            <span>{upcomingEvents.length} Scheduled Sessions</span>
+          </div>
         </div>
 
         {/* Events Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {upcomingEvents.map((event) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {upcomingEvents.map((event, index) => (
             <motion.div
               key={event.id}
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="bg-[#0c1222]/85 rounded-xl border border-cyan-500/20 hover:border-cyan-400/50 shadow-[0_8px_30px_rgba(0,0,0,0.6)] p-6 flex flex-col justify-between backdrop-blur-xl transition-all"
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              whileHover={{ y: -5 }}
+              className="p-8 sm:p-10 rounded-3xl bg-white border border-[#0d1321]/[0.08] shadow-[0_15px_40px_-15px_rgba(13,19,33,0.04)] hover:shadow-[0_25px_60px_-15px_rgba(13,19,33,0.08)] hover:border-[#0d1321]/20 transition-all flex flex-col justify-between"
             >
-              <div className="space-y-3.5">
-                {/* Status & Category Bar */}
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-mono font-bold text-cyan-400 bg-cyan-950/40 px-2.5 py-0.5 rounded border border-cyan-500/30 uppercase">
+                  <span className="text-[10px] font-mono tracking-widest uppercase text-[#0d1321]/60 bg-[#fafaf9] border border-[#0d1321]/[0.08] px-3 py-1 rounded-full">
                     {event.category}
                   </span>
-                  {getStatusBadge(event.status)}
+                  <span className="text-xs font-mono font-medium text-[#0d1321]/60">
+                    {event.status}
+                  </span>
                 </div>
 
-                {/* Event Title */}
-                <h3 className="text-2xl font-bold font-tech text-slate-100">
+                <h3 className="text-2xl font-bold font-display text-[#0d1321] tracking-tight">
                   {event.title}
                 </h3>
 
-                {/* Date & Location Metas */}
-                <div className="flex flex-wrap items-center gap-3 text-xs font-mono pt-0.5">
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded bg-[#070b14] border border-slate-800 text-slate-300">
-                    <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+                <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#0d1321]/60 pt-1">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#0d1321]" />
                     <span>{event.date}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded bg-[#070b14] border border-slate-800 text-slate-400">
-                    <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[#0d1321]" />
                     <span>{event.location}</span>
-                  </div>
+                  </span>
                 </div>
 
-                {/* Description */}
-                <p className="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#0d1321]/70 font-body leading-relaxed pt-1">
                   {event.description}
                 </p>
               </div>
 
-              {/* Action Button */}
-              <div className="pt-4 mt-4 border-t border-slate-800 flex items-center justify-end">
-                {event.status !== "Completed" ? (
-                  <button
-                    onClick={onOpenRegister}
-                    className="cyber-btn-primary !h-[38px] !text-xs !py-0 !px-4"
-                  >
-                    <span>{event.ctaText}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                ) : (
-                  <span className="text-xs font-mono text-slate-500 font-bold">
-                    Concluded
-                  </span>
-                )}
+              <div className="pt-6 mt-6 border-t border-[#0d1321]/[0.06] flex items-center justify-between">
+                <span className="text-xs font-mono text-[#0d1321]/50">
+                  Open to all AIT students
+                </span>
+
+                <button
+                  onClick={onOpenRegister}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#0d1321] hover:bg-[#1a2640] px-4 py-2 rounded-full transition-all cursor-pointer"
+                >
+                  <span>{event.ctaText || "Register"}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             </motion.div>
           ))}

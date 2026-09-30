@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { X, Download, ShieldCheck, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { X, Download, ShieldCheck } from "lucide-react";
 import { wartechTracks } from "@/data/siteData";
 
 interface RulebookModalProps {
@@ -20,7 +20,7 @@ CENTRE OF EXCELLENCE FOR AI & ROBOTICS (CEAR)
 =====================================================
 
 1. GENERAL ELIGIBILITY
-- Open to undergraduate engineering cadets and students from all accredited technical institutions across India.
+- Open to undergraduate engineering students from all accredited technical institutions across India.
 - Teams may consist of 1 to 4 members. Cross-college teams are permitted.
 
 2. COMBAT & ELECTRICAL REGULATIONS
@@ -29,7 +29,7 @@ CENTRE OF EXCELLENCE FOR AI & ROBOTICS (CEAR)
 - Kill-Switch: All robots must feature an externally accessible mechanical or wireless Emergency Stop.
 
 3. TRACK HIGHLIGHTS:
-${wartechTracks.map((t) => `- [${t.trackCode}] ${t.title}: Team ${t.teamSize}, Prize ${t.prizePool}. Arena: ${t.arenaType}`).join("\n")}
+${wartechTracks.map((t) => `- [${t.id}] ${t.title}: Team ${t.teamSize}, Prize ${t.prizePool}`).join("\n")}
 
 4. DISQUALIFICATION CONDITIONS:
 - Exceeding weight or dimensional envelope during pre-match inspection.
@@ -48,105 +48,76 @@ Official Queries: cear@aitpune.edu.in
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0d1321]/60 backdrop-blur-md overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="relative w-full max-w-2xl bg-[#0c1322] border border-rose-500/35 rounded-2xl p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_25px_rgba(255,51,102,0.18)] my-8 overflow-hidden max-h-[85vh] flex flex-col justify-between backdrop-blur-2xl"
+        className="relative w-full max-w-2xl bg-white border border-[#0d1321]/[0.1] rounded-3xl p-6 sm:p-10 shadow-2xl my-8 overflow-hidden max-h-[85vh] flex flex-col justify-between"
       >
-        <div className="cyber-bracket-top-left !border-rose-500" />
-        <div className="cyber-bracket-bottom-right !border-rose-500" />
-
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-lg border border-slate-800 bg-[#070b14] hover:bg-slate-800 text-slate-300 transition-colors cursor-pointer"
+          className="absolute top-6 right-6 p-2 rounded-full text-[#0d1321]/50 hover:text-[#0d1321] hover:bg-[#0d1321]/[0.05] transition-colors cursor-pointer"
           aria-label="Close"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
 
-        <div className="overflow-y-auto pr-2 space-y-5">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold tracking-wider text-rose-400 bg-rose-950/40 px-2.5 py-0.5 rounded border border-rose-500/30 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>OFFICIAL DIRECTIVE MANUAL</span>
-              </span>
-              <span className="text-xs font-mono font-bold text-slate-400">
-                AIT-CEAR-WT26-REG-V1.4
-              </span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-black font-tech text-slate-100">
-              Wartech 2026 Rulebook &amp; Safety Protocols
+        <div className="overflow-y-auto pr-2 space-y-6">
+          <div className="space-y-1">
+            <span className="text-[10px] font-mono tracking-widest uppercase text-[#0d1321]/50">
+              Official Directive Manual
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#0d1321]">
+              Wartech 2026 Regulations
             </h3>
           </div>
 
-          <div className="space-y-4 text-xs font-body text-slate-300 leading-relaxed">
-            {/* Directive */}
-            <div className="p-4 rounded-xl bg-[#070b14] border border-slate-800 space-y-1">
-              <span className="font-bold text-cyan-400 block font-tech text-sm uppercase tracking-wide">
+          <div className="space-y-4 text-xs font-body text-[#0d1321]/80 leading-relaxed">
+            <div className="p-5 rounded-2xl bg-[#fafaf9] border border-[#0d1321]/[0.06] space-y-1.5">
+              <span className="font-bold text-[#0d1321] block font-display text-sm">
                 1. General Participation Directives
               </span>
-              <p className="font-mono text-slate-400 text-[11px]">
-                All tracks are open to undergraduate students. Valid college student ID is mandatory at the AIT campus gate. Teams can register up to 4 members per entry.
+              <p className="text-xs text-[#0d1321]/70">
+                All tracks are open to undergraduate college students. Valid student ID card is mandatory at the AIT campus gate. Teams can register up to 4 members per entry.
               </p>
             </div>
 
-            {/* Power Constraints */}
-            <div className="p-4 rounded-xl bg-[#070b14] border border-slate-800 space-y-2">
-              <span className="font-bold text-emerald-400 block font-tech text-sm uppercase tracking-wide">
+            <div className="p-5 rounded-2xl bg-[#fafaf9] border border-[#0d1321]/[0.06] space-y-1.5">
+              <span className="font-bold text-[#0d1321] block font-display text-sm">
                 2. Power &amp; Mechanical Constraints
               </span>
-              <ul className="space-y-1.5 font-mono text-[11px] text-slate-300">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Maximum battery voltage capped at 16.8V (4S LiPo max).</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Manual master kill-switch must be prominently accessible on top deck.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Standard 2.4GHz FHSS wireless or Bluetooth/WiFi telemetry only.</span>
-                </li>
-              </ul>
+              <p className="text-xs text-[#0d1321]/70">
+                Maximum battery rating permitted is 4S LiPo (16.8V max fully charged). All fighting and racing robots must feature an easily accessible physical master power kill-switch.
+              </p>
             </div>
 
-            {/* Disqualification */}
-            <div className="p-4 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1">
-              <div className="flex items-center gap-1.5 text-rose-400 font-bold font-tech text-sm uppercase tracking-wide">
-                <AlertTriangle className="w-4 h-4" />
-                <span>3. Disqualification &amp; Safety Protocol</span>
-              </div>
-              <p className="text-[11px] font-mono text-slate-300">
-                Deliberate damage outside designated arena bounds, hazardous chemical release, or unshielded propellers in pits leads to immediate disqualification without refund.
+            <div className="p-5 rounded-2xl bg-[#fafaf9] border border-[#0d1321]/[0.06] space-y-1.5">
+              <span className="font-bold text-[#0d1321] block font-display text-sm">
+                3. Safety &amp; Disqualification
+              </span>
+              <p className="text-xs text-[#0d1321]/70">
+                Any weapon releasing untethered projectiles, flammable liquids, or hazardous chemicals will cause immediate disqualification and forfeiture.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="pt-4 mt-4 border-t border-slate-800 flex items-center justify-between">
-          <span className="text-[11px] font-mono font-bold text-slate-500">
-            AIT PUNE ROBOTICS WING
-          </span>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 font-mono font-bold text-xs text-slate-400 hover:text-slate-200 cursor-pointer"
-            >
-              Close
-            </button>
-            <button
-              onClick={handleDownload}
-              className="cyber-btn-crimson !h-[38px] text-xs !px-4"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Download Rulebook (.txt)</span>
-            </button>
-          </div>
+        <div className="pt-6 mt-6 border-t border-[#0d1321]/[0.08] flex items-center justify-between">
+          <button
+            onClick={handleDownload}
+            className="inline-flex items-center gap-2 text-xs font-mono font-medium text-[#0d1321] hover:underline"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Download Full TXT Rulebook</span>
+          </button>
+
+          <button
+            onClick={onClose}
+            className="py-2.5 px-6 rounded-full text-xs font-medium bg-[#0d1321] text-white hover:bg-[#1a2640] transition-colors cursor-pointer"
+          >
+            Acknowledge &amp; Close
+          </button>
         </div>
       </motion.div>
     </div>

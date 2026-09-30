@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, MapPin, Mail, ChevronDown, CheckCircle2, MessageSquare, Terminal } from "lucide-react";
+import { Send, MapPin, Mail, ChevronDown, CheckCircle2 } from "lucide-react";
 import { siteConfig, faqs } from "@/data/siteData";
 
 export function ContactAndFAQ() {
@@ -11,7 +11,7 @@ export function ContactAndFAQ() {
   const [contactData, setContactData] = useState({
     name: "",
     email: "",
-    subject: "Induction Query",
+    subject: "General Inquiry",
     message: "",
   });
 
@@ -20,64 +20,60 @@ export function ContactAndFAQ() {
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setContactData({ name: "", email: "", subject: "Induction Query", message: "" });
+      setContactData({ name: "", email: "", subject: "General Inquiry", message: "" });
     }, 4000);
   };
 
   return (
-    <section id="contact" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-transparent border-b border-cyan-500/20">
-      <div className="max-w-6xl mx-auto space-y-14">
+    <section id="contact" className="relative py-28 sm:py-36 px-4 sm:px-6 lg:px-8 bg-transparent">
+      <div className="max-w-7xl mx-auto space-y-16">
         {/* Section Heading */}
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0a101d] border border-cyan-500/35 text-xs font-mono font-bold text-cyan-300 mb-2">
-            <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-            <span>COMMUNICATIONS TERMINAL</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-tech tracking-tight text-slate-100 mb-2">
-            Contact &amp; FAQ
+        <div className="space-y-2 max-w-xl border-b border-[#0d1321]/[0.08] pb-6">
+          <span className="text-xs font-mono tracking-widest uppercase text-[#0d1321]/50">
+            06 // Communications &amp; Queries
+          </span>
+          <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-[#0d1321]">
+            Contact &amp; Frequently Asked
           </h2>
-          <p className="text-sm sm:text-base text-slate-300 font-body max-w-xl">
-            Transmit telemetry inquiries directly to CEAR faculty coordinators and student leadership.
+          <p className="text-sm sm:text-base text-[#0d1321]/70 font-body">
+            Get in touch with the CEAR engineering cadre or explore answers to common technical and induction questions.
           </p>
         </div>
 
         {/* 2-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Transmission Form */}
-          <div className="lg:col-span-6 rounded-2xl bg-[#0c1222]/85 border border-cyan-500/25 p-6 sm:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.6)] backdrop-blur-xl relative overflow-hidden">
-            <div className="cyber-bracket-top-left" />
-            <div className="cyber-bracket-bottom-right" />
-
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Left Column: Clean Contact Form */}
+          <div className="lg:col-span-6 rounded-3xl bg-white border border-[#0d1321]/[0.08] p-8 sm:p-10 shadow-[0_15px_40px_-15px_rgba(13,19,33,0.04)]">
             {submitted ? (
-              <div className="text-center py-10 space-y-3">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 mx-auto flex items-center justify-center font-bold shadow-[0_0_15px_rgba(0,255,157,0.3)]">
-                  <CheckCircle2 className="w-6 h-6" />
+              <div className="text-center py-12 space-y-4">
+                <div className="w-12 h-12 rounded-full bg-[#fafaf9] text-[#0d1321] border border-[#0d1321]/[0.1] mx-auto flex items-center justify-center font-bold">
+                  <CheckCircle2 className="w-6 h-6 text-[#0d1321]" />
                 </div>
-                <h4 className="font-tech text-xl text-slate-100 font-bold">
-                  Transmission Dispatched
+                <h4 className="font-display text-2xl text-[#0d1321] font-bold">
+                  Message Transmitted
                 </h4>
-                <p className="text-xs text-slate-300 font-body">
-                  Telemetry received. We will respond directly to your provided email.
+                <p className="text-sm text-[#0d1321]/70 font-body max-w-sm mx-auto">
+                  Thank you for reaching out. A CEAR domain coordinator will respond to your email shortly.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 font-body text-xs">
+              <form onSubmit={handleSubmit} className="space-y-5 font-body text-xs">
                 <div>
-                  <label className="font-mono text-[11px] text-slate-300 font-bold block mb-1">
-                    Cadet / Inquirer Name
+                  <label className="font-mono text-xs text-[#0d1321] font-bold block mb-1.5 uppercase">
+                    Your Full Name
                   </label>
                   <input
                     type="text"
                     required
                     value={contactData.name}
                     onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
-                    placeholder="Cadet Name"
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#070b14] border border-slate-800 text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 transition-all placeholder:text-slate-600"
+                    placeholder="e.g. Cadet Rohan Sharma"
+                    className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                   />
                 </div>
 
                 <div>
-                  <label className="font-mono text-[11px] text-slate-300 font-bold block mb-1">
+                  <label className="font-mono text-xs text-[#0d1321] font-bold block mb-1.5 uppercase">
                     Email Address
                   </label>
                   <input
@@ -86,115 +82,92 @@ export function ContactAndFAQ() {
                     value={contactData.email}
                     onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
                     placeholder="your.email@aitpune.edu.in"
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#070b14] border border-slate-800 text-slate-100 font-mono focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 transition-all placeholder:text-slate-600"
+                    className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                   />
                 </div>
 
                 <div>
-                  <label className="font-mono text-[11px] text-slate-300 font-bold block mb-1">
-                    Transmission Topic
+                  <label className="font-mono text-xs text-[#0d1321] font-bold block mb-1.5 uppercase">
+                    Topic of Inquiry
                   </label>
                   <select
                     value={contactData.subject}
                     onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#070b14] border border-slate-800 text-slate-100 focus:border-cyan-400 focus:outline-none font-mono font-bold transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all"
                   >
-                    <option value="Induction Query" className="bg-[#070b14]">Club Inductions 2026</option>
-                    <option value="Project Collaboration" className="bg-[#070b14]">Research Collaboration</option>
-                    <option value="Wartech 2026 Fest" className="bg-[#070b14]">Wartech 2026 Inquiry</option>
-                    <option value="General Inquiry" className="bg-[#070b14]">General Lab Inquiry</option>
+                    <option value="Induction Query">Club Induction &amp; Recruitment</option>
+                    <option value="Wartech 2026 Registration">Wartech 2026 Registration</option>
+                    <option value="Project Collaboration">Research &amp; Project Collaboration</option>
+                    <option value="Sponsorship">Sponsorship &amp; Industry Partnership</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="font-mono text-[11px] text-slate-300 font-bold block mb-1">
-                    Transmission Body
+                  <label className="font-mono text-xs text-[#0d1321] font-bold block mb-1.5 uppercase">
+                    Message
                   </label>
                   <textarea
                     required
                     rows={4}
                     value={contactData.message}
                     onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
-                    placeholder="Enter your transmission..."
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#070b14] border border-slate-800 text-slate-100 font-body focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 resize-none transition-all placeholder:text-slate-600"
+                    placeholder="Details about your query..."
+                    className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all resize-none placeholder:text-[#0d1321]/30"
                   />
                 </div>
 
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    className="w-full cyber-btn-primary !h-[44px] text-sm cursor-pointer"
-                  >
-                    <Send className="w-4 h-4" />
-                    <span>Send Transmission</span>
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3.5 px-6 rounded-full text-sm font-medium font-body bg-[#0d1321] text-white hover:bg-[#1a2640] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Transmit Query</span>
+                </button>
               </form>
             )}
           </div>
 
-          {/* Right Column: FAQ Accordion & Coordinates */}
-          <div className="lg:col-span-6 space-y-5">
-            <div className="rounded-2xl bg-[#0c1222]/85 border border-cyan-500/25 p-6 sm:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.6)] backdrop-blur-xl">
-              <h3 className="font-tech text-lg font-bold text-slate-100 mb-3 flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-cyan-400" />
-                <span>Frequently Asked Questions</span>
-              </h3>
+          {/* Right Column: FAQ Accordion */}
+          <div className="lg:col-span-6 space-y-4">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div
+                  key={idx}
+                  className="rounded-2xl bg-white border border-[#0d1321]/[0.08] overflow-hidden transition-all shadow-xs"
+                >
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
+                  >
+                    <span className="font-display text-base sm:text-lg font-bold text-[#0d1321]">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-[#0d1321] shrink-0 transition-transform duration-300 ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-              <div className="divide-y divide-slate-800/80">
-                {faqs.slice(0, 4).map((faq, index) => {
-                  const isOpen = openFaq === index;
-
-                  return (
-                    <div key={index} className="py-3">
-                      <button
-                        onClick={() => setOpenFaq(isOpen ? null : index)}
-                        className="w-full text-left flex items-start justify-between gap-3 group cursor-pointer"
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="overflow-hidden"
                       >
-                        <span className="font-tech text-sm font-bold text-slate-200 group-hover:text-cyan-300 transition-colors leading-snug">
-                          {faq.question}
-                        </span>
-                        <ChevronDown
-                          className={`w-4 h-4 text-cyan-400 shrink-0 mt-0.5 transition-transform duration-200 ${
-                            isOpen ? "rotate-180 text-cyan-300" : ""
-                          }`}
-                        />
-                      </button>
-
-                      <AnimatePresence>
-                        {isOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.18 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="pt-2 pb-1 text-xs text-slate-400 leading-relaxed font-body">
-                              {faq.answer}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Direct Coordinates Card */}
-            <div className="rounded-xl bg-[#0c1222]/85 border border-cyan-500/20 p-5 space-y-2.5 font-mono text-xs text-slate-300 shadow-[0_8px_25px_rgba(0,0,0,0.5)] backdrop-blur-xl">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                <span className="font-semibold">
-                  Lab 104, Dept of E&amp;TC, Army Institute of Technology, Pune 411015
-                </span>
-              </div>
-              <div className="flex items-center gap-2.5 pt-2 border-t border-slate-800">
-                <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span className="font-bold text-slate-100">{siteConfig.contactEmail}</span>
-              </div>
-            </div>
+                        <div className="px-6 pb-6 pt-1 text-xs sm:text-sm text-[#0d1321]/70 font-body leading-relaxed border-t border-[#0d1321]/[0.04]">
+                          {faq.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

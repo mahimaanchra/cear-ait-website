@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Award, Medal } from "lucide-react";
+import { Trophy, Award } from "lucide-react";
 import { achievements } from "@/data/siteData";
 
 const categoryFilters = ["ALL", "PODIUM", "NATIONAL FINALIST"];
@@ -20,20 +20,19 @@ export function Achievements() {
         );
 
   return (
-    <section id="achievements" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-transparent border-b border-cyan-500/20">
-      <div className="max-w-6xl mx-auto space-y-12">
+    <section id="achievements" className="relative py-28 sm:py-36 px-4 sm:px-6 lg:px-8 bg-transparent">
+      <div className="max-w-7xl mx-auto space-y-16">
         {/* Section Heading */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0a101d] border border-cyan-500/35 text-xs font-mono font-bold text-cyan-300 mb-2">
-              <Trophy className="w-3.5 h-3.5 text-cyan-400" />
-              <span>PODIUM RECORD &amp; ACCOLADES</span>
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-black font-tech tracking-tight text-slate-100 mb-2">
-              Track Record
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-[#0d1321]/[0.08] pb-6">
+          <div className="space-y-2 max-w-xl">
+            <span className="text-xs font-mono tracking-widest uppercase text-[#0d1321]/50">
+              05 // Accolades &amp; Trophies
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-[#0d1321]">
+              National Track Record
             </h2>
-            <p className="text-sm sm:text-base text-slate-300 font-body max-w-xl">
-              Podiums and championships clinched across national robotics tournaments.
+            <p className="text-sm sm:text-base text-[#0d1321]/70 font-body">
+              Championships and podium finishes won by CEAR across national robotics arenas.
             </p>
           </div>
 
@@ -43,10 +42,10 @@ export function Achievements() {
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-3.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer border ${
+                className={`px-4 py-1.5 rounded-full font-medium transition-all cursor-pointer ${
                   filter === cat
-                    ? "bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-[0_0_12px_rgba(0,240,255,0.3)]"
-                    : "bg-[#0c1222] text-slate-400 border-slate-800 hover:border-slate-700 hover:text-slate-200"
+                    ? "bg-[#0d1321] text-white shadow-xs"
+                    : "bg-white text-[#0d1321]/70 border border-[#0d1321]/[0.08] hover:border-[#0d1321]/20 hover:text-[#0d1321]"
                 }`}
               >
                 {cat === "ALL" ? "All" : cat === "PODIUM" ? "Podiums" : "Finalists"}
@@ -56,49 +55,47 @@ export function Achievements() {
         </div>
 
         {/* Horizontal Achievement Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAchievements.map((item) => {
-            return (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
-                className="rounded-xl bg-[#0c1222]/85 border border-cyan-500/20 hover:border-cyan-400/50 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between cursor-default group backdrop-blur-xl transition-all"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-amber-400 bg-amber-950/40 px-2.5 py-0.5 rounded border border-amber-500/30">
-                      {item.rank}
-                    </span>
-                    <span className="font-mono text-xs text-slate-500 font-bold">
-                      {item.year}
-                    </span>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredAchievements.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+              whileHover={{ y: -5 }}
+              className="p-8 rounded-3xl bg-white border border-[#0d1321]/[0.08] shadow-[0_15px_40px_-15px_rgba(13,19,33,0.03)] hover:shadow-[0_20px_50px_-15px_rgba(13,19,33,0.07)] hover:border-[#0d1321]/20 transition-all flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-[#0d1321] bg-[#fafaf9] border border-[#0d1321]/[0.08] px-3 py-1 rounded-full">
+                    {item.rank}
+                  </span>
+                  <span className="font-mono text-xs text-[#0d1321]/40">
+                    {item.year}
+                  </span>
+                </div>
 
-                  <div>
-                    <h3 className="font-tech text-lg font-bold text-slate-100 leading-tight group-hover:text-cyan-300 transition-colors">
-                      {item.event}
-                    </h3>
-                    <p className="font-mono text-xs text-cyan-400 font-bold mt-1">
-                      {item.institution}
-                    </p>
-                  </div>
-
-                  <p className="font-body text-xs text-slate-400 leading-relaxed">
-                    {item.description}
+                <div>
+                  <h3 className="font-display text-xl font-bold text-[#0d1321] tracking-tight">
+                    {item.event}
+                  </h3>
+                  <p className="font-mono text-xs text-[#0d1321]/60 mt-1">
+                    {item.institution}
                   </p>
                 </div>
 
-                <div className="pt-4 mt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400 font-bold">
-                  <span className="uppercase text-[10px] tracking-wider text-slate-500">{item.category}</span>
-                  <Trophy className="w-4 h-4 text-amber-400" />
-                </div>
-              </motion.div>
-            );
-          })}
+                <p className="font-body text-xs sm:text-sm text-[#0d1321]/70 leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+
+              <div className="pt-6 mt-6 border-t border-[#0d1321]/[0.06] flex items-center justify-between text-xs font-mono text-[#0d1321]/50">
+                <span className="uppercase text-[10px] tracking-wider">{item.category}</span>
+                <Trophy className="w-4 h-4 text-[#0d1321]" />
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
