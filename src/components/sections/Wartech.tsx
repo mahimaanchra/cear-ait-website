@@ -111,7 +111,7 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
               Competition Arenas &amp; Tracks
             </h3>
             <span className="text-xs font-mono text-[#0d1321]/50">
-              8 SQUADS
+              8 Competition Tracks
             </span>
           </div>
 
@@ -233,7 +233,7 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
                   }}
                   className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-medium text-white bg-[#0d1321] hover:bg-[#1a2640] transition-colors cursor-pointer"
                 >
-                  <span>Register Squad</span>
+                  <span>Register Team</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

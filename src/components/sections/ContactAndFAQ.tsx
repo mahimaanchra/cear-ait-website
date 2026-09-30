@@ -50,10 +50,10 @@ export function ContactAndFAQ() {
                   <CheckCircle2 className="w-6 h-6 text-[#0d1321]" />
                 </div>
                 <h4 className="font-display text-2xl text-[#0d1321] font-bold">
-                  Message Transmitted
+                  Message Sent
                 </h4>
                 <p className="text-sm text-[#0d1321]/70 font-body max-w-sm mx-auto">
-                  Thank you for reaching out. A CEAR domain coordinator will respond to your email shortly.
+                  Thank you for reaching out. The CEAR team will respond to your inquiry shortly.
                 </p>
               </div>
             ) : (
@@ -67,7 +67,7 @@ export function ContactAndFAQ() {
                     required
                     value={contactData.name}
                     onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
-                    placeholder="e.g. Cadet Rohan Sharma"
+                    placeholder="Your name"
                     className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                   />
                 </div>
@@ -81,7 +81,7 @@ export function ContactAndFAQ() {
                     required
                     value={contactData.email}
                     onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
-                    placeholder="your.email@aitpune.edu.in"
+                    placeholder="name@example.com"
                     className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                   />
                 </div>
@@ -111,7 +111,7 @@ export function ContactAndFAQ() {
                     rows={4}
                     value={contactData.message}
                     onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
-                    placeholder="Details about your query..."
+                    placeholder="How can we help you?"
                     className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all resize-none placeholder:text-[#0d1321]/30"
                   />
                 </div>
@@ -121,7 +121,7 @@ export function ContactAndFAQ() {
                   className="w-full py-3.5 px-6 rounded-full text-sm font-medium font-body bg-[#0d1321] text-white hover:bg-[#1a2640] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Transmit Query</span>
+                  <span>Send Message</span>
                 </button>
               </form>
             )}

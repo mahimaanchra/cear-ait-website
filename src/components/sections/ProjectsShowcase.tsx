@@ -17,7 +17,7 @@ export function ProjectsShowcase() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#0d1321]/[0.08] pb-6">
           <div className="space-y-2 max-w-2xl">
             <span className="text-xs font-mono tracking-widest uppercase text-[#0d1321]/50">
-              02 // Fleet Repository
+              02 // Research &amp; Platforms
             </span>
             <h2 className="text-3xl sm:text-5xl font-black font-display text-[#0d1321] tracking-tight">
               Robotics Platforms &amp; R&amp;D

@@ -139,7 +139,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                     required
                     value={inductionData.fullName}
                     onChange={(e) => setInductionData({ ...inductionData, fullName: e.target.value })}
-                    placeholder="Cadet Name"
+                    placeholder="Your full name"
                     className="w-full px-4 py-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                   />
                 </div>
@@ -153,7 +153,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                     required
                     value={inductionData.email}
                     onChange={(e) => setInductionData({ ...inductionData, email: e.target.value })}
-                    placeholder="name.branch@aitpune.edu.in"
+                    placeholder="your.email@aitpune.edu.in"
                     className="w-full px-4 py-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                   />
                 </div>
@@ -176,7 +176,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                       <option value="SE - IT">SE - IT</option>
                       <option value="SE - E&TC">SE - E&amp;TC</option>
                       <option value="SE - Mechanical">SE - Mechanical</option>
-                      <option value="TE/BE Cadet">TE/BE Cadet</option>
+                      <option value="TE/BE Student">TE/BE Student</option>
                     </select>
                   </div>
 
@@ -206,7 +206,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                     rows={3}
                     value={inductionData.statement}
                     onChange={(e) => setInductionData({ ...inductionData, statement: e.target.value })}
-                    placeholder="Briefly state your robotics or coding background..."
+                    placeholder="Briefly state your technical interests or background..."
                     className="w-full px-4 py-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all resize-none placeholder:text-[#0d1321]/30"
                   />
                 </div>
@@ -235,7 +235,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                       required
                       value={wartechData.teamName}
                       onChange={(e) => setWartechData({ ...wartechData, teamName: e.target.value })}
-                      placeholder="e.g. MechaVanguard"
+                      placeholder="Enter team name"
                       className="w-full px-4 py-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                     />
                   </div>
@@ -249,7 +249,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                       required
                       value={wartechData.college}
                       onChange={(e) => setWartechData({ ...wartechData, college: e.target.value })}
-                      placeholder="e.g. AIT Pune / COEP"
+                      placeholder="College / Institution"
                       className="w-full px-4 py-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                     />
                   </div>
@@ -282,7 +282,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                       required
                       value={wartechData.leadName}
                       onChange={(e) => setWartechData({ ...wartechData, leadName: e.target.value })}
-                      placeholder="Full Name"
+                      placeholder="Full name"
                       className="w-full px-4 py-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                     />
                   </div>
@@ -296,7 +296,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                       required
                       value={wartechData.phone}
                       onChange={(e) => setWartechData({ ...wartechData, phone: e.target.value })}
-                      placeholder="+91 9876543210"
+                      placeholder="+91 Phone number"
                       className="w-full px-4 py-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                     />
                   </div>
@@ -311,7 +311,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                     required
                     value={wartechData.email}
                     onChange={(e) => setWartechData({ ...wartechData, email: e.target.value })}
-                    placeholder="leader@college.edu.in"
+                    placeholder="leader.email@example.com"
                     className="w-full px-4 py-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
                   />
                 </div>
@@ -321,7 +321,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                     type="submit"
                     className="w-full py-3.5 px-6 rounded-full text-sm font-medium bg-[#0d1321] text-white hover:bg-[#1a2640] transition-all cursor-pointer shadow-sm hover:shadow-md"
                   >
-                    Confirm Squad Registration
+                    Confirm Registration
                   </button>
                 </div>
               </form>
@@ -342,7 +342,7 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                 Welcome to CEAR
               </h3>
               <p className="text-xs sm:text-sm text-[#0d1321]/70 font-body max-w-sm mx-auto mt-2">
-                Your dossier has been officially recorded in our registry. Check your email for screening schedule and guidelines.
+                Your registration details have been received. We will follow up via email with tournament schedules and guidelines.
               </p>
             </div>
 

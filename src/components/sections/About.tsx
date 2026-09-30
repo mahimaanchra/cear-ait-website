@@ -21,7 +21,7 @@ export function About() {
         <div className="max-w-4xl space-y-4">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#0d1321]/60">
             <span className="w-1.5 h-1.5 rounded-full bg-[#0d1321]" />
-            <span>01 // Dossier &amp; Philosophy</span>
+            <span>01 // Overview &amp; Vision</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0d1321] font-display leading-[1.12]">
@@ -82,7 +82,7 @@ export function About() {
               </p>
             </div>
             <div className="pt-8 mt-6 border-t border-[#0d1321]/[0.06] flex items-center justify-between text-xs font-mono text-[#0d1321]/50">
-              <span>CADRE // LAB 104</span>
+              <span>CEAR // LAB 104</span>
               <span>DEFENSE TECH</span>
             </div>
           </motion.div>
@@ -135,7 +135,7 @@ export function About() {
                 </div>
 
                 <div className="pt-4 mt-6 border-t border-[#0d1321]/[0.06] flex items-center justify-between text-xs text-[#0d1321]/40 group-hover:text-[#0d1321] transition-colors font-mono">
-                  <span>Explore research</span>
+                  <span>Learn more</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </div>
               </motion.div>
