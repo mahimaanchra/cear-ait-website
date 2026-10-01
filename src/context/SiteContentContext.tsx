@@ -43,6 +43,7 @@ interface SiteContentContextType {
   resetToDefaults: () => Promise<void>;
   isSaving: boolean;
   lastSaved: string | null;
+  cloudConnected: boolean;
 }
 
 const SiteContentContext = createContext<SiteContentContextType | undefined>(undefined);
@@ -56,6 +57,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
   const [projects, setProjects] = useState<Project[]>(defaultProjects);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const [cloudConnected, setCloudConnected] = useState(false);
 
   // Initialize from API / localStorage on mount
   useEffect(() => {
@@ -85,6 +87,9 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
           if (data.upcomingEvents) setUpcomingEvents(data.upcomingEvents);
           if (data.projects) setProjects(data.projects);
           if (data.lastUpdated) setLastSaved(data.lastUpdated);
+          if (typeof data.cloudConnected === "boolean") {
+            setCloudConnected(data.cloudConnected);
+          }
 
           // Update local cache
           localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -120,6 +125,10 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       });
 
       if (res.ok) {
+        const result = await res.json();
+        if (typeof result.cloudConnected === "boolean") {
+          setCloudConnected(result.cloudConnected);
+        }
         setLastSaved(new Date().toLocaleTimeString());
         setIsSaving(false);
         return true;
@@ -246,6 +255,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
         resetToDefaults,
         isSaving,
         lastSaved,
+        cloudConnected,
       }}
     >
       {children}

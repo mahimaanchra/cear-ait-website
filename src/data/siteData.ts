@@ -9,6 +9,7 @@ export interface Project {
   tags: string[];
   specs: { label: string; value: string }[];
   highlight?: string;
+  imageUrl?: string;
   githubUrl?: string;
   demoUrl?: string;
 }
@@ -64,6 +65,7 @@ export interface EventItem {
   description: string;
   location: string;
   ctaText: string;
+  imageUrl?: string;
 }
 
 export interface WorkshopMediaItem {
