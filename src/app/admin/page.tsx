@@ -29,9 +29,15 @@ import {
   Sparkles,
   Layers,
   ArrowRight,
+  Cloud,
+  Database,
+  UploadCloud,
+  Copy,
+  Check,
 } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
 import { TeamMember, EventItem, Project } from "@/data/siteData";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 const DEFAULT_PASSCODE = "cear@2026";
 const AUTH_STORAGE_KEY = "cear_admin_auth";
@@ -57,6 +63,7 @@ export default function AdminPage() {
     resetToDefaults,
     isSaving,
     lastSaved,
+    cloudConnected,
   } = useSiteContent();
 
   // Authentication State
@@ -79,6 +86,11 @@ export default function AdminPage() {
 
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
+
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+
+  const [isCloudHelpModalOpen, setIsCloudHelpModalOpen] = useState(false);
 
   // Check stored auth on mount
   useEffect(() => {
@@ -284,10 +296,25 @@ export default function AdminPage() {
                 <h1 className="font-tech text-lg font-black text-slate-900">
                   CEAR Control Panel
                 </h1>
-                <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.2 rounded-full flex items-center gap-1">
+                <span className="text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   <span>ONLINE</span>
                 </span>
+                {cloudConnected ? (
+                  <span className="hidden sm:inline-flex text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full items-center gap-1">
+                    <Cloud className="w-3 h-3 text-blue-600" />
+                    <span>CLOUD SYNC ACTIVE</span>
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => setIsCloudHelpModalOpen(true)}
+                    className="hidden sm:inline-flex text-[10px] font-mono font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full items-center gap-1 transition-colors cursor-pointer"
+                    title="Click for Cloud Database & Storage setup guide"
+                  >
+                    <Database className="w-3 h-3 text-amber-600" />
+                    <span>LOCAL MODE • CONNECT CLOUD</span>
+                  </button>
+                )}
               </div>
               <p className="text-[11px] font-mono text-slate-500">
                 AIT Pune • CMS &amp; Cadre Management
@@ -702,6 +729,16 @@ export default function AdminPage() {
                   Currently {projects.length} platforms registered in fleet showcase
                 </p>
               </div>
+              <button
+                onClick={() => {
+                  setEditingProject(null);
+                  setIsProjectModalOpen(true);
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-tech font-bold text-xs px-3.5 py-2 rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Platform</span>
+              </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -711,6 +748,18 @@ export default function AdminPage() {
                   className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between"
                 >
                   <div className="space-y-2.5">
+                    {proj.imageUrl && (
+                      <div className="relative w-full h-36 rounded-lg overflow-hidden bg-slate-100 mb-2 border border-slate-200">
+                        <Image
+                          src={proj.imageUrl}
+                          alt={proj.title}
+                          fill
+                          className="object-cover"
+                          unoptimized={proj.imageUrl.startsWith("http")}
+                        />
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-mono font-bold uppercase text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
                         {proj.category}
@@ -741,10 +790,35 @@ export default function AdminPage() {
                   </div>
 
                   <div className="pt-3 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
-                    <span>{proj.specs?.length || 0} Specs</span>
-                    {proj.githubUrl && (
-                      <span className="text-blue-600 font-bold">Has GitHub Repo</span>
-                    )}
+                    <span className="text-[10px] text-slate-400">
+                      {proj.specs?.length || 0} Specs
+                      {proj.githubUrl && " • GitHub"}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          setEditingProject(proj);
+                          setIsProjectModalOpen(true);
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                        title="Edit Platform"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (confirm(`Delete project "${proj.title}"?`)) {
+                            deleteProject(proj.id);
+                            showToast(`Deleted ${proj.title}`);
+                            handleManualSave();
+                          }
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                        title="Delete Platform"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -844,6 +918,37 @@ export default function AdminPage() {
             setIsEventModalOpen(false);
             handleManualSave();
           }}
+        />
+      )}
+      {/* ==================================================== */}
+      {/* MODAL: ADD / EDIT PROJECT                            */}
+      {/* ==================================================== */}
+      {isProjectModalOpen && (
+        <ProjectFormModal
+          isOpen={isProjectModalOpen}
+          initialData={editingProject}
+          onClose={() => setIsProjectModalOpen(false)}
+          onSave={(savedProject) => {
+            if (editingProject) {
+              updateProject(savedProject.id, savedProject);
+              showToast(`Updated ${savedProject.title}`);
+            } else {
+              addProject(savedProject);
+              showToast(`Added platform: ${savedProject.title}!`);
+            }
+            setIsProjectModalOpen(false);
+            handleManualSave();
+          }}
+        />
+      )}
+
+      {/* ==================================================== */}
+      {/* MODAL: CLOUD DATABASE SETUP GUIDE                    */}
+      {/* ==================================================== */}
+      {isCloudHelpModalOpen && (
+        <CloudSetupModal
+          isOpen={isCloudHelpModalOpen}
+          onClose={() => setIsCloudHelpModalOpen(false)}
         />
       )}
     </div>
@@ -984,21 +1089,13 @@ function MemberFormModal({
             </div>
           </div>
 
-          <div>
-            <label className="block text-slate-700 font-bold mb-1">
-              IMAGE URL / PROFILE PHOTO (OPTIONAL)
-            </label>
-            <input
-              type="text"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="e.g. https://... or /cear-logo.png"
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500"
-            />
-            <p className="text-[10px] text-slate-400 mt-1">
-              Leave blank to automatically use initials avatar badge.
-            </p>
-          </div>
+          <ImageUploadField
+            label="PROFILE PHOTO (OPTIONAL)"
+            value={imageUrl}
+            onChange={setImageUrl}
+            folder="team"
+            helperText="Upload a profile picture or paste an image URL. Leave blank for initials badge."
+          />
 
           <div>
             <label className="block text-slate-700 font-bold mb-1">SPECIALIZATION / FOCUS</label>
@@ -1088,6 +1185,7 @@ function EventFormModal({
   const [location, setLocation] = useState(initialData?.location || "CEAR Robotics Lab, AIT");
   const [description, setDescription] = useState(initialData?.description || "");
   const [ctaText, setCtaText] = useState(initialData?.ctaText || "Register Now");
+  const [imageUrl, setImageUrl] = useState(initialData?.imageUrl || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -1102,6 +1200,7 @@ function EventFormModal({
       location: location.trim(),
       description: description.trim(),
       ctaText: ctaText.trim() || "View Details",
+      imageUrl: imageUrl.trim() || undefined,
     };
 
     onSave(event);
@@ -1202,6 +1301,14 @@ function EventFormModal({
             />
           </div>
 
+          <ImageUploadField
+            label="EVENT BANNER / POSTER (OPTIONAL)"
+            value={imageUrl}
+            onChange={setImageUrl}
+            folder="events"
+            helperText="Upload event poster or flyer from device, or paste image URL."
+          />
+
           <div>
             <label className="block text-slate-700 font-bold mb-1">CTA BUTTON TEXT</label>
             <input
@@ -1229,6 +1336,379 @@ function EventFormModal({
             </button>
           </div>
         </form>
+      </motion.div>
+    </div>
+  );
+}
+
+// ==========================================
+// PROJECT FORM MODAL COMPONENT
+// ==========================================
+function ProjectFormModal({
+  isOpen,
+  initialData,
+  onClose,
+  onSave,
+}: {
+  isOpen: boolean;
+  initialData: Project | null;
+  onClose: () => void;
+  onSave: (project: Project) => void;
+}) {
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [category, setCategory] = useState<Project["category"]>(
+    initialData?.category || "Robotics"
+  );
+  const [tagline, setTagline] = useState(initialData?.tagline || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [status, setStatus] = useState<Project["status"]>(
+    initialData?.status || "Active R&D"
+  );
+  const [tagsStr, setTagsStr] = useState(
+    initialData?.tags?.join(", ") || "Robotics, Hardware, ROS2"
+  );
+  const [imageUrl, setImageUrl] = useState(initialData?.imageUrl || "");
+  const [githubUrl, setGithubUrl] = useState(initialData?.githubUrl || "");
+  const [demoUrl, setDemoUrl] = useState(initialData?.demoUrl || "");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) return;
+
+    const tags = tagsStr
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    const project: Project = {
+      id: initialData?.id || `proj-${Date.now()}`,
+      title: title.trim(),
+      category,
+      tagline: tagline.trim() || title.trim(),
+      description: description.trim(),
+      longDescription: initialData?.longDescription || description.trim(),
+      status,
+      tags: tags.length > 0 ? tags : ["Robotics", "Hardware"],
+      specs: initialData?.specs || [
+        { label: "Category", value: category },
+        { label: "Status", value: status },
+      ],
+      imageUrl: imageUrl.trim() || undefined,
+      githubUrl: githubUrl.trim() || undefined,
+      demoUrl: demoUrl.trim() || undefined,
+    };
+
+    onSave(project);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="w-full max-w-xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden font-sans my-8"
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
+          <h3 className="font-tech text-lg font-bold text-slate-900">
+            {initialData ? `Edit Platform: ${initialData.title}` : "Add New Robotic Platform"}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 text-xs font-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-slate-700 font-bold mb-1">PLATFORM TITLE *</label>
+              <input
+                type="text"
+                required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g. Cerberus UGV"
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-slate-700 font-bold mb-1">CATEGORY *</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value as Project["category"])}
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500"
+              >
+                <option value="Robotics">Robotics</option>
+                <option value="Autonomous">Autonomous</option>
+                <option value="Aquatics">Aquatics</option>
+                <option value="Manipulation">Manipulation</option>
+                <option value="Aerial">Aerial</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-slate-700 font-bold mb-1">STATUS</label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value as Project["status"])}
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500"
+              >
+                <option value="Active R&D">Active R&D</option>
+                <option value="Operational">Operational</option>
+                <option value="Completed">Completed</option>
+                <option value="Podium Winner">Podium Winner</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-slate-700 font-bold mb-1">TAGLINE / ONE-LINER</label>
+              <input
+                type="text"
+                value={tagline}
+                onChange={(e) => setTagline(e.target.value)}
+                placeholder="e.g. All-Terrain Autonomous Reconnaissance UGV"
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-slate-700 font-bold mb-1">SHORT DESCRIPTION</label>
+            <textarea
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe platform mission, navigation stack, and sensors..."
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500 font-sans"
+            />
+          </div>
+
+          <ImageUploadField
+            label="PLATFORM HARDWARE PHOTO"
+            value={imageUrl}
+            onChange={setImageUrl}
+            folder="projects"
+            helperText="Upload a photo of the bot/hardware, or paste an image URL."
+          />
+
+          <div>
+            <label className="block text-slate-700 font-bold mb-1">
+              TECH TAGS (COMMA SEPARATED)
+            </label>
+            <input
+              type="text"
+              value={tagsStr}
+              onChange={(e) => setTagsStr(e.target.value)}
+              placeholder="ROS2, Nav2, Jetson Orin, LiDAR, BLDC"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-slate-700 font-bold mb-1">GITHUB REPO URL</label>
+              <input
+                type="url"
+                value={githubUrl}
+                onChange={(e) => setGithubUrl(e.target.value)}
+                placeholder="https://github.com/cear-ait/..."
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-slate-700 font-bold mb-1">DEMO / VIDEO URL</label>
+              <input
+                type="url"
+                value={demoUrl}
+                onChange={(e) => setDemoUrl(e.target.value)}
+                placeholder="https://youtube.com/watch?v=..."
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 text-xs focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 font-bold cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-tech font-bold text-xs px-5 py-2.5 rounded-lg shadow-sm transition-all cursor-pointer"
+            >
+              {initialData ? "Update Platform" : "Add Platform"}
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
+// ==========================================
+// CLOUD DATABASE & STORAGE SETUP GUIDE MODAL
+// ==========================================
+function CloudSetupModal({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const sqlCode = `-- 1. Create table for persisting dynamic site content
+CREATE TABLE IF NOT EXISTS public.site_content (
+  id TEXT PRIMARY KEY,
+  payload JSONB NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- 2. Enable row level security (RLS)
+ALTER TABLE public.site_content ENABLE ROW LEVEL SECURITY;
+
+-- 3. Allow anonymous public read
+CREATE POLICY "Public Read Access" 
+ON public.site_content FOR SELECT USING (true);
+
+-- 4. Allow anonymous write/update for admin sync
+CREATE POLICY "Public Write Access" 
+ON public.site_content FOR ALL USING (true);
+
+-- 5. Create public media bucket for image uploads
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('cear-media', 'cear-media', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- 6. Storage bucket policy: public read & write
+CREATE POLICY "Public Media Access" 
+ON storage.objects FOR ALL USING (bucket_id = 'cear-media');`;
+
+  const copySql = () => {
+    navigator.clipboard.writeText(sqlCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="w-full max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden font-sans my-8"
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+              <Cloud className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="font-tech text-base font-bold text-slate-900">
+                Connect Free Supabase Cloud Database &amp; Storage
+              </h3>
+              <p className="text-[11px] font-mono text-slate-500">
+                2-minute setup to persist updates &amp; image uploads live on Vercel
+              </p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5 text-xs font-sans text-slate-700 max-h-[75vh] overflow-y-auto">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 font-mono font-bold text-slate-900">
+              <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px]">
+                1
+              </span>
+              <span>Create a Free Supabase Project</span>
+            </div>
+            <p className="text-slate-600 text-xs pl-7">
+              Go to{" "}
+              <a
+                href="https://supabase.com"
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-600 font-bold underline"
+              >
+                supabase.com
+              </a>{" "}
+              and click <strong>New project</strong> (100% free forever for hobby/club usage).
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between font-mono font-bold text-slate-900">
+              <div className="flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px]">
+                  2
+                </span>
+                <span>Run SQL Script in Supabase SQL Editor</span>
+              </div>
+              <button
+                onClick={copySql}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono text-[11px] font-semibold transition-colors cursor-pointer"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <span className="text-emerald-700">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Copy SQL</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <div className="pl-7">
+              <pre className="p-3 bg-slate-900 text-slate-200 rounded-xl font-mono text-[11px] overflow-x-auto leading-relaxed">
+                {sqlCode}
+              </pre>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 font-mono font-bold text-slate-900">
+              <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px]">
+                3
+              </span>
+              <span>Add Keys to .env.local (or Vercel Environment Variables)</span>
+            </div>
+            <div className="pl-7 space-y-2">
+              <p className="text-slate-600 text-xs">
+                In Supabase, go to <strong>Project Settings → API</strong> and copy your Project URL and anon public key into your <code>.env.local</code> file:
+              </p>
+              <pre className="p-3 bg-slate-900 text-emerald-400 rounded-xl font-mono text-[11px] overflow-x-auto leading-relaxed">
+{`NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`}
+              </pre>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-xs">
+            💡 <strong>Note:</strong> Until you add the Supabase keys, your website works smoothly in <strong>Local Mode</strong>, saving images to <code>public/uploads/</code> and data to local storage.
+          </div>
+        </div>
+
+        <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-mono text-xs font-bold rounded-lg cursor-pointer transition-colors"
+          >
+            Close Guide
+          </button>
+        </div>
       </motion.div>
     </div>
   );
