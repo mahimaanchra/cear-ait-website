@@ -23,6 +23,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://cear-ait-website.vercel.app"),
   title: "CEAR | Centre of Excellence for AI & Robotics – AIT Pune",
   description:
     "Official portal for CEAR (Centre of Excellence for AI & Robotics) at Army Institute of Technology, Pune. Autonomous defense robotics, hardware craft, intelligent control architectures, and Wartech 2026.",
@@ -42,13 +43,32 @@ export const metadata: Metadata = {
     "Edge AI",
   ],
   authors: [{ name: "CEAR Engineering Cadre, AIT Pune" }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "CEAR | Centre of Excellence for AI & Robotics – AIT Pune",
     description:
       "Autonomous Robotics, Intelligent Control & Hardware Craft. Explore our fleet, leadership cadre, and Wartech 2026.",
+    url: "https://cear-ait-website.vercel.app",
     type: "website",
     locale: "en_US",
     siteName: "CEAR AIT",
+    images: [
+      {
+        url: "/cear-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "CEAR - Centre of Excellence for AI & Robotics, AIT Pune",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CEAR | Centre of Excellence for AI & Robotics – AIT Pune",
+    description:
+      "Autonomous Robotics, Intelligent Control & Hardware Craft. Explore our fleet, leadership cadre, and Wartech 2026.",
+    images: ["/cear-logo.png"],
   },
   icons: {
     icon: [
