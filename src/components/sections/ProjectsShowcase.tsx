@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, ExternalLink, ArrowRight, X, ArrowUpRight } from "lucide-react";
 import { Project } from "@/data/siteData";
@@ -45,6 +46,18 @@ export function ProjectsShowcase() {
               className="group p-8 rounded-3xl bg-white border border-[#0d1321]/[0.08] shadow-[0_15px_40px_-15px_rgba(13,19,33,0.04)] hover:shadow-[0_25px_60px_-15px_rgba(13,19,33,0.08)] hover:border-[#0d1321]/25 transition-all flex flex-col justify-between"
             >
               <div className="space-y-5">
+                {project.imageUrl && (
+                  <div className="relative w-full h-44 rounded-2xl overflow-hidden bg-slate-100 border border-[#0d1321]/[0.08] mb-2">
+                    <Image
+                      src={project.imageUrl}
+                      alt={project.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      unoptimized={project.imageUrl.startsWith("http")}
+                    />
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono tracking-widest uppercase text-[#0d1321]/60 bg-[#fafaf9] border border-[#0d1321]/[0.08] px-3 py-1 rounded-full">
                     {project.category}
@@ -128,6 +141,18 @@ export function ProjectsShowcase() {
                   <X className="w-5 h-5" />
                 </button>
               </div>
+
+              {selectedProject.imageUrl && (
+                <div className="relative w-full h-56 rounded-2xl overflow-hidden bg-slate-100 border border-[#0d1321]/[0.08]">
+                  <Image
+                    src={selectedProject.imageUrl}
+                    alt={selectedProject.title}
+                    fill
+                    className="object-cover"
+                    unoptimized={selectedProject.imageUrl.startsWith("http")}
+                  />
+                </div>
+              )}
 
               <p className="text-sm text-[#0d1321]/75 leading-relaxed font-body">
                 {selectedProject.description}

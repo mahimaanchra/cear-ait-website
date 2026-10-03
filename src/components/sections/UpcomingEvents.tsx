@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
@@ -47,6 +48,18 @@ export function UpcomingEvents({ onOpenRegister }: UpcomingEventsProps) {
               className="p-8 sm:p-10 rounded-3xl bg-white border border-[#0d1321]/[0.08] shadow-[0_15px_40px_-15px_rgba(13,19,33,0.04)] hover:shadow-[0_25px_60px_-15px_rgba(13,19,33,0.08)] hover:border-[#0d1321]/20 transition-all flex flex-col justify-between"
             >
               <div className="space-y-4">
+                {event.imageUrl && (
+                  <div className="relative w-full h-48 rounded-2xl overflow-hidden bg-slate-100 border border-[#0d1321]/[0.08] mb-4">
+                    <Image
+                      src={event.imageUrl}
+                      alt={event.title}
+                      fill
+                      className="object-cover transition-transform duration-500 hover:scale-105"
+                      unoptimized={event.imageUrl.startsWith("http")}
+                    />
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono tracking-widest uppercase text-[#0d1321]/60 bg-[#fafaf9] border border-[#0d1321]/[0.08] px-3 py-1 rounded-full">
                     {event.category}
