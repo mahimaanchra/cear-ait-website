@@ -8,9 +8,11 @@ import {
   coreContributors as defaultContributors,
   upcomingEvents as defaultEvents,
   projects as defaultProjects,
+  workshopGallery as defaultGallery,
   TeamMember,
   EventItem,
   Project,
+  WorkshopMediaItem,
 } from "@/data/siteData";
 
 const STORAGE_KEY = "cear_site_content_v1";
@@ -22,6 +24,7 @@ interface SiteContentContextType {
   coreContributors: TeamMember[];
   upcomingEvents: EventItem[];
   projects: Project[];
+  workshopGallery: WorkshopMediaItem[];
 
   // Team actions
   addMember: (member: TeamMember) => void;
@@ -38,12 +41,19 @@ interface SiteContentContextType {
   updateProject: (id: string, project: Partial<Project>) => void;
   deleteProject: (id: string) => void;
 
-  // Persistence
+  // Gallery actions
+  addGalleryItem: (item: WorkshopMediaItem) => void;
+  updateGalleryItem: (id: string, item: Partial<WorkshopMediaItem>) => void;
+  deleteGalleryItem: (id: string) => void;
+
+  // Persistence & Health
   saveChanges: () => Promise<boolean>;
   resetToDefaults: () => Promise<void>;
+  importFullBackup: (backup: any) => Promise<boolean>;
   isSaving: boolean;
   lastSaved: string | null;
   cloudConnected: boolean;
+  hasUnsavedChanges: boolean;
 }
 
 const SiteContentContext = createContext<SiteContentContextType | undefined>(undefined);
@@ -55,9 +65,11 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
   const [coreContributors, setCoreContributors] = useState<TeamMember[]>(defaultContributors);
   const [upcomingEvents, setUpcomingEvents] = useState<EventItem[]>(defaultEvents);
   const [projects, setProjects] = useState<Project[]>(defaultProjects);
+  const [workshopGallery, setWorkshopGallery] = useState<WorkshopMediaItem[]>(defaultGallery);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [cloudConnected, setCloudConnected] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // Initialize from API / localStorage on mount
   useEffect(() => {
@@ -73,6 +85,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
           if (parsed.coreContributors) setCoreContributors(parsed.coreContributors);
           if (parsed.upcomingEvents) setUpcomingEvents(parsed.upcomingEvents);
           if (parsed.projects) setProjects(parsed.projects);
+          if (parsed.workshopGallery) setWorkshopGallery(parsed.workshopGallery);
           if (parsed.lastUpdated) setLastSaved(parsed.lastUpdated);
         }
 
@@ -86,6 +99,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
           if (data.coreContributors) setCoreContributors(data.coreContributors);
           if (data.upcomingEvents) setUpcomingEvents(data.upcomingEvents);
           if (data.projects) setProjects(data.projects);
+          if (data.workshopGallery) setWorkshopGallery(data.workshopGallery);
           if (data.lastUpdated) setLastSaved(data.lastUpdated);
           if (typeof data.cloudConnected === "boolean") {
             setCloudConnected(data.cloudConnected);
@@ -112,6 +126,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       coreContributors,
       upcomingEvents,
       projects,
+      workshopGallery,
       lastUpdated: new Date().toISOString(),
     };
 
@@ -130,6 +145,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
           setCloudConnected(result.cloudConnected);
         }
         setLastSaved(new Date().toLocaleTimeString());
+        setHasUnsavedChanges(false);
         setIsSaving(false);
         return true;
       }
@@ -149,7 +165,9 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
     setCoreContributors(defaultContributors);
     setUpcomingEvents(defaultEvents);
     setProjects(defaultProjects);
+    setWorkshopGallery(defaultGallery);
     localStorage.removeItem(STORAGE_KEY);
+    setHasUnsavedChanges(true);
 
     const defaultPayload = {
       facultyIncharge: defaultFaculty,
@@ -158,18 +176,45 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       coreContributors: defaultContributors,
       upcomingEvents: defaultEvents,
       projects: defaultProjects,
+      workshopGallery: defaultGallery,
       lastUpdated: new Date().toISOString(),
     };
 
-    await fetch("/api/content", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(defaultPayload),
-    });
+    try {
+      await fetch("/api/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(defaultPayload),
+      });
+      setLastSaved(new Date().toLocaleTimeString());
+      setHasUnsavedChanges(false);
+    } catch (err) {
+      console.error("Failed to reset server state:", err);
+    }
   };
 
-  // --- Member Actions ---
+  // Import full JSON backup
+  const importFullBackup = async (backup: any): Promise<boolean> => {
+    try {
+      if (backup.facultyIncharge) setFacultyIncharge(backup.facultyIncharge);
+      if (backup.secretaries) setSecretaries(backup.secretaries);
+      if (backup.jointSecretaries) setJointSecretaries(backup.jointSecretaries);
+      if (backup.coreContributors) setCoreContributors(backup.coreContributors);
+      if (backup.upcomingEvents) setUpcomingEvents(backup.upcomingEvents);
+      if (backup.projects) setProjects(backup.projects);
+      if (backup.workshopGallery) setWorkshopGallery(backup.workshopGallery);
+
+      setHasUnsavedChanges(true);
+      return true;
+    } catch (err) {
+      console.error("Failed to parse backup:", err);
+      return false;
+    }
+  };
+
+  // --- Team Actions ---
   const addMember = (member: TeamMember) => {
+    setHasUnsavedChanges(true);
     if (member.tier === "faculty") {
       setFacultyIncharge(member);
     } else if (member.tier === "secretary") {
@@ -182,6 +227,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
   };
 
   const updateMember = (id: string, updated: Partial<TeamMember>) => {
+    setHasUnsavedChanges(true);
     if (facultyIncharge.id === id) {
       setFacultyIncharge((prev) => ({ ...prev, ...updated }));
       return;
@@ -198,6 +244,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
   };
 
   const deleteMember = (id: string) => {
+    setHasUnsavedChanges(true);
     setSecretaries((prev) => prev.filter((m) => m.id !== id));
     setJointSecretaries((prev) => prev.filter((m) => m.id !== id));
     setCoreContributors((prev) => prev.filter((m) => m.id !== id));
@@ -205,32 +252,56 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
 
   // --- Event Actions ---
   const addEvent = (event: EventItem) => {
+    setHasUnsavedChanges(true);
     setUpcomingEvents((prev) => [event, ...prev]);
   };
 
   const updateEvent = (id: string, updated: Partial<EventItem>) => {
+    setHasUnsavedChanges(true);
     setUpcomingEvents((prev) =>
       prev.map((e) => (e.id === id ? { ...e, ...updated } : e))
     );
   };
 
   const deleteEvent = (id: string) => {
+    setHasUnsavedChanges(true);
     setUpcomingEvents((prev) => prev.filter((e) => e.id !== id));
   };
 
   // --- Project Actions ---
   const addProject = (project: Project) => {
+    setHasUnsavedChanges(true);
     setProjects((prev) => [project, ...prev]);
   };
 
   const updateProject = (id: string, updated: Partial<Project>) => {
+    setHasUnsavedChanges(true);
     setProjects((prev) =>
       prev.map((p) => (p.id === id ? { ...p, ...updated } : p))
     );
   };
 
   const deleteProject = (id: string) => {
+    setHasUnsavedChanges(true);
     setProjects((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  // --- Gallery Actions ---
+  const addGalleryItem = (item: WorkshopMediaItem) => {
+    setHasUnsavedChanges(true);
+    setWorkshopGallery((prev) => [item, ...prev]);
+  };
+
+  const updateGalleryItem = (id: string, updated: Partial<WorkshopMediaItem>) => {
+    setHasUnsavedChanges(true);
+    setWorkshopGallery((prev) =>
+      prev.map((g) => (g.id === id ? { ...g, ...updated } : g))
+    );
+  };
+
+  const deleteGalleryItem = (id: string) => {
+    setHasUnsavedChanges(true);
+    setWorkshopGallery((prev) => prev.filter((g) => g.id !== id));
   };
 
   return (
@@ -242,6 +313,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
         coreContributors,
         upcomingEvents,
         projects,
+        workshopGallery,
         addMember,
         updateMember,
         deleteMember,
@@ -251,11 +323,16 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
         addProject,
         updateProject,
         deleteProject,
+        addGalleryItem,
+        updateGalleryItem,
+        deleteGalleryItem,
         saveChanges,
         resetToDefaults,
+        importFullBackup,
         isSaving,
         lastSaved,
         cloudConnected,
+        hasUnsavedChanges,
       }}
     >
       {children}

@@ -8,6 +8,7 @@ import {
   coreContributors,
   upcomingEvents,
   projects,
+  workshopGallery,
 } from "@/data/siteData";
 import { isSupabaseConfigured, getSupabaseServerClient } from "@/lib/supabase";
 
@@ -20,6 +21,7 @@ interface SiteContentPayload {
   coreContributors?: typeof coreContributors;
   upcomingEvents?: typeof upcomingEvents;
   projects?: typeof projects;
+  workshopGallery?: typeof workshopGallery;
   lastUpdated?: string;
   cloudConnected?: boolean;
 }
@@ -75,6 +77,7 @@ export async function GET() {
       coreContributors,
       upcomingEvents,
       projects,
+      workshopGallery,
       lastUpdated: new Date().toISOString(),
       cloudConnected: isCloud,
     };
@@ -90,6 +93,7 @@ export async function GET() {
         coreContributors,
         upcomingEvents,
         projects,
+        workshopGallery,
         cloudConnected: isCloud,
       },
       { status: 200 }
@@ -133,7 +137,6 @@ export async function POST(request: Request) {
         "utf-8"
       );
     } catch (fsErr) {
-      // In read-only serverless environments like Vercel, fs.writeFile might throw
       console.warn("Local filesystem write skipped/failed:", fsErr);
     }
 

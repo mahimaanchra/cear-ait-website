@@ -10,7 +10,8 @@ import {
   ChevronRight,
   Camera,
 } from "lucide-react";
-import { workshopGallery, WorkshopMediaItem } from "@/data/siteData";
+import { workshopGallery as defaultGallery, WorkshopMediaItem } from "@/data/siteData";
+import { useSiteContent } from "@/context/SiteContentContext";
 import { WordBlurReveal } from "@/components/ui/WordBlurReveal";
 
 const categories = [
@@ -22,14 +23,17 @@ const categories = [
 ];
 
 export function WorkshopAndLab() {
+  const { workshopGallery } = useSiteContent();
+  const currentGallery = workshopGallery && workshopGallery.length > 0 ? workshopGallery : defaultGallery;
+
   const [activeCategory, setActiveCategory] = useState("All Photos");
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
   // Filter gallery items
   const filteredPhotos =
     activeCategory === "All Photos"
-      ? workshopGallery
-      : workshopGallery.filter((item) => item.category === activeCategory);
+      ? currentGallery
+      : currentGallery.filter((item) => item.category === activeCategory);
 
   // Keyboard navigation for Lightbox
   useEffect(() => {
