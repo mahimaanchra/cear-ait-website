@@ -69,13 +69,13 @@ export function EventSpotlightCard({ onOpenRegister }: EventSpotlightCardProps) 
   };
 
   return (
-    <div className="w-full max-w-md bg-white border border-[#0d1321]/[0.08] rounded-3xl shadow-[0_15px_40px_-15px_rgba(13,19,33,0.06)] overflow-hidden flex flex-col justify-between font-body">
+    <div className="w-full max-w-md bg-white border border-[#240d2b]/[0.08] rounded-3xl shadow-[0_15px_40px_-15px_rgba(36,13,43,0.06)] overflow-hidden flex flex-col justify-between font-body">
       {/* Top Banner Accent */}
-      <div className="h-1.5 w-full bg-[#0d1321]" />
+      <div className="h-1.5 w-full bg-[#ff6b35]" />
 
       <div className="p-6 sm:p-7 space-y-4">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono tracking-widest uppercase text-[#0d1321]/50 bg-[#fafaf9] border border-[#0d1321]/[0.08] px-3 py-1 rounded-full">
+          <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/50 bg-[#f6f3ee] border border-[#240d2b]/[0.08] px-3 py-1 rounded-full">
             {activeEvent.category}
           </span>
           <div className="flex gap-1.5">
@@ -83,8 +83,8 @@ export function EventSpotlightCard({ onOpenRegister }: EventSpotlightCardProps) 
               <button
                 key={ev.id}
                 onClick={() => setCurrentIndex(i)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  currentIndex === i ? "bg-[#0d1321] w-4" : "bg-[#0d1321]/20"
+                className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                  currentIndex === i ? "bg-[#ff6b35] w-4" : "bg-[#240d2b]/20"
                 }`}
               />
             ))}
@@ -92,42 +92,42 @@ export function EventSpotlightCard({ onOpenRegister }: EventSpotlightCardProps) 
         </div>
 
         <div>
-          <h3 className="text-xl font-bold font-display text-[#0d1321]">
+          <h3 className="text-xl font-bold font-display text-[#240d2b]">
             {activeEvent.title}
           </h3>
-          <p className="text-xs sm:text-sm text-[#0d1321]/70 mt-1">
+          <p className="text-xs sm:text-sm text-[#240d2b]/70 mt-1">
             {activeEvent.tagline}
           </p>
         </div>
 
-        <div className="space-y-1.5 text-xs font-mono text-[#0d1321]/60">
+        <div className="space-y-1.5 text-xs font-mono text-[#240d2b]/60">
           <p className="flex items-center gap-2">
-            <Calendar className="w-3.5 h-3.5 text-[#0d1321]" />
+            <Calendar className="w-3.5 h-3.5 text-[#ff6b35]" />
             <span>{activeEvent.date}</span>
           </p>
           <p className="flex items-center gap-2">
-            <MapPin className="w-3.5 h-3.5 text-[#0d1321]" />
+            <MapPin className="w-3.5 h-3.5 text-[#ff6b35]" />
             <span>{activeEvent.location}</span>
           </p>
         </div>
 
         <div className="pt-2 flex items-center gap-2">
           {activeEvent.perks.map((p, idx) => (
-            <div key={idx} className="p-2.5 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.06] text-xs font-mono">
-              <span className="text-[#0d1321]/50 block text-[9px]">{p.label}</span>
-              <span className="font-bold text-[#0d1321]">{p.value}</span>
+            <div key={idx} className="p-2.5 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] text-xs font-mono">
+              <span className="text-[#240d2b]/50 block text-[9px]">{p.label}</span>
+              <span className="font-bold text-[#ff6b35]">{p.value}</span>
             </div>
           ))}
         </div>
       </div>
 
       <div className="p-6 pt-0 flex items-center justify-between">
-        <Link href={activeEvent.detailsHref} className="text-xs font-mono text-[#0d1321]/60 hover:text-[#0d1321]">
+        <Link href={activeEvent.detailsHref} className="text-xs font-mono text-[#240d2b]/60 hover:text-[#ff6b35] transition-colors">
           Learn more
         </Link>
         <button
           onClick={handleRegisterClick}
-          className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-medium bg-[#0d1321] text-white hover:bg-[#1a2640] transition-colors"
+          className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-medium bg-[#ff6b35] text-white hover:bg-[#fa5519] transition-colors shadow-[0_2px_10px_rgba(255,107,53,0.3)] cursor-pointer"
         >
           <span>{activeEvent.primaryCtaText}</span>
           <ArrowRight className="w-3.5 h-3.5" />

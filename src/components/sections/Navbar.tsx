@@ -60,7 +60,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-[#fafaf9]/90 backdrop-blur-xl border-b border-[#0d1321]/[0.08] shadow-[0_10px_30px_-10px_rgba(13,19,33,0.05)] py-3"
+            ? "bg-[#f6f3ee]/90 backdrop-blur-xl border-b border-[#240d2b]/[0.08] shadow-[0_10px_30px_-10px_rgba(36,13,43,0.05)] py-3"
             : "bg-transparent py-4"
         }`}
       >
@@ -76,17 +76,17 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
               />
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="font-display text-lg font-black tracking-tight text-[#0d1321]">
+              <span className="font-display text-lg font-black tracking-tight text-[#240d2b]">
                 CEAR
               </span>
-              <span className="text-[10px] font-mono tracking-widest text-[#0d1321]/50 uppercase hidden sm:inline">
+              <span className="text-[10px] font-mono tracking-widest text-[#240d2b]/50 uppercase hidden sm:inline">
                 AIT PUNE
               </span>
             </div>
           </Link>
 
           {/* Middle: Clean Minimal Links */}
-          <nav className="hidden md:flex items-center gap-1 bg-[#ffffff]/80 backdrop-blur-md border border-[#0d1321]/[0.08] rounded-full p-1 shadow-xs">
+          <nav className="hidden md:flex items-center gap-1 bg-[#ffffff]/80 backdrop-blur-md border border-[#240d2b]/[0.08] rounded-full p-1 shadow-xs">
             {navLinks.map((link) => {
               const targetId = link.href.replace("#", "");
               const isActive = activeSection === targetId;
@@ -97,10 +97,10 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                   href={link.href}
                   className={`px-3.5 py-1.5 text-xs font-medium font-body tracking-tight rounded-full transition-all ${
                     isActive
-                      ? "bg-[#0d1321] text-white shadow-xs"
+                      ? "bg-[#240d2b] text-[#f6f3ee] shadow-xs"
                       : link.isFlagship
-                      ? "text-[#0d1321] font-semibold hover:bg-[#0d1321]/[0.05]"
-                      : "text-[#0d1321]/70 hover:text-[#0d1321] hover:bg-[#0d1321]/[0.04]"
+                      ? "text-[#ff6b35] font-semibold hover:bg-[#ff6b35]/[0.08]"
+                      : "text-[#240d2b]/70 hover:text-[#240d2b] hover:bg-[#240d2b]/[0.04]"
                   }`}
                 >
                   {link.name}
@@ -109,12 +109,12 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             })}
           </nav>
 
-          {/* Right: Clean Action Button */}
+          {/* Right: Clean Tangerine Action Button */}
           <div className="hidden sm:flex items-center gap-3">
             {onOpenRegister ? (
               <button
                 onClick={onOpenRegister}
-                className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#0d1321] hover:bg-[#1a2640] px-4 py-2 rounded-full transition-all shadow-xs cursor-pointer hover:shadow-md"
+                className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#ff6b35] hover:bg-[#fa5519] px-4 py-2 rounded-full transition-all shadow-[0_2px_12px_rgba(255,107,53,0.3)] hover:shadow-[0_4px_16px_rgba(255,107,53,0.45)] cursor-pointer"
               >
                 <span>Wartech &apos;26</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -122,7 +122,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             ) : (
               <Link
                 href="#wartech"
-                className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#0d1321] hover:bg-[#1a2640] px-4 py-2 rounded-full transition-all shadow-xs hover:shadow-md"
+                className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#ff6b35] hover:bg-[#fa5519] px-4 py-2 rounded-full transition-all shadow-[0_2px_12px_rgba(255,107,53,0.3)] hover:shadow-[0_4px_16px_rgba(255,107,53,0.45)]"
               >
                 <span>Wartech &apos;26</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -133,7 +133,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl text-[#0d1321] hover:bg-[#0d1321]/[0.06] transition-colors"
+            className="md:hidden p-2 rounded-xl text-[#240d2b] hover:bg-[#240d2b]/[0.06] transition-colors"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -149,7 +149,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-40 bg-[#fafaf9]/95 backdrop-blur-2xl border-b border-[#0d1321]/[0.08] shadow-2xl p-6 md:hidden"
+            className="fixed inset-x-0 top-16 z-40 bg-[#f6f3ee]/95 backdrop-blur-2xl border-b border-[#240d2b]/[0.08] shadow-2xl p-6 md:hidden"
           >
             <nav className="flex flex-col space-y-3">
               {navLinks.map((link) => (
@@ -157,7 +157,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-base font-medium text-[#0d1321] py-2 border-b border-[#0d1321]/[0.06]"
+                  className="text-base font-medium text-[#240d2b] py-2 border-b border-[#240d2b]/[0.06]"
                 >
                   {link.name}
                 </Link>
@@ -169,7 +169,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
                     setMobileMenuOpen(false);
                     onOpenRegister?.();
                   }}
-                  className="w-full text-center py-2.5 text-sm font-medium text-white bg-[#0d1321] rounded-xl"
+                  className="w-full text-center py-2.5 text-sm font-medium text-white bg-[#ff6b35] hover:bg-[#fa5519] rounded-xl shadow-[0_2px_12px_rgba(255,107,53,0.3)]"
                 >
                   Wartech 2026 Registration
                 </button>

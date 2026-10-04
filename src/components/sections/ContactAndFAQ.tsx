@@ -28,14 +28,14 @@ export function ContactAndFAQ() {
     <section id="contact" className="relative py-28 sm:py-36 px-4 sm:px-6 lg:px-8 bg-transparent">
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Section Heading */}
-        <div className="space-y-2 max-w-xl border-b border-[#0d1321]/[0.08] pb-6">
-          <span className="text-xs font-mono tracking-widest uppercase text-[#0d1321]/50">
+        <div className="space-y-2 max-w-xl border-b border-[#240d2b]/[0.08] pb-6">
+          <span className="text-xs font-mono tracking-widest uppercase text-[#240d2b]/50">
             06 // Communications &amp; Queries
           </span>
-          <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-[#0d1321]">
+          <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-[#240d2b]">
             Contact &amp; Frequently Asked
           </h2>
-          <p className="text-sm sm:text-base text-[#0d1321]/70 font-body">
+          <p className="text-sm sm:text-base text-[#240d2b]/70 font-body">
             Get in touch with the CEAR engineering cadre or explore answers to common technical and induction questions.
           </p>
         </div>
@@ -43,23 +43,23 @@ export function ContactAndFAQ() {
         {/* 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Clean Contact Form */}
-          <div className="lg:col-span-6 rounded-3xl bg-white border border-[#0d1321]/[0.08] p-8 sm:p-10 shadow-[0_15px_40px_-15px_rgba(13,19,33,0.04)]">
+          <div className="lg:col-span-6 rounded-3xl bg-white border border-[#240d2b]/[0.08] p-8 sm:p-10 shadow-[0_15px_40px_-15px_rgba(36,13,43,0.04)]">
             {submitted ? (
               <div className="text-center py-12 space-y-4">
-                <div className="w-12 h-12 rounded-full bg-[#fafaf9] text-[#0d1321] border border-[#0d1321]/[0.1] mx-auto flex items-center justify-center font-bold">
-                  <CheckCircle2 className="w-6 h-6 text-[#0d1321]" />
+                <div className="w-12 h-12 rounded-full bg-[#f6f3ee] text-[#ff6b35] border border-[#ff6b35]/20 mx-auto flex items-center justify-center font-bold">
+                  <CheckCircle2 className="w-6 h-6 text-[#ff6b35]" />
                 </div>
-                <h4 className="font-display text-2xl text-[#0d1321] font-bold">
+                <h4 className="font-display text-2xl text-[#240d2b] font-bold">
                   Message Sent
                 </h4>
-                <p className="text-sm text-[#0d1321]/70 font-body max-w-sm mx-auto">
+                <p className="text-sm text-[#240d2b]/70 font-body max-w-sm mx-auto">
                   Thank you for reaching out. The CEAR team will respond to your inquiry shortly.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5 font-body text-xs">
                 <div>
-                  <label className="font-mono text-xs text-[#0d1321] font-bold block mb-1.5 uppercase">
+                  <label className="font-mono text-xs text-[#240d2b] font-bold block mb-1.5 uppercase">
                     Your Full Name
                   </label>
                   <input
@@ -68,12 +68,12 @@ export function ContactAndFAQ() {
                     value={contactData.name}
                     onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
                     placeholder="Your name"
-                    className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
+                    className="w-full px-4 py-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all placeholder:text-[#240d2b]/30"
                   />
                 </div>
 
                 <div>
-                  <label className="font-mono text-xs text-[#0d1321] font-bold block mb-1.5 uppercase">
+                  <label className="font-mono text-xs text-[#240d2b] font-bold block mb-1.5 uppercase">
                     Email Address
                   </label>
                   <input
@@ -82,18 +82,18 @@ export function ContactAndFAQ() {
                     value={contactData.email}
                     onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
                     placeholder="name@example.com"
-                    className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all placeholder:text-[#0d1321]/30"
+                    className="w-full px-4 py-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all placeholder:text-[#240d2b]/30"
                   />
                 </div>
 
                 <div>
-                  <label className="font-mono text-xs text-[#0d1321] font-bold block mb-1.5 uppercase">
+                  <label className="font-mono text-xs text-[#240d2b] font-bold block mb-1.5 uppercase">
                     Topic of Inquiry
                   </label>
                   <select
                     value={contactData.subject}
                     onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all"
                   >
                     <option value="Induction Query">Club Induction &amp; Recruitment</option>
                     <option value="Wartech 2026 Registration">Wartech 2026 Registration</option>
@@ -103,7 +103,7 @@ export function ContactAndFAQ() {
                 </div>
 
                 <div>
-                  <label className="font-mono text-xs text-[#0d1321] font-bold block mb-1.5 uppercase">
+                  <label className="font-mono text-xs text-[#240d2b] font-bold block mb-1.5 uppercase">
                     Message
                   </label>
                   <textarea
@@ -112,13 +112,13 @@ export function ContactAndFAQ() {
                     value={contactData.message}
                     onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
                     placeholder="How can we help you?"
-                    className="w-full px-4 py-3 rounded-xl bg-[#fafaf9] border border-[#0d1321]/[0.08] text-[#0d1321] font-body text-sm focus:border-[#0d1321] focus:bg-white focus:outline-none transition-all resize-none placeholder:text-[#0d1321]/30"
+                    className="w-full px-4 py-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all resize-none placeholder:text-[#240d2b]/30"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-full text-sm font-medium font-body bg-[#0d1321] text-white hover:bg-[#1a2640] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full py-3.5 px-6 rounded-full text-sm font-medium font-body bg-[#ff6b35] text-white hover:bg-[#fa5519] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(255,107,53,0.3)] hover:shadow-[0_6px_20px_rgba(255,107,53,0.45)]"
                 >
                   <Send className="w-4 h-4" />
                   <span>Send Message</span>
@@ -134,17 +134,19 @@ export function ContactAndFAQ() {
               return (
                 <div
                   key={idx}
-                  className="rounded-2xl bg-white border border-[#0d1321]/[0.08] overflow-hidden transition-all shadow-xs"
+                  className={`rounded-2xl bg-white border transition-all shadow-xs ${
+                    isOpen ? "border-[#ff6b35]/40" : "border-[#240d2b]/[0.08]"
+                  }`}
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
                     className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                   >
-                    <span className="font-display text-base sm:text-lg font-bold text-[#0d1321]">
+                    <span className="font-display text-base sm:text-lg font-bold text-[#240d2b]">
                       {faq.question}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-[#0d1321] shrink-0 transition-transform duration-300 ${
+                      className={`w-4 h-4 text-[#ff6b35] shrink-0 transition-transform duration-300 ${
                         isOpen ? "rotate-180" : ""
                       }`}
                     />
@@ -159,7 +161,7 @@ export function ContactAndFAQ() {
                         transition={{ duration: 0.25 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-6 pb-6 pt-1 text-xs sm:text-sm text-[#0d1321]/70 font-body leading-relaxed border-t border-[#0d1321]/[0.04]">
+                        <div className="px-6 pb-6 pt-1 text-xs sm:text-sm text-[#240d2b]/70 font-body leading-relaxed border-t border-[#240d2b]/[0.04]">
                           {faq.answer}
                         </div>
                       </motion.div>

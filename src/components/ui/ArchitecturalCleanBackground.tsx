@@ -11,14 +11,14 @@ export function ArchitecturalCleanBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#fafaf9]">
-      {/* 1. Very subtle soft top ambient radiant glow (Celvia style) */}
-      <div className="absolute top-0 inset-x-0 h-[45vh] bg-gradient-to-b from-[#eaff66]/20 via-[#f4ffaa]/08 to-transparent opacity-70 pointer-events-none" />
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#f6f3ee]">
+      {/* 1. Very subtle soft top ambient radiant glow (Radiant Tangerine) */}
+      <div className="absolute top-0 inset-x-0 h-[45vh] bg-gradient-to-b from-[#ff6b35]/15 via-[#ffa278]/06 to-transparent opacity-75 pointer-events-none" />
 
-      {/* 2. Architectural Blueprint Vector Lines (inFaces style) */}
+      {/* 2. Architectural Blueprint Vector Lines (Royal Plum) */}
       {mounted && (
         <svg
-          className="absolute inset-0 w-full h-full text-[#0d1321]/[0.045]"
+          className="absolute inset-0 w-full h-full text-[#240d2b]/[0.05]"
           xmlns="http://www.w3.org/2000/svg"
         >
           {/* Subtle 50% Horizontal Datum Line */}
@@ -92,7 +92,7 @@ export function ArchitecturalCleanBackground() {
       <div
         className="absolute inset-0 opacity-[0.025] pointer-events-none"
         style={{
-          backgroundImage: `radial-gradient(#0d1321 0.75px, transparent 0.75px)`,
+          backgroundImage: `radial-gradient(#240d2b 0.75px, transparent 0.75px)`,
           backgroundSize: "24px 24px",
         }}
       />

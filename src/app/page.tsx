@@ -31,7 +31,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafaf9] text-[#0d1321] font-body selection:bg-[#dcf836] selection:text-[#0d1321] relative overflow-hidden">
+    <div className="min-h-screen bg-[#f6f3ee] text-[#240d2b] font-body selection:bg-[#ff6b35] selection:text-white relative overflow-hidden">
       {/* Architectural Clean Vector Blueprint & Ambient Glow Background */}
       <ArchitecturalCleanBackground />
 

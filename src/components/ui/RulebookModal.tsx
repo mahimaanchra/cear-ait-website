@@ -48,16 +48,16 @@ Official Queries: cear@aitpune.edu.in
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0d1321]/60 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#240d2b]/70 backdrop-blur-md overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="relative w-full max-w-2xl bg-white border border-[#0d1321]/[0.1] rounded-3xl p-6 sm:p-10 shadow-2xl my-8 overflow-hidden max-h-[85vh] flex flex-col justify-between"
+        className="relative w-full max-w-2xl bg-white border border-[#240d2b]/[0.1] rounded-3xl p-6 sm:p-10 shadow-2xl my-8 overflow-hidden max-h-[85vh] flex flex-col justify-between"
       >
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-full text-[#0d1321]/50 hover:text-[#0d1321] hover:bg-[#0d1321]/[0.05] transition-colors cursor-pointer"
+          className="absolute top-6 right-6 p-2 rounded-full text-[#240d2b]/50 hover:text-[#240d2b] hover:bg-[#240d2b]/[0.05] transition-colors cursor-pointer"
           aria-label="Close"
         >
           <X className="w-5 h-5" />
@@ -65,56 +65,56 @@ Official Queries: cear@aitpune.edu.in
 
         <div className="overflow-y-auto pr-2 space-y-6">
           <div className="space-y-1">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-[#0d1321]/50">
+            <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] font-semibold">
               Official Directive Manual
             </span>
-            <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#0d1321]">
+            <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#240d2b]">
               Wartech 2026 Regulations
             </h3>
           </div>
 
-          <div className="space-y-4 text-xs font-body text-[#0d1321]/80 leading-relaxed">
-            <div className="p-5 rounded-2xl bg-[#fafaf9] border border-[#0d1321]/[0.06] space-y-1.5">
-              <span className="font-bold text-[#0d1321] block font-display text-sm">
+          <div className="space-y-4 text-xs font-body text-[#240d2b]/80 leading-relaxed">
+            <div className="p-5 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1.5">
+              <span className="font-bold text-[#240d2b] block font-display text-sm">
                 1. General Participation Directives
               </span>
-              <p className="text-xs text-[#0d1321]/70">
+              <p className="text-xs text-[#240d2b]/70">
                 All tracks are open to undergraduate college students. Valid student ID card is mandatory at the AIT campus gate. Teams can register up to 4 members per entry.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#fafaf9] border border-[#0d1321]/[0.06] space-y-1.5">
-              <span className="font-bold text-[#0d1321] block font-display text-sm">
+            <div className="p-5 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1.5">
+              <span className="font-bold text-[#240d2b] block font-display text-sm">
                 2. Power &amp; Mechanical Constraints
               </span>
-              <p className="text-xs text-[#0d1321]/70">
+              <p className="text-xs text-[#240d2b]/70">
                 Maximum battery rating permitted is 4S LiPo (16.8V max fully charged). All fighting and racing robots must feature an easily accessible physical master power kill-switch.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#fafaf9] border border-[#0d1321]/[0.06] space-y-1.5">
-              <span className="font-bold text-[#0d1321] block font-display text-sm">
+            <div className="p-5 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1.5">
+              <span className="font-bold text-[#240d2b] block font-display text-sm">
                 3. Safety &amp; Disqualification
               </span>
-              <p className="text-xs text-[#0d1321]/70">
+              <p className="text-xs text-[#240d2b]/70">
                 Any weapon releasing untethered projectiles, flammable liquids, or hazardous chemicals will cause immediate disqualification and forfeiture.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="pt-6 mt-6 border-t border-[#0d1321]/[0.08] flex items-center justify-between">
+        <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.08] flex items-center justify-between">
           <button
             onClick={handleDownload}
-            className="inline-flex items-center gap-2 text-xs font-mono font-medium text-[#0d1321] hover:underline"
+            className="inline-flex items-center gap-2 text-xs font-mono font-medium text-[#240d2b] hover:text-[#ff6b35] transition-colors"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3.5 h-3.5 text-[#ff6b35]" />
             <span>Download Full TXT Rulebook</span>
           </button>
 
           <button
             onClick={onClose}
-            className="py-2.5 px-6 rounded-full text-xs font-medium bg-[#0d1321] text-white hover:bg-[#1a2640] transition-colors cursor-pointer"
+            className="py-2.5 px-6 rounded-full text-xs font-medium bg-[#ff6b35] text-white hover:bg-[#fa5519] transition-colors cursor-pointer shadow-[0_2px_10px_rgba(255,107,53,0.3)]"
           >
             Acknowledge &amp; Close
           </button>

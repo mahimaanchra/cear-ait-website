@@ -10,19 +10,44 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Plum Purple, Warm Oat, and Radiant Tangerine Theme Tokens
+        plum: {
+          DEFAULT: "#240d2b",
+          deep: "#18071e",
+          dark: "#240d2b",
+          light: "#3b1646",
+          soft: "rgba(36, 13, 43, 0.06)",
+          border: "rgba(36, 13, 43, 0.08)",
+        },
+        oat: {
+          DEFAULT: "#f6f3ee",
+          canvas: "#f6f3ee",
+          surface: "#fcfbf8",
+          card: "#ffffff",
+          hover: "#f0ebe1",
+          muted: "#eae2d5",
+          border: "#dfd5c4",
+        },
+        tangerine: {
+          DEFAULT: "#ff6b35",
+          hover: "#fa5519",
+          light: "#ff8c5a",
+          soft: "rgba(255, 107, 53, 0.16)",
+          glow: "rgba(255, 107, 53, 0.35)",
+        },
         // Dark Sci-Fi Autonomous Theme Tokens (Aliased to seamlessly transition existing components)
         paper: {
-          DEFAULT: "#060911", // Deep obsidian background
-          card: "#0d1424",    // Translucent dark glass
-          subtle: "#111a2e",  // Elevated dark surface
-          muted: "#17233d",   // Border/divider tone
+          DEFAULT: "#f6f3ee",
+          card: "#ffffff",
+          subtle: "#ede5da",
+          muted: "#dfd5c6",
         },
         ink: {
-          DEFAULT: "#f1f5f9", // Crisp bright slate/white
-          pure: "#ffffff",
-          soft: "#cbd5e1",
-          muted: "#94a3b8",
-          border: "rgba(56, 189, 248, 0.22)", // Subtle cyan tech border
+          DEFAULT: "#240d2b",
+          pure: "#18071e",
+          soft: "#5c4760",
+          muted: "#8e7a93",
+          border: "rgba(36, 13, 43, 0.12)",
         },
         // Neon Telemetry & Alert Accents
         alarm: {

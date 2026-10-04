@@ -23,15 +23,15 @@ export function Achievements() {
     <section id="achievements" className="relative py-28 sm:py-36 px-4 sm:px-6 lg:px-8 bg-transparent">
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Section Heading */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-[#0d1321]/[0.08] pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-[#240d2b]/[0.08] pb-6">
           <div className="space-y-2 max-w-xl">
-            <span className="text-xs font-mono tracking-widest uppercase text-[#0d1321]/50">
+            <span className="text-xs font-mono tracking-widest uppercase text-[#240d2b]/50">
               05 // Accolades &amp; Trophies
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-[#0d1321]">
+            <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-[#240d2b]">
               National Track Record
             </h2>
-            <p className="text-sm sm:text-base text-[#0d1321]/70 font-body">
+            <p className="text-sm sm:text-base text-[#240d2b]/70 font-body">
               Championships and podium finishes won by CEAR across national robotics arenas.
             </p>
           </div>
@@ -44,8 +44,8 @@ export function Achievements() {
                 onClick={() => setFilter(cat)}
                 className={`px-4 py-1.5 rounded-full font-medium transition-all cursor-pointer ${
                   filter === cat
-                    ? "bg-[#0d1321] text-white shadow-xs"
-                    : "bg-white text-[#0d1321]/70 border border-[#0d1321]/[0.08] hover:border-[#0d1321]/20 hover:text-[#0d1321]"
+                    ? "bg-[#240d2b] text-[#f6f3ee] shadow-xs"
+                    : "bg-white text-[#240d2b]/70 border border-[#240d2b]/[0.08] hover:border-[#ff6b35]/40 hover:text-[#240d2b]"
                 }`}
               >
                 {cat === "ALL" ? "All" : cat === "PODIUM" ? "Podiums" : "Finalists"}
@@ -64,35 +64,35 @@ export function Achievements() {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
               whileHover={{ y: -5 }}
-              className="p-8 rounded-3xl bg-white border border-[#0d1321]/[0.08] shadow-[0_15px_40px_-15px_rgba(13,19,33,0.03)] hover:shadow-[0_20px_50px_-15px_rgba(13,19,33,0.07)] hover:border-[#0d1321]/20 transition-all flex flex-col justify-between"
+              className="p-8 rounded-3xl bg-white border border-[#240d2b]/[0.08] shadow-[0_15px_40px_-15px_rgba(36,13,43,0.03)] hover:shadow-[0_20px_50px_-15px_rgba(36,13,43,0.07)] hover:border-[#ff6b35]/35 transition-all flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-[#0d1321] bg-[#fafaf9] border border-[#0d1321]/[0.08] px-3 py-1 rounded-full">
+                  <span className="text-xs font-mono font-bold text-[#ff6b35] bg-[#ff6b35]/10 border border-[#ff6b35]/20 px-3 py-1 rounded-full">
                     {item.rank}
                   </span>
-                  <span className="font-mono text-xs text-[#0d1321]/40">
+                  <span className="font-mono text-xs text-[#240d2b]/40">
                     {item.year}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-display text-xl font-bold text-[#0d1321] tracking-tight">
+                  <h3 className="font-display text-xl font-bold text-[#240d2b] tracking-tight">
                     {item.event}
                   </h3>
-                  <p className="font-mono text-xs text-[#0d1321]/60 mt-1">
+                  <p className="font-mono text-xs text-[#240d2b]/60 mt-1">
                     {item.institution}
                   </p>
                 </div>
 
-                <p className="font-body text-xs sm:text-sm text-[#0d1321]/70 leading-relaxed">
+                <p className="font-body text-xs sm:text-sm text-[#240d2b]/70 leading-relaxed">
                   {item.description}
                 </p>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-[#0d1321]/[0.06] flex items-center justify-between text-xs font-mono text-[#0d1321]/50">
+              <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.06] flex items-center justify-between text-xs font-mono text-[#240d2b]/50">
                 <span className="uppercase text-[10px] tracking-wider">{item.category}</span>
-                <Trophy className="w-4 h-4 text-[#0d1321]" />
+                <Trophy className="w-4 h-4 text-[#ff6b35]" />
               </div>
             </motion.div>
           ))}

@@ -6,38 +6,55 @@
 
 :root {
   /* =========================================================================
-     CELVIA & INFACES MINIMALIST DESIGN TOKENS
-     Pure Off-White Canvas with CEAR Logo Dark Navy & Volt Lime
+     PLUM PURPLE, WARM OAT & RADIANT TANGERINE DESIGN TOKENS
+     Warm Oat Linen Base with Royal Plum Typography and Electric Tangerine Accents
      ========================================================================= */
-  --bg-base: #fafaf9;
+  --bg-base: #f6f3ee;
   --bg-surface: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #fafaf9;
+  --bg-card-hover: #fcfbf8;
 
-  --navy: #0d1321;
-  --navy-dark: #070b14;
-  --navy-light: #1a2640;
-  --navy-soft: rgba(13, 19, 33, 0.05);
+  /* Plum Purple Palette */
+  --plum: #240d2b;
+  --plum-dark: #18071e;
+  --plum-light: #3b1646;
+  --plum-soft: rgba(36, 13, 43, 0.06);
 
-  --lime: #dcf836;
-  --lime-hover: #c9e828;
-  --lime-soft: rgba(220, 248, 54, 0.2);
+  /* Radiant Tangerine Palette */
+  --tangerine: #ff6b35;
+  --tangerine-hover: #fa5519;
+  --tangerine-soft: rgba(255, 107, 53, 0.16);
 
-  --border-subtle: rgba(13, 19, 33, 0.08);
-  --border-medium: rgba(13, 19, 33, 0.16);
+  /* Warm Oat Palette */
+  --oat: #f6f3ee;
+  --oat-light: #fcfbf8;
+  --oat-muted: #eae2d5;
+  --oat-border: #dfd5c4;
 
-  --text-primary: #0d1321;
-  --text-secondary: #4b556b;
-  --text-muted: #808c9f;
+  --border-subtle: rgba(36, 13, 43, 0.08);
+  --border-medium: rgba(36, 13, 43, 0.16);
 
-  /* Aliased Legacy Tokens to Guarantee Flawless Rendering */
-  --paper: #fafaf9;
+  --text-primary: #240d2b;
+  --text-secondary: #5c4760;
+  --text-muted: #8e7a93;
+
+  /* Aliased Legacy Tokens to Guarantee Flawless Rendering Across All Components */
+  --navy: #240d2b;
+  --navy-dark: #18071e;
+  --navy-light: #3b1646;
+  --navy-soft: rgba(36, 13, 43, 0.06);
+
+  --lime: #ff6b35;
+  --lime-hover: #fa5519;
+  --lime-soft: rgba(255, 107, 53, 0.18);
+
+  --paper: #f6f3ee;
   --paper-card: #ffffff;
-  --paper-subtle: #f4f4f2;
-  --paper-muted: #e5e5e2;
-  --ink: #0d1321;
-  --ink-pure: #000000;
-  --ink-muted: #64748b;
+  --paper-subtle: #ede5da;
+  --paper-muted: #dfd5c6;
+  --ink: #240d2b;
+  --ink-pure: #18071e;
+  --ink-muted: #6b5670;
 
   --display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --body: 'Space Grotesk', 'Inter', system-ui, sans-serif;
@@ -60,8 +77,8 @@ body {
 }
 
 ::selection {
-  background: var(--lime);
-  color: #0d1321;
+  background: var(--tangerine);
+  color: #ffffff;
 }
 
 /* Custom Sleek Scrollbar */
@@ -70,17 +87,17 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #fafaf9;
-  border-left: 1px solid rgba(13, 19, 33, 0.06);
+  background: #f6f3ee;
+  border-left: 1px solid rgba(36, 13, 43, 0.06);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(13, 19, 33, 0.2);
+  background: rgba(36, 13, 43, 0.2);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(13, 19, 33, 0.4);
+  background: var(--tangerine);
 }
 
 /* Typography Utilities */
@@ -111,14 +128,14 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: 1.5rem;
-  box-shadow: 0 10px 30px -10px rgba(13, 19, 33, 0.04);
+  box-shadow: 0 10px 30px -10px rgba(36, 13, 43, 0.04);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .clean-card:hover,
 .cyber-card:hover {
-  border-color: rgba(13, 19, 33, 0.2);
-  box-shadow: 0 20px 40px -15px rgba(13, 19, 33, 0.08);
+  border-color: rgba(36, 13, 43, 0.2);
+  box-shadow: 0 20px 40px -15px rgba(36, 13, 43, 0.08);
   transform: translateY(-2px);
 }
 
@@ -132,24 +149,24 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: #0d1321;
+  background: #240d2b;
   color: #ffffff;
   font-family: var(--body);
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
-  border: 1px solid #0d1321;
-  box-shadow: 0 2px 10px rgba(13, 19, 33, 0.1);
+  border: 1px solid #240d2b;
+  box-shadow: 0 2px 10px rgba(36, 13, 43, 0.12);
   transition: all 0.25s ease;
   cursor: pointer;
 }
 
 .cyber-btn-primary:hover,
 .paper-btn-primary:hover {
-  background: #1a2640;
-  border-color: #1a2640;
-  box-shadow: 0 6px 20px rgba(13, 19, 33, 0.18);
+  background: #3b1646;
+  border-color: #3b1646;
+  box-shadow: 0 6px 20px rgba(36, 13, 43, 0.18);
   transform: translateY(-1px);
 }
 
@@ -160,45 +177,49 @@ body {
   justify-content: center;
   gap: 0.5rem;
   background: #ffffff;
-  color: #0d1321;
+  color: #240d2b;
   font-family: var(--body);
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
-  border: 1px solid rgba(13, 19, 33, 0.15);
-  box-shadow: 0 2px 8px rgba(13, 19, 33, 0.03);
+  border: 1px solid rgba(36, 13, 43, 0.15);
+  box-shadow: 0 2px 8px rgba(36, 13, 43, 0.03);
   transition: all 0.25s ease;
   cursor: pointer;
 }
 
 .cyber-btn-secondary:hover,
 .paper-btn-secondary:hover {
-  background: #fafaf9;
-  border-color: rgba(13, 19, 33, 0.3);
-  box-shadow: 0 4px 15px rgba(13, 19, 33, 0.08);
+  background: #f6f3ee;
+  border-color: rgba(36, 13, 43, 0.3);
+  box-shadow: 0 4px 15px rgba(36, 13, 43, 0.08);
 }
 
-.cyber-btn-crimson {
+.cyber-btn-crimson,
+.btn-tangerine {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: #0d1321;
+  background: #ff6b35;
   color: #ffffff;
   font-family: var(--body);
   font-size: 0.875rem;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
-  border: 1px solid #0d1321;
-  box-shadow: 0 2px 10px rgba(13, 19, 33, 0.1);
+  border: 1px solid #ff6b35;
+  box-shadow: 0 4px 14px rgba(255, 107, 53, 0.3);
   transition: all 0.25s ease;
   cursor: pointer;
 }
 
-.cyber-btn-crimson:hover {
-  background: #1a2640;
+.cyber-btn-crimson:hover,
+.btn-tangerine:hover {
+  background: #fa5519;
+  border-color: #fa5519;
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.45);
   transform: translateY(-1px);
 }
 
