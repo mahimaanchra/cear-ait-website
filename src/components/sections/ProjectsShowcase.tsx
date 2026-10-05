@@ -7,13 +7,23 @@ import { Github, ExternalLink, ArrowRight, X, ArrowUpRight } from "lucide-react"
 import { Project } from "@/data/siteData";
 import { useSiteContent } from "@/context/SiteContentContext";
 
+const categories = ["All Platforms", "Autonomous", "Manipulation", "Aquatics", "Robotics", "Aerial"];
+
 export function ProjectsShowcase() {
   const { projects } = useSiteContent();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeCategory, setActiveCategory] = useState("All Platforms");
+
+  const filteredProjects =
+    activeCategory === "All Platforms"
+      ? projects
+      : projects.filter(
+          (p) => p.category.toLowerCase() === activeCategory.toLowerCase()
+        );
 
   return (
     <section id="projects" className="relative py-28 sm:py-36 bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#240d2b]/[0.08] pb-6">
           <div className="space-y-2 max-w-2xl">
@@ -29,89 +39,122 @@ export function ProjectsShowcase() {
           </div>
 
           <div className="text-xs font-mono text-[#240d2b]/60 px-4 py-2 rounded-full bg-white border border-[#240d2b]/[0.08] shadow-xs shrink-0">
-            <span className="font-bold text-[#ff6b35]">{projects.length}</span> Active Platforms
+            <span className="font-bold text-[#ff6b35]">{filteredProjects.length}</span> of {projects.length} Platforms
           </div>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.06 }}
-              whileHover={{ y: -6 }}
-              className="group p-8 rounded-3xl bg-white border border-[#240d2b]/[0.08] shadow-[0_15px_40px_-15px_rgba(36,13,43,0.04)] hover:shadow-[0_25px_60px_-15px_rgba(36,13,43,0.08)] hover:border-[#ff6b35]/35 transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-5">
-                {project.imageUrl && (
-                  <div className="relative w-full h-44 rounded-2xl overflow-hidden bg-[#f6f3ee] border border-[#240d2b]/[0.08] mb-2">
-                    <Image
-                      src={project.imageUrl}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      unoptimized={project.imageUrl.startsWith("http")}
-                    />
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/60 bg-[#f6f3ee] border border-[#240d2b]/[0.08] px-3 py-1 rounded-full">
-                    {project.category}
-                  </span>
-                  <span className="text-[10px] font-mono font-medium text-[#240d2b]/50">
-                    {project.status}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="text-2xl font-bold font-display text-[#240d2b] tracking-tight group-hover:text-[#ff6b35] transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-[#240d2b]/65 font-body leading-relaxed mt-2.5">
-                    {project.description}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-[#f6f3ee] border border-[#240d2b]/[0.06] text-[#240d2b]/70"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.06] flex items-center justify-between">
-                <button
-                  onClick={() => setSelectedProject(project)}
-                  className="text-xs font-mono font-medium text-[#240d2b] hover:text-[#ff6b35] flex items-center gap-1 cursor-pointer transition-colors"
-                >
-                  <span>View Specifications</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
-
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 rounded-full text-[#240d2b]/50 hover:text-[#ff6b35] hover:bg-[#ff6b35]/[0.08] transition-colors"
-                    title="Source Repository"
-                  >
-                    <Github className="w-4 h-4" />
-                  </a>
-                )}
-              </div>
-            </motion.div>
-          ))}
+        {/* Category Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2">
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`text-xs font-mono px-4 py-2 rounded-full transition-all cursor-pointer ${
+                  isActive
+                    ? "bg-[#240d2b] text-white shadow-xs font-semibold"
+                    : "bg-white text-[#240d2b]/70 border border-[#240d2b]/[0.08] hover:border-[#ff6b35]/40 hover:text-[#ff6b35]"
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
+
+        {/* Projects Grid or Empty State */}
+        {filteredProjects.length === 0 ? (
+          <div className="text-center py-16 px-4 rounded-3xl bg-white border border-[#240d2b]/[0.08] space-y-3">
+            <p className="font-display text-lg font-bold text-[#240d2b]">No platforms found in this domain.</p>
+            <p className="text-xs font-mono text-[#240d2b]/60">Select another filter or view all platforms.</p>
+            <button
+              onClick={() => setActiveCategory("All Platforms")}
+              className="text-xs font-mono font-semibold text-[#ff6b35] hover:underline cursor-pointer"
+            >
+              Reset Filter
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProjects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.06 }}
+                whileHover={{ y: -6 }}
+                className="group p-8 rounded-3xl bg-white border border-[#240d2b]/[0.08] shadow-[0_15px_40px_-15px_rgba(36,13,43,0.04)] hover:shadow-[0_25px_60px_-15px_rgba(36,13,43,0.08)] hover:border-[#ff6b35]/35 transition-all flex flex-col justify-between"
+              >
+                <div className="space-y-5">
+                  {project.imageUrl && (
+                    <div className="relative w-full h-44 rounded-2xl overflow-hidden bg-[#f6f3ee] border border-[#240d2b]/[0.08] mb-2">
+                      <Image
+                        src={project.imageUrl}
+                        alt={project.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        unoptimized={project.imageUrl.startsWith("http")}
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/60 bg-[#f6f3ee] border border-[#240d2b]/[0.08] px-3 py-1 rounded-full">
+                      {project.category}
+                    </span>
+                    <span className="text-[10px] font-mono font-medium text-[#240d2b]/50">
+                      {project.status}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-2xl font-bold font-display text-[#240d2b] tracking-tight group-hover:text-[#ff6b35] transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#240d2b]/65 font-body leading-relaxed mt-2.5">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-[#f6f3ee] border border-[#240d2b]/[0.06] text-[#240d2b]/70"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.06] flex items-center justify-between">
+                  <button
+                    onClick={() => setSelectedProject(project)}
+                    className="text-xs font-mono font-medium text-[#240d2b] hover:text-[#ff6b35] flex items-center gap-1 cursor-pointer transition-colors"
+                  >
+                    <span>View Specifications</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-full text-[#240d2b]/50 hover:text-[#ff6b35] hover:bg-[#ff6b35]/[0.08] transition-colors"
+                      title="Source Repository"
+                    >
+                      <Github className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Project Spec Modal */}
