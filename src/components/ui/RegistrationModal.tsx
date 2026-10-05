@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
-import { X, CheckCircle2, ArrowRight } from "lucide-react";
+import { X, CheckCircle2, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { wartechTracks } from "@/data/siteData";
 
 interface RegistrationModalProps {
@@ -37,6 +37,9 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
     teamSize: "3 Members",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   useEffect(() => {
     if (initialTrack) {
       setActiveTab("wartech");
@@ -44,27 +47,67 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
     }
   }, [initialTrack]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const generatedId = `CEAR-${activeTab === "wartech" ? "WT" : "IND"}-${Math.floor(
-      100000 + Math.random() * 900000
-    )}`;
-    setRegId(generatedId);
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const payload =
+      activeTab === "wartech"
+        ? {
+            registration_type: "wartech",
+            applicant_name: wartechData.leadName,
+            email: wartechData.email,
+            phone: wartechData.phone,
+            track_or_domain: wartechData.trackId,
+            team_name: wartechData.teamName,
+            team_size: wartechData.teamSize,
+            college: wartechData.college,
+            meta: { trackId: wartechData.trackId },
+          }
+        : {
+            registration_type: "inductions",
+            applicant_name: inductionData.fullName,
+            email: inductionData.email,
+            track_or_domain: inductionData.domain,
+            statement: inductionData.statement,
+            meta: { yearBranch: inductionData.yearBranch },
+          };
 
     try {
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { y: 0.6 },
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-    } catch {
-      // safe fallback
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to submit registration");
+      }
+
+      setRegId(data.id);
+      setIsSubmitted(true);
+
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          origin: { y: 0.6 },
+        });
+      } catch {
+        // safe fallback
+      }
+    } catch (err: any) {
+      setSubmitError(err?.message || "An error occurred while submitting. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleReset = () => {
     setIsSubmitted(false);
+    setSubmitError(null);
     onClose();
   };
 
@@ -211,12 +254,27 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                   />
                 </div>
 
+                {submitError && activeTab === "inductions" && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                    <span>{submitError}</span>
+                  </div>
+                )}
+
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-3.5 px-6 rounded-full text-sm font-medium bg-[#ff6b35] text-white hover:bg-[#fa5519] transition-all cursor-pointer shadow-[0_4px_14px_rgba(255,107,53,0.3)] hover:shadow-[0_6px_20px_rgba(255,107,53,0.45)]"
+                    disabled={isSubmitting}
+                    className="w-full py-3.5 px-6 rounded-full text-sm font-medium bg-[#ff6b35] text-white hover:bg-[#fa5519] disabled:opacity-60 disabled:cursor-not-allowed transition-all cursor-pointer shadow-[0_4px_14px_rgba(255,107,53,0.3)] hover:shadow-[0_6px_20px_rgba(255,107,53,0.45)] flex items-center justify-center gap-2"
                   >
-                    Submit Induction Application
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Submitting Application...</span>
+                      </>
+                    ) : (
+                      <span>Submit Induction Application</span>
+                    )}
                   </button>
                 </div>
               </form>
@@ -316,12 +374,27 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                   />
                 </div>
 
+                {submitError && activeTab === "wartech" && (
+                  <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                    <span>{submitError}</span>
+                  </div>
+                )}
+
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-3.5 px-6 rounded-full text-sm font-medium bg-[#ff6b35] text-white hover:bg-[#fa5519] transition-all cursor-pointer shadow-[0_4px_14px_rgba(255,107,53,0.3)] hover:shadow-[0_6px_20px_rgba(255,107,53,0.45)]"
+                    disabled={isSubmitting}
+                    className="w-full py-3.5 px-6 rounded-full text-sm font-medium bg-[#ff6b35] text-white hover:bg-[#fa5519] disabled:opacity-60 disabled:cursor-not-allowed transition-all cursor-pointer shadow-[0_4px_14px_rgba(255,107,53,0.3)] hover:shadow-[0_6px_20px_rgba(255,107,53,0.45)] flex items-center justify-center gap-2"
                   >
-                    Confirm Registration
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Confirming Registration...</span>
+                      </>
+                    ) : (
+                      <span>Confirm Registration</span>
+                    )}
                   </button>
                 </div>
               </form>
