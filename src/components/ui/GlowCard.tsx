@@ -15,7 +15,7 @@ interface GlowCardProps extends HTMLMotionProps<"div"> {
 export function GlowCard({
   children,
   className,
-  glowColor = "rgba(212, 249, 51, 0.12)",
+  glowColor = "rgba(255, 107, 53, 0.15)",
   enableSpotlight = true,
   theme = "light",
   ...props
@@ -33,9 +33,9 @@ export function GlowCard({
   };
 
   const themeClasses = {
-    light: "bg-white text-ink border-[2.5px] border-ink rounded-[22px_27px_20px_25px_/_27px_20px_25px_22px] shadow-[4px_5px_0_#14140f] hover:shadow-[2px_3px_0_#14140f] hover:translate-x-[2px] hover:translate-y-[2px]",
-    dark: "bg-ink text-paper border-[2.5px] border-ink rounded-[22px_27px_20px_25px_/_27px_20px_25px_22px] shadow-[4px_5px_0_#14140f]",
-    lime: "bg-coin-y1/20 text-ink border-[2.5px] border-ink rounded-[22px_27px_20px_25px_/_27px_20px_25px_22px] shadow-[4px_5px_0_#14140f]",
+    light: "bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_12px_35px_-10px_rgba(36,13,43,0.05)] text-[#240d2b]",
+    dark: "bg-[#240d2b]/85 backdrop-blur-2xl border border-white/10 shadow-[0_20px_45px_-10px_rgba(0,0,0,0.3)] text-white",
+    lime: "bg-gradient-to-br from-[#ff6b35]/10 to-white/80 backdrop-blur-xl border border-[#ff6b35]/20 text-[#240d2b]",
   };
 
   return (
@@ -69,3 +69,5 @@ export function GlowCard({
     </motion.div>
   );
 }
+
+export default GlowCard;
