@@ -120,8 +120,88 @@ body {
 }
 
 /* =========================================================================
-   CLEAN MINIMALIST CARDS & PANELS
+   GLASSMORPHISM DESIGN SYSTEM & INTERACTIVE SPECULAR SURFACES
    ========================================================================= */
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 20px 45px -15px rgba(36, 13, 43, 0.06),
+    0 1px 2px rgba(36, 13, 43, 0.04),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.glass-panel-dark {
+  background: rgba(36, 13, 43, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 1.5rem;
+  box-shadow: 
+    0 12px 35px -10px rgba(36, 13, 43, 0.04),
+    0 1px 3px rgba(36, 13, 43, 0.03),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(255, 107, 53, 0.35);
+  box-shadow: 
+    0 24px 50px -12px rgba(36, 13, 43, 0.08),
+    0 0 25px rgba(255, 107, 53, 0.08),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 1);
+  transform: translateY(-3px);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 4px 14px rgba(36, 13, 43, 0.04),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.glass-glow-tangerine {
+  box-shadow: 
+    0 10px 30px -5px rgba(255, 107, 53, 0.25),
+    0 0 15px rgba(255, 107, 53, 0.15);
+}
+
+/* Float animations for parallax accessories */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+@keyframes floatReverse {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(8px) rotate(-1deg); }
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: floatReverse 7s ease-in-out infinite;
+}
 
 .clean-card,
 .cyber-card {
