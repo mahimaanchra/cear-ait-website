@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, MapPin, Mail, ChevronDown, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { siteConfig, faqs } from "@/data/siteData";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 export function ContactAndFAQ() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -61,11 +62,14 @@ export function ContactAndFAQ() {
 
         {/* 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          {/* Left Column: Clean Contact Form */}
-          <div className="lg:col-span-6 rounded-3xl bg-white border border-[#240d2b]/[0.08] p-8 sm:p-10 shadow-[0_15px_40px_-15px_rgba(36,13,43,0.04)]">
+          {/* Left Column: Glass Contact Form */}
+          <GlassCard
+            className="lg:col-span-6 p-8 sm:p-10"
+            spotlightColor="rgba(255, 107, 53, 0.14)"
+          >
             {submitted ? (
               <div className="text-center py-12 space-y-4">
-                <div className="w-12 h-12 rounded-full bg-[#f6f3ee] text-[#ff6b35] border border-[#ff6b35]/20 mx-auto flex items-center justify-center font-bold">
+                <div className="w-12 h-12 rounded-full bg-white text-[#ff6b35] border border-[#ff6b35]/25 mx-auto flex items-center justify-center font-bold shadow-xs">
                   <CheckCircle2 className="w-6 h-6 text-[#ff6b35]" />
                 </div>
                 <h4 className="font-display text-2xl text-[#240d2b] font-bold">
@@ -87,7 +91,7 @@ export function ContactAndFAQ() {
                     value={contactData.name}
                     onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
                     placeholder="Your name"
-                    className="w-full px-4 py-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all placeholder:text-[#240d2b]/30"
+                    className="w-full px-4 py-3 rounded-xl bg-white/80 border border-white/80 text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all placeholder:text-[#240d2b]/30 shadow-xs"
                   />
                 </div>
 
@@ -101,7 +105,7 @@ export function ContactAndFAQ() {
                     value={contactData.email}
                     onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
                     placeholder="name@example.com"
-                    className="w-full px-4 py-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all placeholder:text-[#240d2b]/30"
+                    className="w-full px-4 py-3 rounded-xl bg-white/80 border border-white/80 text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all placeholder:text-[#240d2b]/30 shadow-xs"
                   />
                 </div>
 
@@ -112,7 +116,7 @@ export function ContactAndFAQ() {
                   <select
                     value={contactData.subject}
                     onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-white/80 border border-white/80 text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all shadow-xs"
                   >
                     <option value="Induction Query">Club Induction &amp; Recruitment</option>
                     <option value="Wartech 2026 Registration">Wartech 2026 Registration</option>
@@ -131,7 +135,7 @@ export function ContactAndFAQ() {
                     value={contactData.message}
                     onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
                     placeholder="How can we help you?"
-                    className="w-full px-4 py-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all resize-none placeholder:text-[#240d2b]/30"
+                    className="w-full px-4 py-3 rounded-xl bg-white/80 border border-white/80 text-[#240d2b] font-body text-sm focus:border-[#ff6b35] focus:bg-white focus:outline-none transition-all resize-none placeholder:text-[#240d2b]/30 shadow-xs"
                   />
                 </div>
 
@@ -145,7 +149,7 @@ export function ContactAndFAQ() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 px-6 rounded-full text-sm font-medium font-body bg-[#ff6b35] text-white hover:bg-[#fa5519] disabled:opacity-60 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(255,107,53,0.3)] hover:shadow-[0_6px_20px_rgba(255,107,53,0.45)]"
+                  className="w-full py-3.5 px-6 rounded-full text-sm font-medium font-body bg-[#ff6b35] text-white hover:bg-[#fa5519] disabled:opacity-60 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(255,107,53,0.3)] hover:shadow-[0_6px_20px_rgba(255,107,53,0.45)] hover:scale-102 active:scale-98"
                 >
                   {isSubmitting ? (
                     <>
@@ -161,17 +165,17 @@ export function ContactAndFAQ() {
                 </button>
               </form>
             )}
-          </div>
+          </GlassCard>
 
-          {/* Right Column: FAQ Accordion */}
+          {/* Right Column: Glass FAQ Accordion */}
           <div className="lg:col-span-6 space-y-4">
             {faqs.map((faq, idx) => {
               const isOpen = openFaq === idx;
               return (
                 <div
                   key={idx}
-                  className={`rounded-2xl bg-white border transition-all shadow-xs ${
-                    isOpen ? "border-[#ff6b35]/40" : "border-[#240d2b]/[0.08]"
+                  className={`rounded-2xl bg-white/80 backdrop-blur-xl border transition-all shadow-xs overflow-hidden ${
+                    isOpen ? "border-[#ff6b35]/40 shadow-sm" : "border-white/80 hover:border-white"
                   }`}
                 >
                   <button
@@ -197,7 +201,7 @@ export function ContactAndFAQ() {
                         transition={{ duration: 0.25 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-6 pb-6 pt-1 text-xs sm:text-sm text-[#240d2b]/70 font-body leading-relaxed border-t border-[#240d2b]/[0.04]">
+                        <div className="px-6 pb-6 pt-1 text-xs sm:text-sm text-[#240d2b]/75 font-body leading-relaxed border-t border-[#240d2b]/[0.06]">
                           {faq.answer}
                         </div>
                       </motion.div>

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Trophy, Award } from "lucide-react";
 import { achievements } from "@/data/siteData";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 const categoryFilters = ["ALL", "PODIUM", "NATIONAL FINALIST"];
 
@@ -36,16 +37,16 @@ export function Achievements() {
             </p>
           </div>
 
-          {/* Filter Pills */}
+          {/* Filter Pills with Glassmorphism */}
           <div className="flex flex-wrap gap-2 font-mono text-xs">
             {categoryFilters.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-4 py-1.5 rounded-full font-medium transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-full font-medium transition-all cursor-pointer ${
                   filter === cat
                     ? "bg-[#240d2b] text-[#f6f3ee] shadow-xs"
-                    : "bg-white text-[#240d2b]/70 border border-[#240d2b]/[0.08] hover:border-[#ff6b35]/40 hover:text-[#240d2b]"
+                    : "bg-white/80 backdrop-blur-md text-[#240d2b]/70 border border-white/80 hover:border-[#ff6b35]/40 hover:text-[#240d2b]"
                 }`}
               >
                 {cat === "ALL" ? "All" : cat === "PODIUM" ? "Podiums" : "Finalists"}
@@ -54,21 +55,17 @@ export function Achievements() {
           </div>
         </div>
 
-        {/* Horizontal Achievement Cards */}
+        {/* Horizontal Achievement Cards with GlassCard */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredAchievements.map((item, index) => (
-            <motion.div
+            <GlassCard
               key={item.id}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              whileHover={{ y: -5 }}
-              className="p-8 rounded-3xl bg-white border border-[#240d2b]/[0.08] shadow-[0_15px_40px_-15px_rgba(36,13,43,0.03)] hover:shadow-[0_20px_50px_-15px_rgba(36,13,43,0.07)] hover:border-[#ff6b35]/35 transition-all flex flex-col justify-between"
+              spotlightColor="rgba(255, 107, 53, 0.14)"
+              className="p-8 flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-[#ff6b35] bg-[#ff6b35]/10 border border-[#ff6b35]/20 px-3 py-1 rounded-full">
+                  <span className="text-xs font-mono font-bold text-[#ff6b35] bg-[#ff6b35]/12 border border-[#ff6b35]/25 px-3 py-1 rounded-full shadow-xs">
                     {item.rank}
                   </span>
                   <span className="font-mono text-xs text-[#240d2b]/40">
@@ -85,16 +82,16 @@ export function Achievements() {
                   </p>
                 </div>
 
-                <p className="font-body text-xs sm:text-sm text-[#240d2b]/70 leading-relaxed">
+                <p className="font-body text-xs sm:text-sm text-[#240d2b]/75 leading-relaxed">
                   {item.description}
                 </p>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.06] flex items-center justify-between text-xs font-mono text-[#240d2b]/50">
+              <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.08] flex items-center justify-between text-xs font-mono text-[#240d2b]/50">
                 <span className="uppercase text-[10px] tracking-wider">{item.category}</span>
                 <Trophy className="w-4 h-4 text-[#ff6b35]" />
               </div>
-            </motion.div>
+            </GlassCard>
           ))}
         </div>
       </div>
