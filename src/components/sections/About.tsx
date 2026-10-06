@@ -2,9 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Brain, Cpu, Eye, Navigation, ArrowUpRight } from "lucide-react";
+import { Brain, Cpu, Eye, Navigation, ArrowUpRight, Sparkles } from "lucide-react";
 import { siteConfig, focusAreas } from "@/data/siteData";
 import { WordBlurReveal } from "@/components/ui/WordBlurReveal";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 const iconMap: Record<string, React.ReactNode> = {
   ai: <Brain className="w-5 h-5 text-[#240d2b] group-hover:text-white transition-colors" />,
@@ -37,58 +38,52 @@ export function About() {
           </p>
         </div>
 
-        {/* Vision & Mission: Clean Editorial Split Cards */}
+        {/* Vision & Mission: Glassmorphic Split Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="p-8 sm:p-10 rounded-3xl bg-white border border-[#240d2b]/[0.08] shadow-[0_20px_50px_-15px_rgba(36,13,43,0.04)] hover:border-[#240d2b]/20 transition-all flex flex-col justify-between"
+          <GlassCard
+            className="p-8 sm:p-10 flex flex-col justify-between"
+            spotlightColor="rgba(255, 107, 53, 0.12)"
           >
             <div>
-              <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/60 bg-[#240d2b]/[0.04] px-3 py-1 rounded-full">
+              <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/70 bg-white/80 border border-white/80 px-3 py-1 rounded-full shadow-xs">
                 Strategic Vision
               </span>
               <h3 className="font-display text-2xl font-bold text-[#240d2b] mt-5 mb-3 tracking-tight">
                 National Leadership in Autonomous Defense
               </h3>
-              <p className="text-sm sm:text-base text-[#240d2b]/70 leading-relaxed font-body">
+              <p className="text-sm sm:text-base text-[#240d2b]/75 leading-relaxed font-body">
                 {siteConfig.vision}
               </p>
             </div>
-            <div className="pt-8 mt-6 border-t border-[#240d2b]/[0.06] flex items-center justify-between text-xs font-mono text-[#240d2b]/50">
+            <div className="pt-8 mt-6 border-t border-[#240d2b]/[0.08] flex items-center justify-between text-xs font-mono text-[#240d2b]/50">
               <span>EST. 2020</span>
               <span className="text-[#ff6b35] font-semibold">AIT PUNE</span>
             </div>
-          </motion.div>
+          </GlassCard>
 
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="p-8 sm:p-10 rounded-3xl bg-white border border-[#240d2b]/[0.08] shadow-[0_20px_50px_-15px_rgba(36,13,43,0.04)] hover:border-[#240d2b]/20 transition-all flex flex-col justify-between"
+          <GlassCard
+            className="p-8 sm:p-10 flex flex-col justify-between"
+            spotlightColor="rgba(36, 13, 43, 0.08)"
           >
             <div>
-              <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/60 bg-[#240d2b]/[0.04] px-3 py-1 rounded-full">
+              <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/70 bg-white/80 border border-white/80 px-3 py-1 rounded-full shadow-xs">
                 Core Mission
               </span>
               <h3 className="font-display text-2xl font-bold text-[#240d2b] mt-5 mb-3 tracking-tight">
                 Engineering from First Principles
               </h3>
-              <p className="text-sm sm:text-base text-[#240d2b]/70 leading-relaxed font-body">
+              <p className="text-sm sm:text-base text-[#240d2b]/75 leading-relaxed font-body">
                 {siteConfig.mission}
               </p>
             </div>
-            <div className="pt-8 mt-6 border-t border-[#240d2b]/[0.06] flex items-center justify-between text-xs font-mono text-[#240d2b]/50">
+            <div className="pt-8 mt-6 border-t border-[#240d2b]/[0.08] flex items-center justify-between text-xs font-mono text-[#240d2b]/50">
               <span>CEAR // LAB 104</span>
               <span className="text-[#ff6b35] font-semibold">DEFENSE TECH</span>
             </div>
-          </motion.div>
+          </GlassCard>
         </div>
 
-        {/* Technical Domains Section */}
+        {/* Technical Domains Section with Glass Cards */}
         <div id="domains" className="space-y-8 pt-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-6">
             <div>
@@ -106,39 +101,35 @@ export function About() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {focusAreas.map((domain, index) => (
-              <motion.div
+              <GlassCard
                 key={domain.id}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-                whileHover={{ y: -6 }}
-                className="group p-6 rounded-2xl bg-white border border-[#240d2b]/[0.08] shadow-[0_10px_30px_-10px_rgba(36,13,43,0.03)] hover:shadow-[0_20px_40px_-15px_rgba(36,13,43,0.08)] hover:border-[#ff6b35]/40 transition-all flex flex-col justify-between"
+                className="group p-6 flex flex-col justify-between"
+                spotlightColor="rgba(255, 107, 53, 0.16)"
               >
                 <div>
                   <div className="flex items-center justify-between mb-5">
-                    <div className="w-10 h-10 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] flex items-center justify-center group-hover:bg-[#ff6b35] transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-white/90 border border-[#240d2b]/[0.08] flex items-center justify-center group-hover:bg-[#ff6b35] shadow-xs transition-colors">
                       {iconMap[domain.id]}
                     </div>
-                    <span className="text-[10px] font-mono tracking-wider text-[#240d2b]/50 uppercase">
+                    <span className="text-[10px] font-mono tracking-wider text-[#240d2b]/60 uppercase bg-white/60 px-2 py-0.5 rounded-full border border-white/60">
                       {domain.tag}
                     </span>
                   </div>
 
-                  <h4 className="font-display text-lg font-bold text-[#240d2b] tracking-tight mb-2 group-hover:text-[#3b1646] transition-colors">
+                  <h4 className="font-display text-lg font-bold text-[#240d2b] tracking-tight mb-2 group-hover:text-[#ff6b35] transition-colors">
                     {domain.title}
                   </h4>
 
-                  <p className="text-xs text-[#240d2b]/65 font-body leading-relaxed">
+                  <p className="text-xs text-[#240d2b]/70 font-body leading-relaxed">
                     {domain.description}
                   </p>
                 </div>
 
                 <div className="pt-4 mt-6 border-t border-[#240d2b]/[0.06] flex items-center justify-between text-xs text-[#240d2b]/40 group-hover:text-[#ff6b35] transition-colors font-mono">
-                  <span>Learn more</span>
+                  <span>Explore domain</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </div>
-              </motion.div>
+              </GlassCard>
             ))}
           </div>
         </div>

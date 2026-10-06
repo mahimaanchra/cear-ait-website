@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, ArrowRight, X, ArrowUpRight } from "lucide-react";
+import { Github, ExternalLink, ArrowRight, X, ArrowUpRight, Cpu } from "lucide-react";
 import { Project } from "@/data/siteData";
 import { useSiteContent } from "@/context/SiteContentContext";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 const categories = ["All Platforms", "Autonomous", "Manipulation", "Aquatics", "Robotics", "Aerial"];
 
@@ -28,7 +29,7 @@ export function ProjectsShowcase() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#240d2b]/[0.08] pb-6">
           <div className="space-y-2 max-w-2xl">
             <span className="text-xs font-mono tracking-widest uppercase text-[#240d2b]/50">
-              02 // Research &amp; Platforms
+              03 // Research &amp; Platforms
             </span>
             <h2 className="text-3xl sm:text-5xl font-black font-display text-[#240d2b] tracking-tight">
               Robotics Platforms &amp; R&amp;D
@@ -38,7 +39,7 @@ export function ProjectsShowcase() {
             </p>
           </div>
 
-          <div className="text-xs font-mono text-[#240d2b]/60 px-4 py-2 rounded-full bg-white border border-[#240d2b]/[0.08] shadow-xs shrink-0">
+          <div className="text-xs font-mono text-[#240d2b]/60 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-white/80 shadow-xs shrink-0">
             <span className="font-bold text-[#ff6b35]">{filteredProjects.length}</span> of {projects.length} Platforms
           </div>
         </div>
@@ -54,7 +55,7 @@ export function ProjectsShowcase() {
                 className={`text-xs font-mono px-4 py-2 rounded-full transition-all cursor-pointer ${
                   isActive
                     ? "bg-[#240d2b] text-white shadow-xs font-semibold"
-                    : "bg-white text-[#240d2b]/70 border border-[#240d2b]/[0.08] hover:border-[#ff6b35]/40 hover:text-[#ff6b35]"
+                    : "bg-white/80 backdrop-blur-md text-[#240d2b]/70 border border-white/80 hover:border-[#ff6b35]/40 hover:text-[#ff6b35]"
                 }`}
               >
                 {cat}
@@ -65,7 +66,7 @@ export function ProjectsShowcase() {
 
         {/* Projects Grid or Empty State */}
         {filteredProjects.length === 0 ? (
-          <div className="text-center py-16 px-4 rounded-3xl bg-white border border-[#240d2b]/[0.08] space-y-3">
+          <div className="text-center py-16 px-4 rounded-3xl bg-white/70 backdrop-blur-xl border border-white/80 space-y-3">
             <p className="font-display text-lg font-bold text-[#240d2b]">No platforms found in this domain.</p>
             <p className="text-xs font-mono text-[#240d2b]/60">Select another filter or view all platforms.</p>
             <button
@@ -78,18 +79,14 @@ export function ProjectsShowcase() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project, index) => (
-              <motion.div
+              <GlassCard
                 key={project.id}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.06 }}
-                whileHover={{ y: -6 }}
-                className="group p-8 rounded-3xl bg-white border border-[#240d2b]/[0.08] shadow-[0_15px_40px_-15px_rgba(36,13,43,0.04)] hover:shadow-[0_25px_60px_-15px_rgba(36,13,43,0.08)] hover:border-[#ff6b35]/35 transition-all flex flex-col justify-between"
+                spotlightColor="rgba(255, 107, 53, 0.15)"
+                className="group p-8 flex flex-col justify-between"
               >
                 <div className="space-y-5">
                   {project.imageUrl && (
-                    <div className="relative w-full h-44 rounded-2xl overflow-hidden bg-[#f6f3ee] border border-[#240d2b]/[0.08] mb-2">
+                    <div className="relative w-full h-48 rounded-2xl overflow-hidden bg-[#240d2b]/5 border border-white/60 mb-2">
                       <Image
                         src={project.imageUrl}
                         alt={project.title}
@@ -101,10 +98,10 @@ export function ProjectsShowcase() {
                   )}
 
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/60 bg-[#f6f3ee] border border-[#240d2b]/[0.08] px-3 py-1 rounded-full">
+                    <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/70 bg-white/80 border border-white/80 px-3 py-1 rounded-full shadow-xs">
                       {project.category}
                     </span>
-                    <span className="text-[10px] font-mono font-medium text-[#240d2b]/50">
+                    <span className="text-[10px] font-mono font-medium text-[#240d2b]/60 bg-[#240d2b]/5 px-2.5 py-0.5 rounded-full">
                       {project.status}
                     </span>
                   </div>
@@ -113,7 +110,7 @@ export function ProjectsShowcase() {
                     <h3 className="text-2xl font-bold font-display text-[#240d2b] tracking-tight group-hover:text-[#ff6b35] transition-colors">
                       {project.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-[#240d2b]/65 font-body leading-relaxed mt-2.5">
+                    <p className="text-xs sm:text-sm text-[#240d2b]/70 font-body leading-relaxed mt-2.5">
                       {project.description}
                     </p>
                   </div>
@@ -122,7 +119,7 @@ export function ProjectsShowcase() {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-[#f6f3ee] border border-[#240d2b]/[0.06] text-[#240d2b]/70"
+                        className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-white/70 border border-white/80 text-[#240d2b]/80 shadow-xs"
                       >
                         {tag}
                       </span>
@@ -130,7 +127,7 @@ export function ProjectsShowcase() {
                   </div>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.06] flex items-center justify-between">
+                <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.08] flex items-center justify-between">
                   <button
                     onClick={() => setSelectedProject(project)}
                     className="text-xs font-mono font-medium text-[#240d2b] hover:text-[#ff6b35] flex items-center gap-1 cursor-pointer transition-colors"
@@ -144,28 +141,28 @@ export function ProjectsShowcase() {
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 rounded-full text-[#240d2b]/50 hover:text-[#ff6b35] hover:bg-[#ff6b35]/[0.08] transition-colors"
+                      className="p-1.5 rounded-full text-[#240d2b]/50 hover:text-[#ff6b35] hover:bg-white/80 transition-colors"
                       title="Source Repository"
                     >
                       <Github className="w-4 h-4" />
                     </a>
                   )}
                 </div>
-              </motion.div>
+              </GlassCard>
             ))}
           </div>
         )}
       </div>
 
-      {/* Project Spec Modal */}
+      {/* Project Spec Glass Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#240d2b]/70 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#240d2b]/75 backdrop-blur-xl">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-xl bg-white rounded-3xl p-6 sm:p-10 border border-[#240d2b]/[0.1] shadow-2xl space-y-6"
+              className="relative w-full max-w-xl bg-white/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-white/80 shadow-2xl space-y-6"
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -179,14 +176,14 @@ export function ProjectsShowcase() {
 
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="p-2 rounded-full text-[#240d2b]/60 hover:text-[#240d2b] hover:bg-[#240d2b]/[0.05] transition-colors cursor-pointer"
+                  className="p-2 rounded-full text-[#240d2b]/60 hover:text-[#240d2b] hover:bg-black/5 transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {selectedProject.imageUrl && (
-                <div className="relative w-full h-56 rounded-2xl overflow-hidden bg-[#f6f3ee] border border-[#240d2b]/[0.08]">
+                <div className="relative w-full h-56 rounded-2xl overflow-hidden bg-[#240d2b]/5 border border-white/80 shadow-inner">
                   <Image
                     src={selectedProject.imageUrl}
                     alt={selectedProject.title}
@@ -197,7 +194,7 @@ export function ProjectsShowcase() {
                 </div>
               )}
 
-              <p className="text-sm text-[#240d2b]/75 leading-relaxed font-body">
+              <p className="text-sm text-[#240d2b]/80 leading-relaxed font-body">
                 {selectedProject.description}
               </p>
 
@@ -210,7 +207,7 @@ export function ProjectsShowcase() {
                     {selectedProject.specs.map((spec, i) => (
                       <div
                         key={i}
-                        className="p-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] text-xs font-mono text-[#240d2b]/80"
+                        className="p-3 rounded-xl bg-white/70 border border-white/80 text-xs font-mono text-[#240d2b]/80 shadow-xs"
                       >
                         <span className="text-[#240d2b]/50">{spec.label}: </span>
                         <span className="font-bold text-[#240d2b]">{spec.value}</span>
@@ -230,7 +227,7 @@ export function ProjectsShowcase() {
                     href={selectedProject.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium text-white bg-[#ff6b35] hover:bg-[#fa5519] transition-colors shadow-[0_2px_10px_rgba(255,107,53,0.3)]"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium text-white bg-[#ff6b35] hover:bg-[#fa5519] transition-colors shadow-[0_2px_12px_rgba(255,107,53,0.35)]"
                   >
                     <Github className="w-3.5 h-3.5" />
                     <span>View GitHub Repo</span>
