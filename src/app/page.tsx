@@ -15,6 +15,8 @@ import { Footer } from "@/components/sections/Footer";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
 import { ArchitecturalCleanBackground } from "@/components/ui/ArchitecturalCleanBackground";
+import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
+import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
 
 export default function Home() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -32,8 +34,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#f6f3ee] text-[#240d2b] font-body selection:bg-[#ff6b35] selection:text-white relative overflow-hidden">
+      {/* Radiant Top Scroll Progress Bar */}
+      <ScrollProgressBar />
+
       {/* Architectural Clean Vector Blueprint & Ambient Glow Background */}
       <ArchitecturalCleanBackground />
+
+      {/* Floating Autonomous Telemetry Diagnostics Dock */}
+      <AutonomousStatusWidget />
 
       {/* 1. Sticky Navigation Bar */}
       <Navbar onOpenRegister={() => handleOpenRegister()} />

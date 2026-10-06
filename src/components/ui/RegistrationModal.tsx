@@ -114,12 +114,12 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#240d2b]/70 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#240d2b]/80 backdrop-blur-xl overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="relative w-full max-w-xl bg-white border border-[#240d2b]/[0.1] rounded-3xl p-6 sm:p-10 shadow-2xl my-8 overflow-hidden"
+        className="relative w-full max-w-xl bg-white/95 backdrop-blur-2xl border border-white/80 rounded-3xl p-6 sm:p-10 shadow-2xl my-8 overflow-hidden"
       >
         {/* Close Button */}
         <button
