@@ -11,12 +11,12 @@ interface NavbarProps {
 }
 
 const navLinks = [
-  { name: "About", href: "#about" },
-  { name: "Workshop", href: "#workshop" },
-  { name: "Projects", href: "#projects" },
-  { name: "Wartech '26", href: "#wartech", isFlagship: true },
-  { name: "Team", href: "#team" },
-  { name: "Contact", href: "#contact" },
+  { name: "About", href: "/#about" },
+  { name: "Workshop", href: "/#workshop" },
+  { name: "Projects", href: "/#projects" },
+  { name: "Wartech '26", href: "/#wartech", isFlagship: true },
+  { name: "Team", href: "/#team" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 export function Navbar({ onOpenRegister }: NavbarProps) {
@@ -66,7 +66,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Left: Minimal CEAR Logo & Typography with Glass Badge */}
-          <Link href="#hero" className="flex items-center gap-3 group">
+          <Link href="/#hero" className="flex items-center gap-3 group">
             <div className="relative w-9 h-9 shrink-0 transition-transform duration-300 group-hover:scale-108 p-1 rounded-xl bg-white/70 backdrop-blur-md border border-white/80 shadow-xs">
               <div className="relative w-full h-full">
                 <Image
