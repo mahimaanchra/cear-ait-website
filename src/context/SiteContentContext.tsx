@@ -9,10 +9,12 @@ import {
   upcomingEvents as defaultEvents,
   projects as defaultProjects,
   workshopGallery as defaultGallery,
+  achievements as defaultAchievements,
   TeamMember,
   EventItem,
   Project,
   WorkshopMediaItem,
+  Achievement,
 } from "@/data/siteData";
 
 const STORAGE_KEY = "cear_site_content_v1";
@@ -25,6 +27,7 @@ interface SiteContentContextType {
   upcomingEvents: EventItem[];
   projects: Project[];
   workshopGallery: WorkshopMediaItem[];
+  achievements: Achievement[];
 
   // Team actions
   addMember: (member: TeamMember) => void;
@@ -46,6 +49,11 @@ interface SiteContentContextType {
   updateGalleryItem: (id: string, item: Partial<WorkshopMediaItem>) => void;
   deleteGalleryItem: (id: string) => void;
 
+  // Achievement actions
+  addAchievement: (item: Achievement) => void;
+  updateAchievement: (id: string, item: Partial<Achievement>) => void;
+  deleteAchievement: (id: string) => void;
+
   // Persistence & Health
   saveChanges: () => Promise<boolean>;
   resetToDefaults: () => Promise<void>;
@@ -66,6 +74,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
   const [upcomingEvents, setUpcomingEvents] = useState<EventItem[]>(defaultEvents);
   const [projects, setProjects] = useState<Project[]>(defaultProjects);
   const [workshopGallery, setWorkshopGallery] = useState<WorkshopMediaItem[]>(defaultGallery);
+  const [achievements, setAchievements] = useState<Achievement[]>(defaultAchievements);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [cloudConnected, setCloudConnected] = useState(false);
@@ -86,6 +95,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
           if (parsed.upcomingEvents) setUpcomingEvents(parsed.upcomingEvents);
           if (parsed.projects) setProjects(parsed.projects);
           if (parsed.workshopGallery) setWorkshopGallery(parsed.workshopGallery);
+          if (parsed.achievements) setAchievements(parsed.achievements);
           if (parsed.lastUpdated) setLastSaved(parsed.lastUpdated);
         }
 
@@ -100,6 +110,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
           if (data.upcomingEvents) setUpcomingEvents(data.upcomingEvents);
           if (data.projects) setProjects(data.projects);
           if (data.workshopGallery) setWorkshopGallery(data.workshopGallery);
+          if (data.achievements) setAchievements(data.achievements);
           if (data.lastUpdated) setLastSaved(data.lastUpdated);
           if (typeof data.cloudConnected === "boolean") {
             setCloudConnected(data.cloudConnected);
@@ -127,6 +138,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       upcomingEvents,
       projects,
       workshopGallery,
+      achievements,
       lastUpdated: new Date().toISOString(),
     };
 
@@ -166,6 +178,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
     setUpcomingEvents(defaultEvents);
     setProjects(defaultProjects);
     setWorkshopGallery(defaultGallery);
+    setAchievements(defaultAchievements);
     localStorage.removeItem(STORAGE_KEY);
     setHasUnsavedChanges(true);
 
@@ -177,6 +190,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       upcomingEvents: defaultEvents,
       projects: defaultProjects,
       workshopGallery: defaultGallery,
+      achievements: defaultAchievements,
       lastUpdated: new Date().toISOString(),
     };
 
@@ -203,6 +217,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       if (backup.upcomingEvents) setUpcomingEvents(backup.upcomingEvents);
       if (backup.projects) setProjects(backup.projects);
       if (backup.workshopGallery) setWorkshopGallery(backup.workshopGallery);
+      if (backup.achievements) setAchievements(backup.achievements);
 
       setHasUnsavedChanges(true);
       return true;
@@ -304,6 +319,24 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
     setWorkshopGallery((prev) => prev.filter((g) => g.id !== id));
   };
 
+  // --- Achievement Actions ---
+  const addAchievement = (item: Achievement) => {
+    setHasUnsavedChanges(true);
+    setAchievements((prev) => [item, ...prev]);
+  };
+
+  const updateAchievement = (id: string, updated: Partial<Achievement>) => {
+    setHasUnsavedChanges(true);
+    setAchievements((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, ...updated } : a))
+    );
+  };
+
+  const deleteAchievement = (id: string) => {
+    setHasUnsavedChanges(true);
+    setAchievements((prev) => prev.filter((a) => a.id !== id));
+  };
+
   return (
     <SiteContentContext.Provider
       value={{
@@ -314,6 +347,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
         upcomingEvents,
         projects,
         workshopGallery,
+        achievements,
         addMember,
         updateMember,
         deleteMember,
@@ -326,6 +360,9 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
         addGalleryItem,
         updateGalleryItem,
         deleteGalleryItem,
+        addAchievement,
+        updateAchievement,
+        deleteAchievement,
         saveChanges,
         resetToDefaults,
         importFullBackup,

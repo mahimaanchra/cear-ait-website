@@ -9,6 +9,7 @@ import {
   upcomingEvents,
   projects,
   workshopGallery,
+  achievements,
 } from "@/data/siteData";
 import { isSupabaseConfigured, getSupabaseServerClient } from "@/lib/supabase";
 
@@ -22,6 +23,7 @@ interface SiteContentPayload {
   upcomingEvents?: typeof upcomingEvents;
   projects?: typeof projects;
   workshopGallery?: typeof workshopGallery;
+  achievements?: typeof achievements;
   lastUpdated?: string;
   cloudConnected?: boolean;
 }
@@ -78,6 +80,7 @@ export async function GET() {
       upcomingEvents,
       projects,
       workshopGallery,
+      achievements,
       lastUpdated: new Date().toISOString(),
       cloudConnected: isCloud,
     };
@@ -94,6 +97,7 @@ export async function GET() {
         upcomingEvents,
         projects,
         workshopGallery,
+        achievements,
         cloudConnected: isCloud,
       },
       { status: 200 }
