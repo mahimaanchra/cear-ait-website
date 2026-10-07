@@ -203,6 +203,51 @@ body {
   animation: floatReverse 7s ease-in-out infinite;
 }
 
+/* Background Pattern & Telemetry Radar Motion */
+@keyframes patternDrift {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 56px 56px;
+  }
+}
+
+.animate-pattern-drift {
+  animation: patternDrift 90s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes radarSpinCw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes radarSpinCcw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-radar-cw {
+  animation: radarSpinCw 120s linear infinite;
+}
+
+.animate-radar-ccw {
+  animation: radarSpinCcw 80s linear infinite;
+}
+
+.animate-radar-fast-cw {
+  animation: radarSpinCw 35s linear infinite;
+}
+
 .clean-card,
 .cyber-card {
   background: var(--bg-card);
