@@ -96,7 +96,7 @@ This production web platform acts as the public face and digital command centre 
 | **🔬 Lab 104 & Workshop Archive** | Interactive photography archive with high-resolution lightbox modal viewing, tags, and behind-the-scenes engineering builds. |
 | **🛡 Built-in Admin CMS (`/admin`)** | Passcode-protected control panel (`cear@2026`) enabling authorized cadre to update fleet projects, upcoming workshops, and cadre members with instant drag-and-drop media uploads. |
 | **🔄 Dual-Layer Persistence** | Fault-tolerant content management: works with cloud **Supabase PostgreSQL & Storage** while maintaining seamless offline local JSON and disk-based fallback. |
-| **🎨 Tactical Cyber UI / UX** | Purpose-built Dark Tactical theme (Command Obsidian `#070b12`, Tactical Deep Navy `#0d1321`, Signal Volt Accent `#dcf836`) with interactive neural shaders and matrix effects. |
+| **🎨 Editorial Glassmorphic Design System** | Clean Royal Plum (`#240d2b`), Warm Oat Linen (`#f6f3ee`), and Radiant Tangerine (`#ff6b35`) aesthetic featuring 3D spring tilt cards, cursor spotlight sheen, multi-plane parallax, continuous rotating blueprint radar telemetry, and sliding gallery carousels. |
 | **🚀 Production Grade SEO** | Automated sitemap generation (`/sitemap.xml`), robots directives (`/robots.txt`), OpenGraph meta, and zero-error Next.js App Router static prerendering. |
 
 ---

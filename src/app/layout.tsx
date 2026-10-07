@@ -22,6 +22,12 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
+export const viewport = {
+  themeColor: "#f6f3ee",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://cear-ait-website.vercel.app"),
   title: "CEAR | Centre of Excellence for AI & Robotics – AIT Pune",

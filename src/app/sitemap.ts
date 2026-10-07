@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://cear-ait-website.vercel.app";
-  const lastModified = new Date("2026-10-02T10:00:00.000Z");
+  const lastModified = new Date();
 
   return [
     {
