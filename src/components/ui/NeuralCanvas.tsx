@@ -17,18 +17,22 @@ interface NeuralCanvasProps {
   className?: string;
   nodeCount?: number;
   interactive?: boolean;
+  speed?: number;
+  opacity?: number;
 }
 
 export function NeuralCanvas({
   className = "",
-  nodeCount = 38,
+  nodeCount = 42,
   interactive = true,
+  speed = 1,
+  opacity = 0.85,
 }: NeuralCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const mouseRef = useRef<{ x: number | null; y: number | null; radius: number }>({
     x: null,
     y: null,
-    radius: 140,
+    radius: 150,
   });
 
   useEffect(() => {
@@ -38,16 +42,27 @@ export function NeuralCanvas({
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = canvas.parentElement?.clientWidth || window.innerWidth);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || window.innerHeight);
+    const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
 
-    const handleResize = () => {
+    let width = 0;
+    let height = 0;
+
+    const resizeCanvas = () => {
       if (!canvas || !canvas.parentElement) return;
-      width = canvas.width = canvas.parentElement.clientWidth;
-      height = canvas.height = canvas.parentElement.clientHeight;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      ctx.scale(dpr, dpr);
     };
 
-    window.addEventListener("resize", handleResize);
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
 
     // Initialize nodes
     const nodes: Node[] = [];
@@ -57,10 +72,10 @@ export function NeuralCanvas({
       nodes.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: (Math.random() - 0.5) * 0.45,
-        radius: Math.random() < 0.2 ? 3 : Math.random() < 0.6 ? 2 : 1.5,
-        baseAlpha: Math.random() * 0.4 + 0.2,
+        vx: (Math.random() - 0.5) * 0.4 * speed,
+        vy: (Math.random() - 0.5) * 0.4 * speed,
+        radius: Math.random() < 0.2 ? 3.2 : Math.random() < 0.6 ? 2.2 : 1.6,
+        baseAlpha: Math.random() * 0.4 + 0.3,
         type: types[Math.floor(Math.random() * types.length)],
         pulseOffset: Math.random() * Math.PI * 2,
       });
@@ -78,18 +93,19 @@ export function NeuralCanvas({
       mouseRef.current.y = null;
     };
 
-    if (interactive && canvas.parentElement) {
-      canvas.parentElement.addEventListener("mousemove", handleMouseMove);
-      canvas.parentElement.addEventListener("mouseleave", handleMouseLeave);
+    const parent = canvas.parentElement;
+    if (interactive && parent) {
+      parent.addEventListener("mousemove", handleMouseMove);
+      parent.addEventListener("mouseleave", handleMouseLeave);
     }
 
     let time = 0;
     const render = () => {
-      time += 0.02;
+      time += 0.02 * speed;
       ctx.clearRect(0, 0, width, height);
 
-      // Connect nearby nodes with delicate lines (Blueprint ink drafting)
-      const maxDistance = 110;
+      // Connect nearby nodes with delicate plum ink drafting lines
+      const maxDistance = 115;
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
@@ -97,13 +113,24 @@ export function NeuralCanvas({
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < maxDistance) {
-            const alpha = (1 - dist / maxDistance) * 0.18;
+            const alpha = (1 - dist / maxDistance) * 0.16;
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(20, 20, 15, ${alpha})`;
+            ctx.strokeStyle = `rgba(36, 13, 43, ${alpha})`;
             ctx.lineWidth = 0.9;
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
             ctx.stroke();
+
+            // Occasional micro-packet pulse along line
+            if (i % 7 === 0 && Math.sin(time * 2 + i) > 0.8) {
+              const t = (Math.sin(time * 3 + i) + 1) / 2;
+              const px = nodes[i].x + (nodes[j].x - nodes[i].x) * t;
+              const py = nodes[i].y + (nodes[j].y - nodes[i].y) * t;
+              ctx.beginPath();
+              ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+              ctx.fillStyle = "rgba(255, 107, 53, 0.75)";
+              ctx.fill();
+            }
           }
         }
       }
@@ -114,15 +141,15 @@ export function NeuralCanvas({
         // Draw delicate cursor target reticle
         ctx.save();
         ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 22, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(20, 20, 15, 0.35)";
+        ctx.arc(mouse.x, mouse.y, 24, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255, 107, 53, 0.4)";
         ctx.lineWidth = 1.2;
-        ctx.setLineDash([3, 3]);
+        ctx.setLineDash([3, 4]);
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = "#c0342a";
+        ctx.arc(mouse.x, mouse.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = "#ff6b35";
         ctx.fill();
         ctx.restore();
 
@@ -134,13 +161,13 @@ export function NeuralCanvas({
           if (dist < mouse.radius) {
             const alpha = (1 - dist / mouse.radius) * 0.35;
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(43, 90, 155, ${alpha})`;
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = `rgba(255, 107, 53, ${alpha})`;
+            ctx.lineWidth = 1.1;
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(mouse.x, mouse.y);
             ctx.stroke();
 
-            // Very subtle gravitational attraction toward sensor probe
+            // Gravitational pull toward mouse sensor reticle
             nodes[i].x += dx * 0.003;
             nodes[i].y += dy * 0.003;
           }
@@ -151,7 +178,7 @@ export function NeuralCanvas({
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
 
-        // Move
+        // Motion
         node.x += node.vx;
         node.y += node.vy;
 
@@ -159,29 +186,29 @@ export function NeuralCanvas({
         if (node.x < 0 || node.x > width) node.vx *= -1;
         if (node.y < 0 || node.y > height) node.vy *= -1;
 
-        // Subtle pulsing
+        // Harmonic pulsing
         const pulse = Math.sin(time + node.pulseOffset);
-        const radius = node.radius + (pulse > 0 ? pulse * 0.5 : 0);
+        const radius = node.radius + (pulse > 0 ? pulse * 0.6 : 0);
 
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
 
         if (node.type === "core") {
-          // Ink core node with gold center
-          ctx.fillStyle = "#14140f";
+          // Plum core node with glowing Tangerine center
+          ctx.fillStyle = "#240d2b";
           ctx.fill();
 
           ctx.beginPath();
-          ctx.arc(node.x, node.y, radius * 0.5, 0, Math.PI * 2);
-          ctx.fillStyle = "#f2c31a";
+          ctx.arc(node.x, node.y, radius * 0.55, 0, Math.PI * 2);
+          ctx.fillStyle = "#ff6b35";
           ctx.fill();
         } else if (node.type === "relay") {
-          // Cadet blue relay node
-          ctx.fillStyle = "#2b5a9b";
+          // Radiant Tangerine relay node
+          ctx.fillStyle = "#ff6b35";
           ctx.fill();
         } else {
-          // Neutral charcoal sensor node
-          ctx.fillStyle = "rgba(20, 20, 15, 0.45)";
+          // Subtle Plum sensor node
+          ctx.fillStyle = `rgba(36, 13, 43, ${node.baseAlpha})`;
           ctx.fill();
         }
       }
@@ -193,19 +220,19 @@ export function NeuralCanvas({
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-      if (interactive && canvas.parentElement) {
-        canvas.parentElement.removeEventListener("mousemove", handleMouseMove);
-        canvas.parentElement.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("resize", resizeCanvas);
+      if (interactive && parent) {
+        parent.removeEventListener("mousemove", handleMouseMove);
+        parent.removeEventListener("mouseleave", handleMouseLeave);
       }
     };
-  }, [nodeCount, interactive]);
+  }, [nodeCount, interactive, speed]);
 
   return (
     <canvas
       ref={canvasRef}
       className={`pointer-events-none absolute inset-0 z-0 ${className}`}
-      style={{ opacity: 0.85 }}
+      style={{ opacity }}
     />
   );
 }

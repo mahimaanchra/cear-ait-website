@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight, Sparkles } from "lucide-react";
+import { CearLogo } from "@/components/ui/CearLogo";
 
 interface NavbarProps {
   onOpenRegister?: () => void;
@@ -67,16 +68,7 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Left: Minimal CEAR Logo & Typography with Glass Badge */}
           <Link href="/#hero" className="flex items-center gap-3 group">
-            <div className="relative w-9 h-9 shrink-0 transition-transform duration-300 group-hover:scale-108 p-1 rounded-xl bg-white/70 backdrop-blur-md border border-white/80 shadow-xs">
-              <div className="relative w-full h-full">
-                <Image
-                  src="/cear-logo.svg"
-                  alt="CEAR"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
+            <CearLogo size={36} className="w-9 h-9" variant="glass" animated={false} />
             <div className="flex items-baseline gap-1.5">
               <span className="font-display text-lg font-black tracking-tight text-[#240d2b]">
                 CEAR

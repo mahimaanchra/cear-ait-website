@@ -6,6 +6,7 @@ import { Brain, Cpu, Eye, Navigation, ArrowUpRight, Sparkles, X, Layers, Cpu as 
 import { siteConfig, focusAreas } from "@/data/siteData";
 import { WordBlurReveal } from "@/components/ui/WordBlurReveal";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { NeuralCanvas } from "@/components/ui/NeuralCanvas";
 
 const iconMap: Record<string, React.ReactNode> = {
   ai: <Brain className="w-5 h-5 text-[#240d2b] group-hover:text-white transition-colors" />,
@@ -51,6 +52,7 @@ const domainDetails: Record<
 
 export function About() {
   const [selectedDomain, setSelectedDomain] = useState<typeof focusAreas[0] | null>(null);
+  const [neuralActive, setNeuralActive] = useState(true);
 
   return (
     <section id="about" className="relative py-28 sm:py-36 bg-transparent">
@@ -120,6 +122,56 @@ export function About() {
           </GlassCard>
         </div>
 
+        {/* Interactive Swarm & Neural Mesh Simulation Showcase */}
+        <div className="relative rounded-[32px] overflow-hidden bg-white/70 backdrop-blur-2xl border border-white/80 p-6 sm:p-8 shadow-[0_20px_60px_-15px_rgba(36,13,43,0.08)]">
+          {neuralActive && (
+            <NeuralCanvas
+              className="opacity-70"
+              nodeCount={36}
+              speed={0.9}
+              interactive={true}
+            />
+          )}
+
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-xl">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6b35] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff6b35]" />
+                </span>
+                <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] font-semibold">
+                  Interactive Edge Simulation
+                </span>
+              </div>
+              <h3 className="font-display text-xl sm:text-2xl font-bold text-[#240d2b] tracking-tight">
+                Live Swarm &amp; Neural Graph Telemetry
+              </h3>
+              <p className="text-xs sm:text-sm text-[#240d2b]/70 font-body">
+                Move your cursor across this surface to engage proximity radar locks. Simulates edge inference node clustering across tactical rovers and autonomous swarms.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#240d2b]/[0.08] text-xs font-mono text-[#240d2b]/80 shadow-xs">
+                <span className="text-[#240d2b]/50">Nodes:</span>
+                <span className="font-bold text-[#ff6b35]">36 Active</span>
+                <span className="text-[#240d2b]/30">•</span>
+                <span className="text-[#240d2b]/50">Latency:</span>
+                <span className="font-bold text-[#240d2b]">12ms</span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setNeuralActive(!neuralActive)}
+                className="px-4 py-1.5 rounded-full text-xs font-mono font-medium transition-all cursor-pointer bg-[#240d2b] text-white hover:bg-[#3b1646] shadow-xs active:scale-95"
+              >
+                {neuralActive ? "Pause Mesh" : "Run Mesh"}
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Technical Domains Section with Glass Cards */}
         <div id="domains" className="space-y-8 pt-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-6">
@@ -186,6 +238,9 @@ export function About() {
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               className="relative z-10 w-full max-w-2xl bg-white/95 backdrop-blur-2xl border border-white/90 rounded-[32px] p-6 sm:p-10 shadow-[0_30px_90px_rgba(36,13,43,0.3)] my-8 overflow-hidden space-y-6"
             >
+              {/* Live ambient neural backdrop */}
+              <NeuralCanvas className="opacity-15" nodeCount={24} speed={0.6} />
+
               {/* Top Specular Inner Bevel Highlight */}
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
 

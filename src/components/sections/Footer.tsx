@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Linkedin, Github, Instagram, Mail, MapPin, ArrowUp } from "lucide-react";
 import { siteConfig } from "@/data/siteData";
+import { CearLogo } from "@/components/ui/CearLogo";
 
 export function Footer() {
   const scrollToTop = () => {
@@ -18,14 +19,7 @@ export function Footer() {
           {/* Col 1 & 2: Branding & Affiliation */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="relative w-9 h-9 shrink-0">
-                <Image
-                  src="/cear-logo.svg"
-                  alt="CEAR"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              <CearLogo size={36} className="w-9 h-9" variant="glass" animated={false} />
               <div>
                 <span className="font-display text-2xl font-black tracking-tight text-[#240d2b]">
                   CEAR

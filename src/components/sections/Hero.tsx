@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { ChevronDown, ArrowUpRight, Cpu, Radio, Sparkles, Shield } from "lucide-react";
+import { CearLogo } from "@/components/ui/CearLogo";
 
 interface HeroProps {
   onOpenRegister?: (trackId?: string) => void;
@@ -174,17 +175,12 @@ export function Hero({ onOpenRegister }: HeroProps = {}) {
             className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 group/emblem"
           >
             {/* CEAR Geometric Monogram Emblem with Glass Backing */}
-            <div className="relative w-16 h-16 sm:w-22 sm:h-22 lg:w-28 lg:h-28 shrink-0 transition-transform duration-500 ease-out group-hover/emblem:scale-108 p-2 rounded-3xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_10px_25px_rgba(36,13,43,0.12)]">
-              <div className="relative w-full h-full">
-                <Image
-                  src="/cear-logo.svg"
-                  alt="CEAR Emblem"
-                  fill
-                  priority
-                  className="object-contain drop-shadow-[0_6px_14px_rgba(36,13,43,0.18)]"
-                />
-              </div>
-            </div>
+            <CearLogo
+              size={112}
+              className="w-16 h-16 sm:w-22 sm:h-22 lg:w-28 lg:h-28"
+              variant="emblem"
+              priority
+            />
 
             {/* Clean Bold Typography: "CEAR" with ™ Superscript */}
             <div className="flex items-start">
