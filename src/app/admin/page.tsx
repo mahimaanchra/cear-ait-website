@@ -42,15 +42,18 @@ import {
   FileJson,
   Upload,
   MapPin,
+  Trophy,
+  Award,
 } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
-import { TeamMember, EventItem, Project, WorkshopMediaItem } from "@/data/siteData";
+import { TeamMember, EventItem, Project, WorkshopMediaItem, Achievement } from "@/data/siteData";
 import {
   MemberModal,
   EventModal,
   ProjectModal,
   GalleryModal,
   CloudSetupModal,
+  AchievementModal,
 } from "@/components/admin/AdminModals";
 
 const DEFAULT_PASSCODE = "cear@2026";
@@ -66,6 +69,7 @@ export default function AdminPage() {
     upcomingEvents,
     projects,
     workshopGallery,
+    achievements,
     addMember,
     updateMember,
     deleteMember,
@@ -78,6 +82,9 @@ export default function AdminPage() {
     addGalleryItem,
     updateGalleryItem,
     deleteGalleryItem,
+    addAchievement,
+    updateAchievement,
+    deleteAchievement,
     saveChanges,
     resetToDefaults,
     importFullBackup,
@@ -94,8 +101,8 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
 
-  // Tabs: 'team' | 'events' | 'projects' | 'gallery' | 'settings'
-  const [activeTab, setActiveTab] = useState<"team" | "events" | "projects" | "gallery" | "settings">("team");
+  // Tabs: 'team' | 'events' | 'projects' | 'gallery' | 'achievements' | 'settings'
+  const [activeTab, setActiveTab] = useState<"team" | "events" | "projects" | "gallery" | "achievements" | "settings">("team");
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState("");
@@ -103,6 +110,7 @@ export default function AdminPage() {
   const [eventFilter, setEventFilter] = useState<"all" | "Upcoming" | "Ongoing" | "Completed">("all");
   const [projectFilter, setProjectFilter] = useState<string>("all");
   const [galleryFilter, setGalleryFilter] = useState<string>("all");
+  const [achievementFilter, setAchievementFilter] = useState<string>("all");
 
   // Toast Notification
   const [toastMessage, setToastMessage] = useState<{ text: string; type: "success" | "info" | "warning" } | null>(null);
@@ -119,6 +127,9 @@ export default function AdminPage() {
 
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const [editingGalleryItem, setEditingGalleryItem] = useState<WorkshopMediaItem | null>(null);
+
+  const [isAchievementModalOpen, setIsAchievementModalOpen] = useState(false);
+  const [editingAchievement, setEditingAchievement] = useState<Achievement | null>(null);
 
   const [isCloudHelpModalOpen, setIsCloudHelpModalOpen] = useState(false);
 
@@ -292,6 +303,21 @@ export default function AdminPage() {
       g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       g.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       g.badge.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const filteredAchievements = (achievements || []).filter((a) => {
+    const matchesCategory =
+      achievementFilter === "all" ||
+      a.category.toLowerCase() === achievementFilter.toLowerCase();
+    const query = searchQuery.toLowerCase();
+    const matchesSearch =
+      a.event.toLowerCase().includes(query) ||
+      a.rank.toLowerCase().includes(query) ||
+      a.institution.toLowerCase().includes(query) ||
+      a.highlight.toLowerCase().includes(query) ||
+      a.description.toLowerCase().includes(query) ||
+      a.year.includes(query);
     return matchesCategory && matchesSearch;
   });
 
@@ -563,6 +589,19 @@ export default function AdminPage() {
               High-Res Lab Captures
             </span>
           </div>
+
+          <div className="bg-[#0c121e] p-4 rounded-xl border border-slate-800 hover:border-yellow-500/40 transition-colors shadow-lg col-span-2 lg:col-span-1">
+            <div className="flex items-center justify-between text-slate-400 text-xs font-mono">
+              <span className="uppercase tracking-wider">National Accolades</span>
+              <Trophy className="w-4 h-4 text-yellow-400" />
+            </div>
+            <span className="text-3xl font-black font-tech text-white mt-1 block">
+              {achievements.length}
+            </span>
+            <span className="text-[11px] font-mono text-yellow-400/80">
+              Podiums &amp; Championships
+            </span>
+          </div>
         </div>
 
         {/* Tactical Search & Action Bar */}
@@ -637,6 +676,18 @@ export default function AdminPage() {
                 <span>Upload Lab Photo</span>
               </button>
             )}
+            {activeTab === "achievements" && (
+              <button
+                onClick={() => {
+                  setEditingAchievement(null);
+                  setIsAchievementModalOpen(true);
+                }}
+                className="bg-yellow-500 hover:bg-yellow-400 text-[#070b12] font-tech font-bold text-xs px-3.5 py-1.5 rounded-lg shadow-[0_0_15px_rgba(234,179,8,0.3)] flex items-center gap-1.5 cursor-pointer uppercase tracking-wider"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Register Accolade</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -688,6 +739,18 @@ export default function AdminPage() {
           >
             <Camera className="w-4 h-4" />
             <span>Lab 104 Media ({workshopGallery.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("achievements")}
+            className={`py-3 px-4 text-xs font-tech font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer uppercase tracking-wider shrink-0 ${
+              activeTab === "achievements"
+                ? "border-yellow-400 text-yellow-400 bg-yellow-950/20"
+                : "border-transparent text-slate-400 hover:text-white"
+            }`}
+          >
+            <Trophy className="w-4 h-4" />
+            <span>Track Record ({achievements.length})</span>
           </button>
 
           <button
@@ -1159,7 +1222,148 @@ export default function AdminPage() {
         )}
 
         {/* ================================================================= */}
-        {/* TAB 5: SYSTEM TELEMETRY, PASSCODE & BACKUPS                       */}
+        {/* TAB 5: ACHIEVEMENTS & NATIONAL ACCOLADES                          */}
+        {/* ================================================================= */}
+        {activeTab === "achievements" && (
+          <div className="space-y-4">
+            {/* Filter Pills */}
+            <div className="flex flex-wrap gap-2 text-[11px] font-mono">
+              {[
+                { id: "all", label: `All Accolades (${achievements.length})` },
+                {
+                  id: "Podium",
+                  label: `Podiums & Gold (${achievements.filter((a) => a.category === "Podium").length})`,
+                },
+                {
+                  id: "National Finalist",
+                  label: `National Finalists (${achievements.filter((a) => a.category === "National Finalist").length})`,
+                },
+                {
+                  id: "Special Award",
+                  label: `Special Awards (${achievements.filter((a) => a.category === "Special Award").length})`,
+                },
+                {
+                  id: "Defense Showcase",
+                  label: `Defense Showcases (${achievements.filter((a) => a.category === "Defense Showcase").length})`,
+                },
+              ].map((pill) => (
+                <button
+                  key={pill.id}
+                  onClick={() => setAchievementFilter(pill.id)}
+                  className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                    achievementFilter === pill.id
+                      ? "bg-yellow-500/20 text-yellow-300 border-yellow-500/50 font-bold"
+                      : "bg-[#0c121e] text-slate-400 border-slate-800 hover:border-slate-700"
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Achievements Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredAchievements.map((ach) => (
+                <div
+                  key={ach.id}
+                  className="bg-[#0c121e] border border-slate-800 hover:border-yellow-500/40 rounded-xl p-5 flex flex-col justify-between transition-all group shadow-lg"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border uppercase ${
+                          ach.category === "Podium"
+                            ? "bg-yellow-950/80 text-yellow-400 border-yellow-500/40"
+                            : ach.category === "National Finalist"
+                            ? "bg-cyan-950/80 text-cyan-400 border-cyan-500/40"
+                            : "bg-purple-950/80 text-purple-300 border-purple-500/40"
+                        }`}
+                      >
+                        {ach.category}
+                      </span>
+                      <span className="text-xs font-mono text-slate-400 font-bold">
+                        {ach.year}
+                      </span>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center gap-1.5 text-yellow-400 text-xs font-mono font-bold">
+                        <Trophy className="w-3.5 h-3.5" />
+                        <span>{ach.rank}</span>
+                      </div>
+                      <h4 className="font-tech text-base font-bold text-white mt-1 group-hover:text-yellow-400 transition-colors">
+                        {ach.event}
+                      </h4>
+                      <p className="text-[11px] font-mono text-slate-400 mt-0.5">
+                        {ach.institution} • {ach.edition}
+                      </p>
+                    </div>
+
+                    <div className="p-3 bg-[#070b12] rounded-lg border border-slate-800/80 space-y-1">
+                      <p className="text-xs font-semibold text-slate-200">
+                        {ach.highlight}
+                      </p>
+                      <p className="text-[11px] text-slate-400 leading-relaxed font-sans line-clamp-2">
+                        {ach.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-3 mt-4 border-t border-slate-800/80 flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-slate-500">
+                      ID: {ach.id}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          setEditingAchievement(ach);
+                          setIsAchievementModalOpen(true);
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-yellow-400 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                        title="Edit Accolade"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (confirm(`Delete achievement "${ach.event}"?`)) {
+                            deleteAchievement(ach.id);
+                            showToast(`Deleted ${ach.event}`, "info");
+                          }
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                        title="Delete Accolade"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {filteredAchievements.length === 0 && (
+              <div className="text-center py-12 bg-[#0c121e] border border-slate-800 rounded-xl space-y-3">
+                <Trophy className="w-8 h-8 text-slate-600 mx-auto" />
+                <p className="font-tech text-slate-400 text-sm uppercase tracking-wider">
+                  No achievements match current filter
+                </p>
+                <button
+                  onClick={() => {
+                    setAchievementFilter("all");
+                    setSearchQuery("");
+                  }}
+                  className="text-xs font-mono text-cyan-400 hover:underline cursor-pointer"
+                >
+                  Reset Filter
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 6: SYSTEM TELEMETRY, PASSCODE & BACKUPS                       */}
         {/* ================================================================= */}
         {activeTab === "settings" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1350,6 +1554,22 @@ export default function AdminPage() {
             showToast(`Added ${saved.title} to Lab 104 Media!`, "success");
           }
           setIsGalleryModalOpen(false);
+        }}
+      />
+
+      <AchievementModal
+        isOpen={isAchievementModalOpen}
+        initialData={editingAchievement}
+        onClose={() => setIsAchievementModalOpen(false)}
+        onSave={(saved) => {
+          if (editingAchievement) {
+            updateAchievement(saved.id, saved);
+            showToast(`Updated accolade: ${saved.event}`, "success");
+          } else {
+            addAchievement(saved);
+            showToast(`Registered accolade: ${saved.event}!`, "success");
+          }
+          setIsAchievementModalOpen(false);
         }}
       />
 

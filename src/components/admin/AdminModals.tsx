@@ -18,8 +18,10 @@ import {
   Cloud,
   Layers,
   Upload,
+  Trophy,
+  Award,
 } from "lucide-react";
-import { TeamMember, EventItem, Project, WorkshopMediaItem } from "@/data/siteData";
+import { TeamMember, EventItem, Project, WorkshopMediaItem, Achievement } from "@/data/siteData";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 // =========================================================================
@@ -1199,3 +1201,327 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`}
     </div>
   );
 }
+
+// =========================================================================
+// 6. ACHIEVEMENT / ACCOLADE MODAL WITH LIVE CARD SIMULATOR
+// =========================================================================
+export function AchievementModal({
+  isOpen,
+  initialData,
+  onClose,
+  onSave,
+}: {
+  isOpen: boolean;
+  initialData: Achievement | null;
+  onClose: () => void;
+  onSave: (item: Achievement) => void;
+}) {
+  const [event, setEvent] = useState(initialData?.event || "");
+  const [institution, setInstitution] = useState(initialData?.institution || "");
+  const [edition, setEdition] = useState(initialData?.edition || "2026");
+  const [rank, setRank] = useState(initialData?.rank || "");
+  const [highlight, setHighlight] = useState(initialData?.highlight || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [category, setCategory] = useState<Achievement["category"]>(initialData?.category || "Podium");
+  const [year, setYear] = useState(initialData?.year || new Date().getFullYear().toString());
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!event.trim()) return;
+
+    const item: Achievement = {
+      id: initialData?.id || `ach-${Date.now()}`,
+      event: event.trim(),
+      institution: institution.trim() || "National Robotics Circuit",
+      edition: edition.trim() || year.trim(),
+      rank: rank.trim() || "National Honors",
+      highlight: highlight.trim() || "Excellence in robotics engineering and tactical autonomy.",
+      description: description.trim() || "Represented Army Institute of Technology with distinction.",
+      category,
+      year: year.trim() || new Date().getFullYear().toString(),
+    };
+
+    onSave(item);
+  };
+
+  const applyPreset = (preset: {
+    event: string;
+    institution: string;
+    rank: string;
+    highlight: string;
+    category: Achievement["category"];
+  }) => {
+    setEvent(preset.event);
+    setInstitution(preset.institution);
+    setRank(preset.rank);
+    setHighlight(preset.highlight);
+    setCategory(preset.category);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.96 }}
+        className="w-full max-w-4xl bg-[#0c121e] border border-cyan-500/30 rounded-2xl shadow-[0_0_50px_rgba(0,240,255,0.15)] overflow-hidden font-sans my-8"
+      >
+        {/* Modal Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#080d16]">
+          <div className="flex items-center gap-2.5">
+            <Trophy className="w-5 h-5 text-amber-400 animate-pulse" />
+            <h3 className="font-tech text-base sm:text-lg font-bold text-white tracking-wide uppercase">
+              {initialData ? "Edit Trophy / Accolade" : "Register New Achievement"}
+            </h3>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Quick Presets Bar */}
+        <div className="px-6 py-2.5 bg-[#0a0f18] border-b border-slate-800 flex items-center gap-2 overflow-x-auto text-xs font-mono">
+          <span className="text-slate-400 shrink-0">Presets:</span>
+          <button
+            type="button"
+            onClick={() =>
+              applyPreset({
+                event: "DD Robocon India",
+                institution: "Doordarshan / IIT Delhi",
+                rank: "National Super League Quarterfinalist",
+                highlight: "Ranked among Top 8 collegiate autonomous robotics cadres nationwide.",
+                category: "National Finalist",
+              })
+            }
+            className="px-2.5 py-1 rounded-md bg-slate-800 text-cyan-300 hover:bg-slate-700 transition-colors shrink-0"
+          >
+            DD Robocon
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              applyPreset({
+                event: "Smart India Hackathon (Hardware)",
+                institution: "AICTE / MoE",
+                rank: "1st Place Winner • Gold",
+                highlight: "First prize for tactical defense rover with autonomous vision pipeline.",
+                category: "Podium",
+              })
+            }
+            className="px-2.5 py-1 rounded-md bg-slate-800 text-amber-300 hover:bg-slate-700 transition-colors shrink-0"
+          >
+            SIH Hardware Gold
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              applyPreset({
+                event: "IIT Bombay Techfest (Meshmerize)",
+                institution: "IIT Bombay",
+                rank: "2nd Place Silver Podium",
+                highlight: "Sub-millisecond line maze solver algorithm finish.",
+                category: "Podium",
+              })
+            }
+            className="px-2.5 py-1 rounded-md bg-slate-800 text-emerald-300 hover:bg-slate-700 transition-colors shrink-0"
+          >
+            IITB Techfest
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 max-h-[72vh] overflow-y-auto">
+            {/* Form Fields (7 cols) */}
+            <div className="lg:col-span-7 space-y-4">
+              <div>
+                <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1">
+                  Championship / Event Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={event}
+                  onChange={(e) => setEvent(e.target.value)}
+                  placeholder="e.g. Aquawar 3.0 / Robocon 2026"
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#060a12] border border-slate-700 text-white text-sm focus:border-cyan-400 focus:outline-none font-sans"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1">
+                    Host Institution
+                  </label>
+                  <input
+                    type="text"
+                    value={institution}
+                    onChange={(e) => setInstitution(e.target.value)}
+                    placeholder="e.g. IIT Guwahati / BITS Goa"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#060a12] border border-slate-700 text-white text-sm focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1">
+                    Edition / Season
+                  </label>
+                  <input
+                    type="text"
+                    value={edition}
+                    onChange={(e) => setEdition(e.target.value)}
+                    placeholder="e.g. 2025-26"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#060a12] border border-slate-700 text-white text-sm focus:border-cyan-400 focus:outline-none font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1">
+                    Rank / Placement *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={rank}
+                    onChange={(e) => setRank(e.target.value)}
+                    placeholder="e.g. 1st Place Gold / AIR 3"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#060a12] border border-slate-700 text-white text-sm focus:border-cyan-400 focus:outline-none font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1">
+                    Category Tier
+                  </label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value as Achievement["category"])}
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#060a12] border border-slate-700 text-white text-sm focus:border-cyan-400 focus:outline-none font-mono"
+                  >
+                    <option value="Podium">Podium (1st, 2nd, 3rd Gold/Silver/Bronze)</option>
+                    <option value="National Finalist">National Finalist</option>
+                    <option value="Special Award">Special Award / Innovation Trophy</option>
+                    <option value="Defense Showcase">Defense Showcase</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-1">
+                  <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1">
+                    Year
+                  </label>
+                  <input
+                    type="text"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                    placeholder="2026"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#060a12] border border-slate-700 text-white text-sm focus:border-cyan-400 focus:outline-none font-mono"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1">
+                    Highlight Punchline
+                  </label>
+                  <input
+                    type="text"
+                    value={highlight}
+                    onChange={(e) => setHighlight(e.target.value)}
+                    placeholder="e.g. Bronze in national robotics combat"
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#060a12] border border-slate-700 text-white text-sm focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1">
+                  Operational Description
+                </label>
+                <textarea
+                  rows={3}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Details of hardware, bot name, and arena achievements..."
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#060a12] border border-slate-700 text-white text-sm focus:border-cyan-400 focus:outline-none resize-none font-sans"
+                />
+              </div>
+            </div>
+
+            {/* Right Column: Live Card Simulator (5 cols) */}
+            <div className="lg:col-span-5 space-y-3">
+              <span className="block text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider">
+                Live Public Card Simulator
+              </span>
+
+              {/* Glassmorphic simulated card */}
+              <div className="p-6 rounded-2xl bg-white/95 text-[#240d2b] border border-white/90 shadow-[0_15px_35px_rgba(0,0,0,0.3)] space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] font-semibold bg-[#ff6b35]/12 border border-[#ff6b35]/25 px-2.5 py-0.5 rounded-full">
+                    {category}
+                  </span>
+                  <span className="text-xs font-mono text-[#240d2b]/50">
+                    {year || "2026"}
+                  </span>
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Trophy className="w-4 h-4 text-[#ff6b35]" />
+                    <span className="font-bold font-mono text-sm text-[#ff6b35]">
+                      {rank || "Rank Title"}
+                    </span>
+                  </div>
+                  <h4 className="font-display text-lg font-bold text-[#240d2b] tracking-tight leading-snug">
+                    {event || "Championship Event"}
+                  </h4>
+                  <p className="text-xs font-mono text-[#240d2b]/60 mt-0.5">
+                    {institution || "Host Organization"} • {edition || "Season"}
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] text-xs font-body text-[#240d2b]/80 space-y-1">
+                  <p className="font-semibold text-[#240d2b]">
+                    {highlight || "Highlight punchline will show here."}
+                  </p>
+                  <p className="text-[#240d2b]/65 text-[11px] leading-relaxed">
+                    {description || "Full tournament narrative description..."}
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-[#240d2b]/[0.08] flex items-center justify-between text-[10px] font-mono text-[#240d2b]/50">
+                  <span>CEAR DEFENSE CADRE</span>
+                  <span className="text-[#ff6b35] font-semibold">AIT PUNE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Footer */}
+          <div className="flex items-center justify-end gap-3 px-6 py-4 bg-[#080d16] border-t border-slate-800">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs rounded-lg transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-5 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-black font-mono text-xs font-bold rounded-lg shadow-lg shadow-cyan-500/20 transition-all cursor-pointer"
+            >
+              {initialData ? "Save Accolade" : "Add to Track Record"}
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
