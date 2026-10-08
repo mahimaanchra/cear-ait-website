@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
-import { X, CheckCircle2, ArrowRight, Loader2, AlertCircle, ShieldCheck, Sparkles } from "lucide-react";
+import { X, CheckCircle2, ArrowRight, Loader2, AlertCircle, ShieldCheck, Sparkles, Copy, Check, FileCheck } from "lucide-react";
 import { wartechTracks } from "@/data/siteData";
 
 interface RegistrationModalProps {
@@ -39,6 +39,36 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [copiedPass, setCopiedPass] = useState(false);
+
+  const handleQuickFill = () => {
+    if (activeTab === "inductions") {
+      setInductionData({
+        fullName: "Cadet Aryan Varma",
+        email: "aryan.varma@aitpune.edu.in",
+        yearBranch: "FE - Computer",
+        domain: "AI & Neural Edge",
+        statement: "Interested in edge perception on NVIDIA Jetson and ROS2 autonomous navigation pipelines.",
+      });
+    } else {
+      setWartechData({
+        teamName: "AIT Vortex Robotics",
+        college: "Army Institute of Technology, Pune",
+        trackId: "robo-soccer",
+        leadName: "Captain R. Shekhawat",
+        email: "vortex.lead@aitpune.edu.in",
+        phone: "+91 98765 43210",
+        teamSize: "3 Members",
+      });
+    }
+  };
+
+  const handleCopyPass = () => {
+    if (!regId) return;
+    navigator.clipboard?.writeText(regId);
+    setCopiedPass(true);
+    setTimeout(() => setCopiedPass(false), 3000);
+  };
 
   useEffect(() => {
     if (initialTrack) {
@@ -141,13 +171,24 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
               <div>
                 {/* Header & Tabs */}
                 <div className="mb-6 space-y-4">
-                  <div>
-                    <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/50 bg-white/80 border border-[#240d2b]/[0.08] px-2.5 py-0.5 rounded-full">
-                      Official Entry Portal
-                    </span>
-                    <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#240d2b] mt-2">
-                      CEAR Registry
-                    </h3>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/50 bg-white/80 border border-[#240d2b]/[0.08] px-2.5 py-0.5 rounded-full">
+                        Official Entry Portal
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#240d2b] mt-1">
+                        CEAR Registry
+                      </h3>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleQuickFill}
+                      className="text-[11px] font-mono text-[#ff6b35] hover:text-[#e05a36] bg-[#ff6b35]/10 border border-[#ff6b35]/20 hover:bg-[#ff6b35]/15 px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <Sparkles className="w-3 h-3" />
+                      <span>Auto-fill Sample</span>
+                    </button>
                   </div>
 
                   {/* Glassmorphic Tabs */}
@@ -422,27 +463,74 @@ export function RegistrationModal({ isOpen, onClose, initialTrack }: Registratio
                 )}
               </div>
             ) : (
-              /* SUCCESS SCREEN */
-              <div className="text-center py-10 space-y-6">
+              /* SUCCESS SCREEN WITH OFFICIAL PASS CARD */
+              <div className="text-center py-6 space-y-6">
                 <div className="w-16 h-16 rounded-2xl bg-[#ff6b35]/12 border border-[#ff6b35]/25 text-[#ff6b35] mx-auto flex items-center justify-center shadow-xs">
                   <CheckCircle2 className="w-8 h-8 text-[#ff6b35]" />
                 </div>
 
                 <div>
-                  <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] font-semibold bg-[#ff6b35]/10 px-3 py-1 rounded-full">
-                    Registration Confirmed
+                  <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] font-semibold bg-[#ff6b35]/10 px-3 py-1 rounded-full border border-[#ff6b35]/20">
+                    Registration Verified
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#240d2b] mt-2">
-                    Welcome to CEAR
+                    Welcome to CEAR Cadre
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#240d2b]/70 font-body max-w-sm mx-auto mt-2">
-                    Your registration details have been received and recorded. We will follow up via email with tournament schedules and onboarding directives.
+                  <p className="text-xs sm:text-sm text-[#240d2b]/70 font-body max-w-sm mx-auto mt-1.5">
+                    Your credentials have been securely stored in Lab 104 registry. Retain your admission code for orientation &amp; pit admittance.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.08] inline-block font-mono text-xs shadow-inner">
-                  <span className="text-[#240d2b]/50 block">Registration Code:</span>
-                  <span className="font-bold text-base text-[#ff6b35]">{regId}</span>
+                {/* Official Glass Admission Pass */}
+                <div className="w-full bg-[#f6f3ee] border border-[#240d2b]/[0.1] rounded-2xl p-5 text-left font-mono space-y-3 relative overflow-hidden shadow-inner">
+                  {/* Decorative corner tag */}
+                  <div className="flex items-center justify-between pb-3 border-b border-[#240d2b]/[0.08]">
+                    <div className="flex items-center gap-2 text-xs">
+                      <ShieldCheck className="w-4 h-4 text-[#ff6b35]" />
+                      <span className="font-bold text-[#240d2b] uppercase">CEAR ADMISSION PASS</span>
+                    </div>
+                    <span className="text-[10px] text-[#240d2b]/50">AIT LAB 104 • PUNE</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <span className="text-[10px] text-[#240d2b]/50 block">PARTICIPANT / TEAM:</span>
+                      <span className="font-bold text-[#240d2b] truncate block">
+                        {activeTab === "wartech" ? wartechData.teamName || wartechData.leadName : inductionData.fullName || "Cadet"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-[#240d2b]/50 block">TRACK / DOMAIN:</span>
+                      <span className="font-bold text-[#ff6b35] truncate block">
+                        {activeTab === "wartech" ? wartechData.trackId : inductionData.domain}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-between bg-white/80 p-3 rounded-xl border border-white/80">
+                    <div>
+                      <span className="text-[10px] text-[#240d2b]/50 block">PASSCODE ID:</span>
+                      <span className="font-bold text-base text-[#240d2b] tracking-wider">{regId}</span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleCopyPass}
+                      className="px-3.5 py-1.5 rounded-lg bg-[#240d2b] hover:bg-[#3b1646] text-white text-xs font-mono font-medium transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+                    >
+                      {copiedPass ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5 text-white/80" />
+                          <span>Copy Pass</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <div>

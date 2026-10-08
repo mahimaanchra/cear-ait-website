@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, ArrowRight, X, ArrowUpRight, Cpu } from "lucide-react";
+import { Github, ExternalLink, ArrowRight, X, ArrowUpRight, Cpu, Search } from "lucide-react";
 import { Project } from "@/data/siteData";
 import { useSiteContent } from "@/context/SiteContentContext";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -14,13 +14,21 @@ export function ProjectsShowcase() {
   const { projects } = useSiteContent();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState("All Platforms");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredProjects =
-    activeCategory === "All Platforms"
-      ? projects
-      : projects.filter(
-          (p) => p.category.toLowerCase() === activeCategory.toLowerCase()
-        );
+  const filteredProjects = projects.filter((p) => {
+    const matchesCategory =
+      activeCategory === "All Platforms" ||
+      p.category.toLowerCase() === activeCategory.toLowerCase();
+    const query = searchQuery.toLowerCase().trim();
+    const matchesSearch =
+      !query ||
+      p.title.toLowerCase().includes(query) ||
+      p.description.toLowerCase().includes(query) ||
+      p.category.toLowerCase().includes(query) ||
+      (p.tags && p.tags.some((t) => t.toLowerCase().includes(query)));
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <section id="projects" className="relative py-28 sm:py-36 bg-transparent">
@@ -44,24 +52,45 @@ export function ProjectsShowcase() {
           </div>
         </div>
 
-        {/* Category Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2">
-          {categories.map((cat) => {
-            const isActive = activeCategory === cat;
-            return (
+        {/* Category Filter Pills & Search Input */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-2">
+            {categories.map((cat) => {
+              const isActive = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`text-xs font-mono px-4 py-2 rounded-full transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-[#240d2b] text-white shadow-xs font-semibold"
+                      : "bg-white/80 backdrop-blur-md text-[#240d2b]/70 border border-white/80 hover:border-[#ff6b35]/40 hover:text-[#ff6b35]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="relative min-w-[240px]">
+            <Search className="w-3.5 h-3.5 text-[#240d2b]/40 absolute left-3 top-3" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search platforms or tags..."
+              className="w-full pl-8 pr-7 py-2 rounded-full bg-white/80 backdrop-blur-md border border-white/80 text-xs font-mono text-[#240d2b] placeholder:text-[#240d2b]/40 focus:outline-none focus:border-[#ff6b35] transition-all shadow-xs"
+            />
+            {searchQuery && (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`text-xs font-mono px-4 py-2 rounded-full transition-all cursor-pointer ${
-                  isActive
-                    ? "bg-[#240d2b] text-white shadow-xs font-semibold"
-                    : "bg-white/80 backdrop-blur-md text-[#240d2b]/70 border border-white/80 hover:border-[#ff6b35]/40 hover:text-[#ff6b35]"
-                }`}
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2.5 top-2.5 text-[#240d2b]/40 hover:text-[#240d2b] cursor-pointer"
               >
-                {cat}
+                <X className="w-3.5 h-3.5" />
               </button>
-            );
-          })}
+            )}
+          </div>
         </div>
 
         {/* Projects Grid or Empty State */}
@@ -70,10 +99,13 @@ export function ProjectsShowcase() {
             <p className="font-display text-lg font-bold text-[#240d2b]">No platforms found in this domain.</p>
             <p className="text-xs font-mono text-[#240d2b]/60">Select another filter or view all platforms.</p>
             <button
-              onClick={() => setActiveCategory("All Platforms")}
+              onClick={() => {
+                setActiveCategory("All Platforms");
+                setSearchQuery("");
+              }}
               className="text-xs font-mono font-semibold text-[#ff6b35] hover:underline cursor-pointer"
             >
-              Reset Filter
+              Reset Filters
             </button>
           </div>
         ) : (
