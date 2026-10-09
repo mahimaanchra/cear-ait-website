@@ -92,6 +92,10 @@ export default function Home() {
       <RulebookModal
         isOpen={rulebookModalOpen}
         onClose={() => setRulebookModalOpen(false)}
+        onSelectTrack={(trackId) => {
+          setRulebookModalOpen(false);
+          handleOpenRegister(trackId);
+        }}
       />
     </div>
   );

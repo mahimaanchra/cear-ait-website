@@ -55,6 +55,10 @@ export default function WartechPage() {
       <RulebookModal
         isOpen={rulebookModalOpen}
         onClose={() => setRulebookModalOpen(false)}
+        onSelectTrack={(trackId) => {
+          setRulebookModalOpen(false);
+          handleOpenRegister(trackId);
+        }}
       />
     </div>
   );
