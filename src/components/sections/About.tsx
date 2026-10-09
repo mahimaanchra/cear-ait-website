@@ -2,7 +2,24 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Cpu, Eye, Navigation, ArrowUpRight, Sparkles, X, Layers, Cpu as Chip, ShieldCheck } from "lucide-react";
+import {
+  Brain,
+  Cpu,
+  Eye,
+  Navigation,
+  ArrowUpRight,
+  Sparkles,
+  X,
+  Layers,
+  Cpu as Chip,
+  ShieldCheck,
+  Calendar,
+  Compass,
+  Check,
+  Copy,
+  Gauge,
+  Sliders,
+} from "lucide-react";
 import { siteConfig, focusAreas } from "@/data/siteData";
 import { WordBlurReveal } from "@/components/ui/WordBlurReveal";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -14,6 +31,54 @@ const iconMap: Record<string, React.ReactNode> = {
   vision: <Eye className="w-5 h-5 text-[#240d2b] group-hover:text-white transition-colors" />,
   autonomous: <Navigation className="w-5 h-5 text-[#240d2b] group-hover:text-white transition-colors" />,
 };
+
+interface Milestone {
+  year: string;
+  phase: string;
+  title: string;
+  description: string;
+  achievements: string[];
+  techStack: string[];
+}
+
+const cearMilestones: Milestone[] = [
+  {
+    year: "2020",
+    phase: "Genesis",
+    title: "Inception & Lab 104 Robotics Wing",
+    description:
+      "Founded by visionaries at Army Institute of Technology, Pune to build an indigenous hands-on hardware incubator for combat mechatronics and control circuits.",
+    achievements: ["Established Lab 104", "First Combat Cadre", "Custom STM32 Motor Drives"],
+    techStack: ["FreeRTOS", "STM32", "Altium", "FDM 3D"],
+  },
+  {
+    year: "2022",
+    phase: "Expansion",
+    title: "Aquatic Robotics & Aerial Test Cells",
+    description:
+      "Pioneered aquatic underwater robotics, designing the award-winning Jalpari AUV platform which secured 3rd Position and Unique Design honours at IIT Guwahati Techniche.",
+    achievements: ["IIT Guwahati Podium", "Sub-surface Telemetry", "FPV Drone Racing Team"],
+    techStack: ["T200 Thrusters", "Hydrodynamics", "Pixhawk", "MAVLink"],
+  },
+  {
+    year: "2024",
+    phase: "National Arena",
+    title: "Wartech Flagship Championship Inauguration",
+    description:
+      "Created the premier national robotics battleground in Western India, hosting 8 competition disciplines ranging from Robo Soccer and 15kg Robowar to Micromouse mazes.",
+    achievements: ["50+ Inter-Collegiate Teams", "₹1.5L+ Prize Pool", "8 Battle Arenas"],
+    techStack: ["RF 2.4GHz", "High-Voltage LiPo", "Autonomous Dohyo"],
+  },
+  {
+    year: "2026",
+    phase: "Frontier",
+    title: "Swarm Autonomy & Edge Neural Compute",
+    description:
+      "Deploying decentralized robotic swarms, multi-agent SLAM, and TensorRT neural networks on Jetson Orin Nano accelerators for next-generation defense applications.",
+    achievements: ["Sub-14ms YOLOv8 Inference", "GPS-Denied Visual SLAM", "Swarm Coordination"],
+    techStack: ["ROS2 Humble", "Jetson Orin", "YOLOv8", "RealSense Depth"],
+  },
+];
 
 const domainDetails: Record<
   string,
@@ -31,7 +96,7 @@ const domainDetails: Record<
     benchmarks: "< 14ms edge inference latency at 1080p stream resolution",
   },
   robotics: {
-    hardware: ["Custom STM32H7 Motor Drives", "High-Torque Planetary Planetary DC Motors", "SLA/FDM 3D Carbon Linkages"],
+    hardware: ["Custom STM32H7 Motor Drives", "High-Torque Planetary DC Motors", "SLA/FDM 3D Carbon Linkages"],
     software: ["FreeRTOS Kernel", "CAN Bus / CANopen Protocols", "Inverse Kinematics Solvers", "UART Telemetry"],
     platforms: ["Wartech 2026 Combat Arena Bots", "6-DOF Robotic Articulation Arm", "Rough-Terrain Suspension Rover"],
     benchmarks: "Zero-backlash transmission with sub-millimeter repeatable positioning",
@@ -53,6 +118,24 @@ const domainDetails: Record<
 export function About() {
   const [selectedDomain, setSelectedDomain] = useState<typeof focusAreas[0] | null>(null);
   const [neuralActive, setNeuralActive] = useState(true);
+  const [meshSpeed, setMeshSpeed] = useState<number>(0.9);
+  const [nodeCount, setNodeCount] = useState<number>(36);
+  const [copiedStack, setCopiedStack] = useState(false);
+  const [activeMilestoneYear, setActiveMilestoneYear] = useState<string>("2026");
+
+  const handleCopyStack = () => {
+    if (!selectedDomain) return;
+    const details = domainDetails[selectedDomain.id];
+    if (!details) return;
+    const stackText = `CEAR Domain: ${selectedDomain.title}
+Hardware: ${details.hardware.join(", ")}
+Software: ${details.software.join(", ")}
+Platforms: ${details.platforms.join(", ")}
+Operational Target: ${details.benchmarks}`;
+    navigator.clipboard.writeText(stackText);
+    setCopiedStack(true);
+    setTimeout(() => setCopiedStack(false), 2000);
+  };
 
   return (
     <section id="about" className="relative py-28 sm:py-36 bg-transparent">
@@ -127,8 +210,8 @@ export function About() {
           {neuralActive && (
             <NeuralCanvas
               className="opacity-70"
-              nodeCount={36}
-              speed={0.9}
+              nodeCount={nodeCount}
+              speed={meshSpeed}
               interactive={true}
             />
           )}
@@ -152,13 +235,29 @@ export function About() {
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#240d2b]/[0.08] text-xs font-mono text-[#240d2b]/80 shadow-xs">
+            {/* Interactive Telemetry Tuning Controls */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 border border-[#240d2b]/[0.08] text-xs font-mono text-[#240d2b]/80 shadow-xs">
                 <span className="text-[#240d2b]/50">Nodes:</span>
-                <span className="font-bold text-[#ff6b35]">36 Active</span>
+                <button
+                  onClick={() => setNodeCount((n) => (n === 24 ? 36 : n === 36 ? 48 : 24))}
+                  className="font-bold text-[#ff6b35] hover:underline cursor-pointer"
+                  title="Cycle Node Count"
+                >
+                  {nodeCount}
+                </button>
                 <span className="text-[#240d2b]/30">•</span>
-                <span className="text-[#240d2b]/50">Latency:</span>
-                <span className="font-bold text-[#240d2b]">12ms</span>
+                <span className="text-[#240d2b]/50">Speed:</span>
+                <button
+                  onClick={() => setMeshSpeed((s) => (s === 0.6 ? 1.0 : s === 1.0 ? 1.6 : 0.6))}
+                  className="font-bold text-[#240d2b] hover:text-[#ff6b35] cursor-pointer"
+                  title="Cycle Simulation Speed"
+                >
+                  {meshSpeed === 0.6 ? "0.6x" : meshSpeed === 1.0 ? "1.0x" : "1.6x"}
+                </button>
+                <span className="text-[#240d2b]/30">•</span>
+                <span className="text-[#240d2b]/50">Ping:</span>
+                <span className="font-bold text-emerald-600">12ms</span>
               </div>
 
               <button
@@ -172,8 +271,80 @@ export function About() {
           </div>
         </div>
 
+        {/* ================= CEAR STRATEGIC EVOLUTION & MILESTONES ================= */}
+        <div className="space-y-8 pt-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-6">
+            <div>
+              <span className="text-xs font-mono tracking-widest uppercase text-[#ff6b35] font-semibold">
+                Strategic Roadmap &amp; History
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-black font-display text-[#240d2b] tracking-tight mt-1">
+                From Lab 104 to National Arenas
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-[#240d2b]/60 font-mono">
+              2020 Foundation • 2026 Frontier Autonomous Swarms
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {cearMilestones.map((m) => {
+              const isSelected = activeMilestoneYear === m.year;
+              return (
+                <GlassCard
+                  key={m.year}
+                  onClick={() => setActiveMilestoneYear(m.year)}
+                  spotlightColor={isSelected ? "rgba(255, 107, 53, 0.2)" : "rgba(36, 13, 43, 0.08)"}
+                  className={`p-6 flex flex-col justify-between cursor-pointer transition-all ${
+                    isSelected ? "ring-2 ring-[#ff6b35] shadow-lg" : "hover:border-[#ff6b35]/40"
+                  }`}
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="font-display font-black text-2xl text-[#240d2b] tracking-tight">
+                        {m.year}
+                      </span>
+                      <span className="text-[10px] font-mono tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-[#ff6b35]/10 text-[#ff6b35] font-bold border border-[#ff6b35]/20">
+                        {m.phase}
+                      </span>
+                    </div>
+
+                    <h4 className="font-display text-base font-bold text-[#240d2b] tracking-tight">
+                      {m.title}
+                    </h4>
+
+                    <p className="text-xs text-[#240d2b]/75 font-body leading-relaxed line-clamp-3">
+                      {m.description}
+                    </p>
+
+                    <div className="space-y-1.5 pt-1">
+                      {m.achievements.map((ach, i) => (
+                        <div key={i} className="flex items-center gap-1.5 text-[11px] font-mono text-[#240d2b]/80">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]" />
+                          <span>{ach}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-4 mt-5 border-t border-[#240d2b]/[0.06] flex flex-wrap gap-1">
+                    {m.techStack.map((tech, i) => (
+                      <span
+                        key={i}
+                        className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white border border-[#240d2b]/[0.08] text-[#240d2b]/70"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </GlassCard>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Technical Domains Section with Glass Cards */}
-        <div id="domains" className="space-y-8 pt-6">
+        <div id="domains" className="space-y-8 pt-4">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-6">
             <div>
               <span className="text-xs font-mono tracking-widest uppercase text-[#240d2b]/50">
@@ -330,7 +501,25 @@ export function About() {
                 </div>
               )}
 
-              <div className="pt-2 flex justify-end">
+              {/* Action Buttons: Copy Stack & Done */}
+              <div className="pt-2 flex items-center justify-between">
+                <button
+                  onClick={handleCopyStack}
+                  className="inline-flex items-center gap-1.5 text-xs font-mono text-[#240d2b]/70 hover:text-[#ff6b35] cursor-pointer"
+                >
+                  {copiedStack ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Copied Stack to Clipboard</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Technical Stack</span>
+                    </>
+                  )}
+                </button>
+
                 <button
                   onClick={() => setSelectedDomain(null)}
                   className="py-2.5 px-6 rounded-full text-xs font-medium bg-[#240d2b] text-white hover:bg-[#3b1646] transition-all cursor-pointer shadow-md hover:scale-102"
