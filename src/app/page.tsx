@@ -64,7 +64,7 @@ export default function Home() {
         <Team />
 
         {/* 6. Key Events & Workshops Section */}
-        <UpcomingEvents onOpenRegister={() => handleOpenRegister()} />
+        <UpcomingEvents onOpenRegister={(trackId) => handleOpenRegister(trackId)} />
 
         {/* 7. Wartech Flagship Highlight Section */}
         <Wartech
