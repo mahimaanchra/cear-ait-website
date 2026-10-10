@@ -44,9 +44,15 @@ import {
   MapPin,
   Trophy,
   Award,
+  FileText,
+  Mail,
+  Phone,
+  RefreshCw,
+  FileSpreadsheet,
 } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
 import { TeamMember, EventItem, Project, WorkshopMediaItem, Achievement } from "@/data/siteData";
+import { RegistrationRecord } from "@/app/api/register/route";
 import {
   MemberModal,
   EventModal,
@@ -101,8 +107,8 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
 
-  // Tabs: 'team' | 'events' | 'projects' | 'gallery' | 'achievements' | 'settings'
-  const [activeTab, setActiveTab] = useState<"team" | "events" | "projects" | "gallery" | "achievements" | "settings">("team");
+  // Tabs: 'team' | 'events' | 'projects' | 'gallery' | 'achievements' | 'registrations' | 'settings'
+  const [activeTab, setActiveTab] = useState<"team" | "events" | "projects" | "gallery" | "achievements" | "registrations" | "settings">("team");
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState("");
@@ -111,6 +117,96 @@ export default function AdminPage() {
   const [projectFilter, setProjectFilter] = useState<string>("all");
   const [galleryFilter, setGalleryFilter] = useState<string>("all");
   const [achievementFilter, setAchievementFilter] = useState<string>("all");
+
+  // Registrations Management State
+  const [registrations, setRegistrations] = useState<RegistrationRecord[]>([]);
+  const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(false);
+  const [registrationFilter, setRegistrationFilter] = useState<"all" | "wartech" | "inductions">("all");
+  const [registrationStatusFilter, setRegistrationStatusFilter] = useState<string>("all");
+  const [selectedRegistration, setSelectedRegistration] = useState<RegistrationRecord | null>(null);
+  const [copiedRegId, setCopiedRegId] = useState<string | null>(null);
+
+  const fetchRegistrations = useCallback(async () => {
+    setIsLoadingRegistrations(true);
+    try {
+      const authPass = localStorage.getItem(CUSTOM_PASSCODE_KEY) || DEFAULT_PASSCODE;
+      const res = await fetch("/api/register", {
+        headers: { "x-admin-passcode": authPass },
+      });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.registrations)) {
+        setRegistrations(data.registrations);
+      }
+    } catch (err) {
+      console.error("Failed to fetch registrations", err);
+    } finally {
+      setIsLoadingRegistrations(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchRegistrations();
+    }
+  }, [isAuthenticated, fetchRegistrations]);
+
+  const exportRegistrationsCsv = () => {
+    if (registrations.length === 0) {
+      showToast("No registrations available to export", "info");
+      return;
+    }
+    const headers = [
+      "ID",
+      "Type",
+      "Applicant Name",
+      "Email",
+      "Phone",
+      "Track/Domain",
+      "Team Name",
+      "Team Size",
+      "College",
+      "Status",
+      "Created At",
+    ];
+    const rows = registrations.map((r) => [
+      r.id,
+      r.registration_type,
+      `"${(r.applicant_name || "").replace(/"/g, '""')}"`,
+      `"${(r.email || "").replace(/"/g, '""')}"`,
+      `"${(r.phone || "").replace(/"/g, '""')}"`,
+      `"${(r.track_or_domain || "").replace(/"/g, '""')}"`,
+      `"${(r.team_name || "").replace(/"/g, '""')}"`,
+      `"${(r.team_size || "").replace(/"/g, '""')}"`,
+      `"${(r.college || "").replace(/"/g, '""')}"`,
+      r.status,
+      r.created_at,
+    ]);
+    const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `cear_registrations_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast("✓ Exported registrations to CSV!", "success");
+  };
+
+  const filteredRegistrations = registrations.filter((r) => {
+    const matchesType = registrationFilter === "all" || r.registration_type === registrationFilter;
+    const matchesStatus = registrationStatusFilter === "all" || r.status === registrationStatusFilter;
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return matchesType && matchesStatus;
+    const matchesSearch =
+      r.applicant_name.toLowerCase().includes(q) ||
+      r.email.toLowerCase().includes(q) ||
+      (r.team_name && r.team_name.toLowerCase().includes(q)) ||
+      r.track_or_domain.toLowerCase().includes(q) ||
+      (r.phone && r.phone.toLowerCase().includes(q)) ||
+      (r.college && r.college.toLowerCase().includes(q)) ||
+      r.id.toLowerCase().includes(q);
+    return matchesType && matchesStatus && matchesSearch;
+  });
 
   // Toast Notification
   const [toastMessage, setToastMessage] = useState<{ text: string; type: "success" | "info" | "warning" } | null>(null);
@@ -688,6 +784,27 @@ export default function AdminPage() {
                 <span>Register Accolade</span>
               </button>
             )}
+            {activeTab === "registrations" && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={fetchRegistrations}
+                  disabled={isLoadingRegistrations}
+                  className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-tech font-bold text-xs px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                  title="Refresh registrations"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isLoadingRegistrations ? "animate-spin" : ""}`} />
+                  <span>Refresh</span>
+                </button>
+                <button
+                  onClick={exportRegistrationsCsv}
+                  className="bg-emerald-500 hover:bg-emerald-400 text-[#070b12] font-tech font-bold text-xs px-3.5 py-1.5 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                  title="Export registrations to CSV file"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Export CSV</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -751,6 +868,18 @@ export default function AdminPage() {
           >
             <Trophy className="w-4 h-4" />
             <span>Track Record ({achievements.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("registrations")}
+            className={`py-3 px-4 text-xs font-tech font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer uppercase tracking-wider shrink-0 ${
+              activeTab === "registrations"
+                ? "border-emerald-400 text-emerald-400 bg-emerald-950/20"
+                : "border-transparent text-slate-400 hover:text-white"
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            <span>Registrations ({registrations.length})</span>
           </button>
 
           <button
@@ -1363,6 +1492,201 @@ export default function AdminPage() {
         )}
 
         {/* ================================================================= */}
+        {/* TAB 6: WARTECH & INDUCTIONS REGISTRATIONS                         */}
+        {/* ================================================================= */}
+        {activeTab === "registrations" && (
+          <div className="space-y-6">
+            {/* Quick Metrics Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-4">
+                <span className="text-slate-400 text-xs font-mono block">TOTAL CANDIDATES</span>
+                <span className="text-2xl font-black font-tech text-white mt-1 block">
+                  {registrations.length}
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400">Wartech + Inductions</span>
+              </div>
+              <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-4">
+                <span className="text-slate-400 text-xs font-mono block">WARTECH TEAMS</span>
+                <span className="text-2xl font-black font-tech text-amber-400 mt-1 block">
+                  {registrations.filter((r) => r.registration_type === "wartech").length}
+                </span>
+                <span className="text-[10px] font-mono text-slate-400">Combat &amp; Autonomous</span>
+              </div>
+              <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-4">
+                <span className="text-slate-400 text-xs font-mono block">INDUCTION CADETS</span>
+                <span className="text-2xl font-black font-tech text-cyan-400 mt-1 block">
+                  {registrations.filter((r) => r.registration_type === "inductions").length}
+                </span>
+                <span className="text-[10px] font-mono text-slate-400">FE &amp; SE Engineering</span>
+              </div>
+              <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-4">
+                <span className="text-slate-400 text-xs font-mono block">VERIFIED ROSTER</span>
+                <span className="text-2xl font-black font-tech text-emerald-400 mt-1 block">
+                  {registrations.filter((r) => r.status === "verified" || r.status === "shortlisted").length}
+                </span>
+                <span className="text-[10px] font-mono text-slate-400">
+                  {registrations.filter((r) => r.status === "pending").length} Pending Review
+                </span>
+              </div>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap gap-2 text-[11px] font-mono">
+                {[
+                  { id: "all", label: `All Types (${registrations.length})` },
+                  { id: "wartech", label: `Wartech Arenas (${registrations.filter((r) => r.registration_type === "wartech").length})` },
+                  { id: "inductions", label: `Inductions (${registrations.filter((r) => r.registration_type === "inductions").length})` },
+                ].map((pill) => (
+                  <button
+                    key={pill.id}
+                    onClick={() => setRegistrationFilter(pill.id as any)}
+                    className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                      registrationFilter === pill.id
+                        ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/50 font-bold"
+                        : "bg-[#0c121e] text-slate-400 border-slate-800 hover:border-slate-700"
+                    }`}
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-1.5 text-[11px] font-mono">
+                <span className="text-slate-500">Status:</span>
+                {["all", "pending", "verified", "shortlisted"].map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => setRegistrationStatusFilter(st)}
+                    className={`px-2.5 py-0.5 rounded-md uppercase tracking-wider text-[10px] transition-colors cursor-pointer ${
+                      registrationStatusFilter === st
+                        ? "bg-slate-700 text-white font-bold"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    {st}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Registrations List / Table */}
+            {isLoadingRegistrations ? (
+              <div className="text-center py-16 bg-[#0c121e] border border-slate-800 rounded-xl space-y-2">
+                <RefreshCw className="w-6 h-6 text-emerald-400 animate-spin mx-auto" />
+                <p className="font-mono text-xs text-slate-400">Loading registrations roster...</p>
+              </div>
+            ) : filteredRegistrations.length === 0 ? (
+              <div className="text-center py-16 bg-[#0c121e] border border-slate-800 rounded-xl space-y-3">
+                <FileText className="w-8 h-8 text-slate-600 mx-auto" />
+                <p className="font-tech text-slate-400 text-sm uppercase tracking-wider">
+                  No registrations match the selected criteria
+                </p>
+                <button
+                  onClick={() => {
+                    setRegistrationFilter("all");
+                    setRegistrationStatusFilter("all");
+                    setSearchQuery("");
+                  }}
+                  className="text-xs font-mono text-emerald-400 hover:underline cursor-pointer"
+                >
+                  Reset Registration Filters
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filteredRegistrations.map((record) => (
+                  <div
+                    key={record.id}
+                    className="bg-[#0c121e] border border-slate-800 hover:border-emerald-500/40 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all shadow-md group"
+                  >
+                    <div className="space-y-2 max-w-xl">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-xs font-mono font-bold text-white bg-slate-800 px-2.5 py-0.5 rounded">
+                          {record.id}
+                        </span>
+                        <span
+                          className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
+                            record.registration_type === "wartech"
+                              ? "bg-amber-950/80 text-amber-400 border border-amber-500/40"
+                              : "bg-cyan-950/80 text-cyan-400 border border-cyan-500/40"
+                          }`}
+                        >
+                          {record.registration_type}
+                        </span>
+                        <span
+                          className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded ${
+                            record.status === "verified"
+                              ? "bg-emerald-950/80 text-emerald-400 border border-emerald-500/40"
+                              : record.status === "shortlisted"
+                              ? "bg-purple-950/80 text-purple-300 border border-purple-500/40"
+                              : "bg-slate-800 text-slate-400"
+                          }`}
+                        >
+                          {record.status}
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-500">
+                          {new Date(record.created_at).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h4 className="font-tech text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
+                          {record.applicant_name}
+                          {record.team_name && (
+                            <span className="text-slate-400 text-sm font-normal ml-2 font-mono">
+                              ({record.team_name})
+                            </span>
+                          )}
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-400 mt-0.5">
+                          <span className="text-emerald-400 font-semibold">{record.track_or_domain}</span>
+                          {record.college && <span>&bull; {record.college}</span>}
+                          {record.team_size && <span>&bull; {record.team_size}</span>}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-400 pt-1">
+                        <a
+                          href={`mailto:${record.email}`}
+                          className="hover:text-emerald-400 transition-colors flex items-center gap-1"
+                        >
+                          <Mail className="w-3 h-3 text-slate-500" />
+                          <span>{record.email}</span>
+                        </a>
+                        {record.phone && (
+                          <a
+                            href={`tel:${record.phone}`}
+                            className="hover:text-emerald-400 transition-colors flex items-center gap-1"
+                          >
+                            <Phone className="w-3 h-3 text-slate-500" />
+                            <span>{record.phone}</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                      <button
+                        onClick={() => setSelectedRegistration(record)}
+                        className="bg-[#131b2c] hover:bg-[#1a253c] text-emerald-400 border border-slate-700 hover:border-emerald-500/50 font-mono text-xs px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Inspect</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ================================================================= */}
         {/* TAB 6: SYSTEM TELEMETRY, PASSCODE & BACKUPS                       */}
         {/* ================================================================= */}
         {activeTab === "settings" && (
@@ -1577,6 +1901,138 @@ export default function AdminPage() {
         isOpen={isCloudHelpModalOpen}
         onClose={() => setIsCloudHelpModalOpen(false)}
       />
+
+      {/* Registration Details Inspection Modal */}
+      <AnimatePresence>
+        {selectedRegistration && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-xl bg-[#0c121e] border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 text-white shadow-2xl"
+            >
+              <div className="flex items-start justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono font-bold text-white bg-slate-800 px-2 py-0.5 rounded">
+                      {selectedRegistration.id}
+                    </span>
+                    <span className="text-[10px] font-mono uppercase bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded">
+                      {selectedRegistration.registration_type}
+                    </span>
+                  </div>
+                  <h3 className="font-tech text-2xl font-bold mt-2 text-white">
+                    {selectedRegistration.applicant_name}
+                  </h3>
+                </div>
+
+                <button
+                  onClick={() => setSelectedRegistration(null)}
+                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                <div className="p-3 bg-[#131b2c] rounded-lg border border-slate-800">
+                  <span className="text-slate-500 block text-[10px] uppercase">TRACK / DOMAIN</span>
+                  <span className="font-bold text-emerald-400 text-sm mt-0.5 block">
+                    {selectedRegistration.track_or_domain}
+                  </span>
+                </div>
+                <div className="p-3 bg-[#131b2c] rounded-lg border border-slate-800">
+                  <span className="text-slate-500 block text-[10px] uppercase">STATUS</span>
+                  <span className="font-bold text-white text-sm mt-0.5 block uppercase">
+                    {selectedRegistration.status}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2 text-xs font-mono text-slate-300">
+                <div className="flex justify-between py-1 border-b border-slate-800/80">
+                  <span className="text-slate-500">Email:</span>
+                  <a href={`mailto:${selectedRegistration.email}`} className="text-cyan-400 hover:underline">
+                    {selectedRegistration.email}
+                  </a>
+                </div>
+                {selectedRegistration.phone && (
+                  <div className="flex justify-between py-1 border-b border-slate-800/80">
+                    <span className="text-slate-500">Phone:</span>
+                    <a href={`tel:${selectedRegistration.phone}`} className="text-cyan-400 hover:underline">
+                      {selectedRegistration.phone}
+                    </a>
+                  </div>
+                )}
+                {selectedRegistration.team_name && (
+                  <div className="flex justify-between py-1 border-b border-slate-800/80">
+                    <span className="text-slate-500">Team Name:</span>
+                    <span className="text-white font-bold">{selectedRegistration.team_name}</span>
+                  </div>
+                )}
+                {selectedRegistration.team_size && (
+                  <div className="flex justify-between py-1 border-b border-slate-800/80">
+                    <span className="text-slate-500">Team Size:</span>
+                    <span className="text-white">{selectedRegistration.team_size}</span>
+                  </div>
+                )}
+                {selectedRegistration.college && (
+                  <div className="flex justify-between py-1 border-b border-slate-800/80">
+                    <span className="text-slate-500">College:</span>
+                    <span className="text-white">{selectedRegistration.college}</span>
+                  </div>
+                )}
+                <div className="flex justify-between py-1 border-b border-slate-800/80">
+                  <span className="text-slate-500">Submission Date:</span>
+                  <span className="text-white">{new Date(selectedRegistration.created_at).toLocaleString()}</span>
+                </div>
+              </div>
+
+              {selectedRegistration.statement && (
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
+                    Statement / Technical Background:
+                  </span>
+                  <p className="text-xs text-slate-300 bg-[#070b12] p-3.5 rounded-lg border border-slate-800 leading-relaxed font-sans">
+                    {selectedRegistration.statement}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between pt-4 border-t border-slate-800">
+                <button
+                  onClick={() => {
+                    navigator.clipboard?.writeText(selectedRegistration.id);
+                    setCopiedRegId(selectedRegistration.id);
+                    setTimeout(() => setCopiedRegId(null), 2000);
+                  }}
+                  className="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1.5 cursor-pointer"
+                >
+                  {copiedRegId === selectedRegistration.id ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="text-emerald-400">ID Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy ID</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => setSelectedRegistration(null)}
+                  className="bg-slate-800 hover:bg-slate-700 text-white font-mono text-xs px-4 py-2 rounded-lg cursor-pointer"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
