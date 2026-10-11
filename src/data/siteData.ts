@@ -654,22 +654,42 @@ export const achievements: Achievement[] = [
   },
 ];
 
-export const faqs = [
+export interface FAQItem {
+  question: string;
+  answer: string;
+  category: "Inductions" | "Wartech" | "Lab Facilities" | "General";
+}
+
+export const faqs: FAQItem[] = [
   {
-    question: "Who is eligible to join CEAR?",
-    answer: "All AIT Pune students across all engineering branches and years are eligible to apply.",
+    category: "Inductions",
+    question: "Who is eligible to apply for CEAR cadet inductions?",
+    answer: "All First Year (FE) and Second Year (SE) students across Computer, IT, E&TC, and Mechanical Engineering at Army Institute of Technology, Pune are eligible. Selection is based on enthusiasm, problem-solving, and dedication rather than prior pedigree.",
   },
   {
-    question: "Is prior robotics or coding experience required?",
-    answer: "No prior experience required. Senior members provide hands-on training bootcamps.",
+    category: "Inductions",
+    question: "Is prior robotics or microcontrollers experience mandatory?",
+    answer: "No prior experience is necessary. Selected cadets undergo structured hands-on bootcamps covering STM32 firmware, FreeRTOS, ROS2 nodes, SolidWorks CAD, and custom 4-layer PCB layout under senior cadre guidance.",
   },
   {
-    question: "What hardware resources are available?",
-    answer: "3D printers, custom PCB fabrication, LiDAR, Jetson AI accelerators, and dedicated test arenas.",
+    category: "Lab Facilities",
+    question: "What lab tooling and hardware accelerators are accessible in Lab 104?",
+    answer: "Lab 104 is outfitted with Keysight 200MHz DSOs, JBC micro-soldering stations, Bambu Lab Carbon FDM printers, LPKF precision PCB milling, Jetson Orin Nano AI edge nodes, Intel RealSense depth sensors, and enclosed testing arenas.",
   },
   {
-    question: "How do external college teams register for Wartech?",
-    answer: "Register directly through the Wartech portal section. Teams can have 1–4 members.",
+    category: "Wartech",
+    question: "Can external college teams register for the Wartech 2026 Championship?",
+    answer: "Yes! Wartech is a premier national inter-collegiate championship open to all accredited universities and technical institutes across India. Teams of 1–4 members can register across 8 distinct combat, autonomous, aerial, and marine arenas.",
+  },
+  {
+    category: "Wartech",
+    question: "Are custom combat bots and lithium polymer batteries permitted?",
+    answer: "Yes, combat bots up to 15kg are permitted in the Robowar arena, subject to strict regulation inspection. LiPo batteries up to 4S (16.8V) are allowed with mandatory flame-retardant safety pouches in the pit area.",
+  },
+  {
+    category: "General",
+    question: "How can industry partners and defense sponsors collaborate with CEAR?",
+    answer: "Industry partners can reach out via the communications form or write directly to cear@aitpune.edu.in for technical research sponsorships, test trials on the Jalpari AUV or rover platforms, and hackathon co-hosting.",
   },
 ];
 
