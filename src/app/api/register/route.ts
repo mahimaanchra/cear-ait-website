@@ -149,3 +149,81 @@ export async function GET(request: Request) {
   const localData = await getLocalRegistrations();
   return NextResponse.json({ success: true, registrations: localData, provider: "local" });
 }
+
+// PATCH: Update registration status (for /admin panel)
+export async function PATCH(request: Request) {
+  const authHeader = request.headers.get("x-admin-passcode");
+  if (authHeader !== ADMIN_PASSCODE) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const body = await request.json();
+    const { id, status } = body;
+
+    if (!id || !status) {
+      return NextResponse.json(
+        { success: false, error: "Missing required fields: id, status" },
+        { status: 400 }
+      );
+    }
+
+    const validStatuses = ["pending", "verified", "shortlisted", "rejected"];
+    if (!validStatuses.includes(status)) {
+      return NextResponse.json(
+        { success: false, error: `Invalid status: ${status}. Must be one of ${validStatuses.join(", ")}` },
+        { status: 400 }
+      );
+    }
+
+    let updatedRecord: RegistrationRecord | null = null;
+
+    // 1. Update Supabase if configured
+    if (isSupabaseConfigured()) {
+      const supabase = getSupabaseServerClient();
+      if (supabase) {
+        const { data, error } = await supabase
+          .from("registrations")
+          .update({ status })
+          .eq("id", id)
+          .select()
+          .single();
+
+        if (!error && data) {
+          updatedRecord = data;
+        }
+      }
+    }
+
+    // 2. Update local registrations.json
+    try {
+      const current = await getLocalRegistrations();
+      const index = current.findIndex((r) => r.id === id);
+      if (index !== -1) {
+        current[index].status = status;
+        await fs.writeFile(LOCAL_DATA_PATH, JSON.stringify(current, null, 2), "utf-8");
+        if (!updatedRecord) {
+          updatedRecord = current[index];
+        }
+      }
+    } catch (err) {
+      console.warn("Could not update local registrations.json:", err);
+    }
+
+    if (!updatedRecord) {
+      return NextResponse.json({ success: false, error: "Registration record not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Status updated to ${status}`,
+      record: updatedRecord,
+    });
+  } catch (error: any) {
+    console.error("Update registration error:", error);
+    return NextResponse.json(
+      { success: false, error: error?.message || "Failed to update registration status" },
+      { status: 500 }
+    );
+  }
+}

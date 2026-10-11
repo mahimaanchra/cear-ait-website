@@ -208,6 +208,37 @@ export default function AdminPage() {
     return matchesType && matchesStatus && matchesSearch;
   });
 
+  const handleUpdateRegistrationStatus = async (
+    id: string,
+    status: "pending" | "verified" | "shortlisted" | "rejected"
+  ) => {
+    try {
+      const authPass = localStorage.getItem(CUSTOM_PASSCODE_KEY) || DEFAULT_PASSCODE;
+      const res = await fetch("/api/register", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-passcode": authPass,
+        },
+        body: JSON.stringify({ id, status }),
+      });
+      const data = await res.json();
+      if (data.success && data.record) {
+        setRegistrations((prev) =>
+          prev.map((r) => (r.id === id ? { ...r, status: data.record.status } : r))
+        );
+        if (selectedRegistration && selectedRegistration.id === id) {
+          setSelectedRegistration({ ...selectedRegistration, status: data.record.status });
+        }
+        showToast(`✓ Registration status updated to ${status}!`, "success");
+      } else {
+        showToast(data.error || "Failed to update registration status", "warning");
+      }
+    } catch (err: any) {
+      showToast(err?.message || "Failed to update status", "warning");
+    }
+  };
+
   // Toast Notification
   const [toastMessage, setToastMessage] = useState<{ text: string; type: "success" | "info" | "warning" } | null>(null);
 
@@ -1671,6 +1702,16 @@ export default function AdminPage() {
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                      {record.status === "pending" && (
+                        <button
+                          onClick={() => handleUpdateRegistrationStatus(record.id, "verified")}
+                          className="bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-400 border border-emerald-500/40 font-mono text-[11px] px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                          title="Mark as Verified"
+                        >
+                          <Check className="w-3 h-3" />
+                          <span>Verify</span>
+                        </button>
+                      )}
                       <button
                         onClick={() => setSelectedRegistration(record)}
                         className="bg-[#131b2c] hover:bg-[#1a253c] text-emerald-400 border border-slate-700 hover:border-emerald-500/50 font-mono text-xs px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
@@ -1947,6 +1988,34 @@ export default function AdminPage() {
                   <span className="font-bold text-white text-sm mt-0.5 block uppercase">
                     {selectedRegistration.status}
                   </span>
+                </div>
+              </div>
+
+              {/* Status Action Buttons */}
+              <div className="space-y-1.5">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">
+                  Update Candidate Verification Status:
+                </span>
+                <div className="grid grid-cols-4 gap-1.5 font-mono">
+                  {(["pending", "verified", "shortlisted", "rejected"] as const).map((st) => (
+                    <button
+                      key={st}
+                      onClick={() => handleUpdateRegistrationStatus(selectedRegistration.id, st)}
+                      className={`px-2 py-1.5 rounded-lg border uppercase tracking-wider text-[10px] transition-all cursor-pointer font-bold ${
+                        selectedRegistration.status === st
+                          ? st === "verified"
+                            ? "bg-emerald-500 text-black border-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.4)]"
+                            : st === "shortlisted"
+                            ? "bg-purple-500 text-white border-purple-400 shadow-[0_0_12px_rgba(168,85,247,0.4)]"
+                            : st === "rejected"
+                            ? "bg-red-500 text-white border-red-400 shadow-[0_0_12px_rgba(239,68,68,0.4)]"
+                            : "bg-slate-200 text-black border-white"
+                          : "bg-[#131b2c] text-slate-400 border-slate-700 hover:text-white hover:border-slate-500"
+                      }`}
+                    >
+                      {st}
+                    </button>
+                  ))}
                 </div>
               </div>
 
