@@ -61,7 +61,7 @@ export default function Home() {
         <ProjectsShowcase />
 
         {/* 6. Team Leadership & Cadre */}
-        <Team />
+        <Team onOpenRegister={() => handleOpenRegister()} />
 
         {/* 6. Key Events & Workshops Section */}
         <UpcomingEvents onOpenRegister={(trackId) => handleOpenRegister(trackId)} />

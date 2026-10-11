@@ -31,7 +31,7 @@ export default function TeamPage() {
 
       <main className="relative z-10 pt-28">
         <SubpageBreadcrumb currentPage="Team" />
-        <Team />
+        <Team onOpenRegister={() => setRegisterModalOpen(true)} />
       </main>
 
       <Footer />
