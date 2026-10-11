@@ -47,33 +47,38 @@ export function Footer() {
             </span>
             <ul className="space-y-2 text-xs font-body text-[#240d2b]/70">
               <li>
-                <Link href="#about" className="hover:text-[#ff6b35] transition-colors">
+                <Link href="/#about" className="hover:text-[#ff6b35] transition-colors">
                   About CEAR
                 </Link>
               </li>
               <li>
-                <Link href="#workshop" className="hover:text-[#ff6b35] transition-colors">
+                <Link href="/#workshop" className="hover:text-[#ff6b35] transition-colors">
                   Workshop &amp; Lab 104
                 </Link>
               </li>
               <li>
-                <Link href="#projects" className="hover:text-[#ff6b35] transition-colors">
-                  Projects &amp; Hardware
+                <Link href="/projects" className="hover:text-[#ff6b35] transition-colors">
+                  Projects &amp; Fleet Roster
                 </Link>
               </li>
               <li>
-                <Link href="#wartech" className="text-[#ff6b35] font-semibold hover:underline transition-colors">
-                  Wartech 2026
+                <Link href="/wartech" className="text-[#ff6b35] font-semibold hover:underline transition-colors">
+                  Wartech &apos;26 Flagship
                 </Link>
               </li>
               <li>
-                <Link href="#team" className="hover:text-[#ff6b35] transition-colors">
-                  Team &amp; Mentors
+                <Link href="/team" className="hover:text-[#ff6b35] transition-colors">
+                  Team &amp; Research Cadre
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="hover:text-[#ff6b35] transition-colors">
+                <Link href="/#contact" className="hover:text-[#ff6b35] transition-colors">
                   Contact &amp; FAQ
+                </Link>
+              </li>
+              <li className="pt-1">
+                <Link href="/admin" className="text-[11px] font-mono text-[#240d2b]/50 hover:text-[#240d2b] transition-colors">
+                  Cadre Control // Admin
                 </Link>
               </li>
             </ul>
