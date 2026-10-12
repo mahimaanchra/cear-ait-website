@@ -66,23 +66,51 @@ All components must adhere strictly to the CEAR Sandstone & Terracotta glassmorp
    - Keep page components lightweight and semantic (`src/app/`).
    - Separate server data flows from dynamic client components using `'use client'`.
 2. **Interactive UI Components (`src/components/ui/`)**:
+   - `CircuitDivider.tsx`: Architectural vector datum divider with animated laser pulses, dynamic scanning beacons, and frosted glass node stamps (`NODE // ROS2`, `BUS // 915MHz`, `SYS // PWR`).
+   - `AutonomousStatusWidget.tsx`: Persistent diagnostics dock with dynamic `requestAnimationFrame` FPS counter, link latency jitter simulation (`18ms–24ms`), 4 subsystem diagnostic views (`Overview`, `ROS2 Nodes`, `RF Link`, `Power BMS`), and 1-click clipboard telemetry stream export.
    - `GlassCard.tsx`: Reusable 3D cursor spotlight glare card with spring physics.
    - `EventSpotlightCard.tsx`: Featured event card with live T-minus countdown ticker and track pre-selection.
    - `RulebookModal.tsx`: Comprehensive multi-track rulebook viewer with directive search, citation copy, and text export.
    - `RegistrationModal.tsx`: Dual-track registration modal (Wartech & Inductions) with auto-generated receipt passes and confetti feedback.
-   - `AutonomousStatusWidget.tsx`: Persistent diagnostics dock monitoring ROS2 nodes, FPS, and telemetry status.
    - `NeuralCanvas.tsx`: Multi-agent neural simulation matrix with interactive telemetry tuning dock.
-3. **API Endpoints & Cloud Synchronization (`src/app/api/`)**:
+
+3. **API Endpoints & Cloud Architecture (`src/app/api/`)**:
+   - `GET /api/health`: Telemetry diagnostic endpoint reporting runtime stats, platform architecture, Node.js version, memory heap allocations, and live Supabase cloud ping latency.
    - `POST /api/register`: Submits Wartech or Induction candidate profiles with Supabase cloud storage and local JSON fallback (`src/data/registrations.json`).
    - `GET /api/register`: Authenticated endpoint (requires `x-admin-passcode`) used by the Admin Panel for candidate roster review and CSV exports.
-   - `POST /api/contact`: Handles campus inquiries and collaboration proposals.
-   - `GET /api/content` & `POST /api/content`: Dynamic content synchronization with cloud Supabase and local JSON fallback.
-4. **Admin Panel (`/admin`)**:
-   - Passcode-secured portal with tabs for Cadre Cadets, Events & Timeline, Robotics Fleet, Lab 104 Media, Track Record Accolades, Registrations Roster (with CSV download), and System Backups.
+   - `PATCH /api/register`: Authenticated endpoint for updating application status (`approved`, `shortlisted`, `rejected`) in Supabase or local storage.
+   - `POST /api/contact`: Handles campus inquiries and collaboration proposals with automatic input validation and persistence.
+   - `GET /api/contact`: Authenticated endpoint for retrieving inquiry history and messages.
+   - `GET /api/content` & `POST /api/content`: Dynamic content synchronization with cloud Supabase and local JSON fallback for live site updates.
+   - `POST /api/upload`: Multipart image upload gateway targeting Supabase Storage bucket (`cear-media`) with resilient base64 fallback.
+
+4. **Environment Variables Configuration**:
+   ```bash
+   # Supabase Cloud Database & Storage (Optional for local dev, fallback to JSON)
+   NEXT_PUBLIC_SUPABASE_URL="https://your-project-id.supabase.co"
+   NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOi..."
+   SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOi..."
+
+   # Admin Passcode (Defaults to 'cear-admin-2026' if unspecified)
+   ADMIN_PASSCODE="your-secure-admin-passcode"
+   ```
+
+5. **Admin Panel (`/admin`)**:
+   - Passcode-secured portal with tabs for Cadre Cadets, Events & Timeline, Robotics Fleet, Lab 104 Media, Track Record Accolades, Registrations Roster (with status management and CSV download), and System Backups.
 
 ---
 
-## 5. Branching & Git Conventions
+## 5. Hardware-Software Telemetry Integration
+
+For engineers working on robotic payloads in Lab 104:
+- **ROS2 Distribution**: ROS2 Humble Hawksbill / Iron Irwini running on Jetson Orin Nano / Raspberry Pi 4.
+- **Micro-XRCE-DDS**: Bridges STM32 / ESP32 flight and motor controllers with the onboard companion computer.
+- **RF Telemetry**: 915 MHz SiK / LoRa radios mapped via UART baudrate 57600 for air-to-ground telemetry.
+- **Power Architecture**: 4S LiPo (14.8V nominal, 16.8V peak) with INA219 / INA226 voltage and current telemetry sensors.
+
+---
+
+## 6. Branching & Git Conventions
 
 ### Branch Naming
 - `feature/<short-desc>`: New features, pages, or components
@@ -101,12 +129,12 @@ Follow standard conventional commits:
 
 **Example**:
 ```bash
-git commit -m "feat(events): add interactive spotlight countdown card and arena filter"
+git commit -m "feat(telemetry): add multi-tab telemetry HUD with real-time FPS and RF diagnostic stream"
 ```
 
 ---
 
-## 6. Pre-Submission Checklist
+## 7. Pre-Submission Checklist
 
 Before committing or pushing to `main`:
 - [ ] Code compiles with **zero errors and warnings**:
@@ -122,3 +150,4 @@ Before committing or pushing to `main`:
 
 **Army Institute of Technology, Pune**  
 *Centre of Excellence for AI & Robotics (CEAR) &bull; Lab 104*
+
