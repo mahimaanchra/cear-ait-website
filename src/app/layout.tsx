@@ -86,6 +86,74 @@ export const metadata: Metadata = {
   },
 };
 
+const cearJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://cear-ait-website.vercel.app/#organization",
+      name: "CEAR - Centre of Excellence for AI & Robotics",
+      alternateName: ["CEAR AIT", "Centre of Excellence in AI and Robotics"],
+      url: "https://cear-ait-website.vercel.app",
+      logo: "https://cear-ait-website.vercel.app/cear-logo.png",
+      description:
+        "Official research and innovation laboratory for autonomous robotics, AI edge compute, ROS2 architectures, and hardware craft at Army Institute of Technology, Pune.",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Army Institute of Technology, Alandi Road, Dighi",
+        addressLocality: "Pune",
+        addressRegion: "Maharashtra",
+        postalCode: "411015",
+        addressCountry: "IN",
+      },
+      parentOrganization: {
+        "@type": "CollegeOrUniversity",
+        name: "Army Institute of Technology (AIT), Pune",
+        url: "https://www.aitpune.com",
+      },
+      sameAs: [
+        "https://github.com/cear-ait",
+        "https://www.linkedin.com/company/cear-ait",
+      ],
+    },
+    {
+      "@type": "Event",
+      "@id": "https://cear-ait-website.vercel.app/#wartech2026",
+      name: "Wartech 2026 - Flagship Robotics Championship",
+      description:
+        "National inter-collegiate robotics symposium featuring RoboSoccer, RoboRace, Line Follower, and Autonomous Drone challenges organized by CEAR AIT.",
+      startDate: "2026-03-20T09:00:00+05:30",
+      endDate: "2026-03-22T18:00:00+05:30",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      eventStatus: "https://schema.org/EventScheduled",
+      location: {
+        "@type": "Place",
+        name: "Army Institute of Technology Campus & Raman Theatre",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "AIT, Alandi Road, Dighi",
+          addressLocality: "Pune",
+          addressRegion: "Maharashtra",
+          postalCode: "411015",
+          addressCountry: "IN",
+        },
+      },
+      organizer: {
+        "@id": "https://cear-ait-website.vercel.app/#organization",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://cear-ait-website.vercel.app/#website",
+      url: "https://cear-ait-website.vercel.app",
+      name: "CEAR | Centre of Excellence for AI & Robotics",
+      publisher: {
+        "@id": "https://cear-ait-website.vercel.app/#organization",
+      },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -93,6 +161,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(cearJsonLd) }}
+        />
+      </head>
       <body
         className={`${nunito.variable} ${spaceGrotesk.variable} ${spaceMono.variable} font-body bg-[#f6f3ee] text-[#240d2b] antialiased min-h-screen selection:bg-[#ff6b35] selection:text-white`}
       >
@@ -103,3 +177,4 @@ export default function RootLayout({
     </html>
   );
 }
+
