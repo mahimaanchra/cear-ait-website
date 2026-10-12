@@ -17,6 +17,7 @@ import { RulebookModal } from "@/components/ui/RulebookModal";
 import { ArchitecturalCleanBackground } from "@/components/ui/ArchitecturalCleanBackground";
 import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
 import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
+import { CircuitDivider } from "@/components/ui/CircuitDivider";
 
 export default function Home() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -51,11 +52,17 @@ export default function Home() {
         {/* 2. Hero Section */}
         <Hero onOpenRegister={handleOpenRegister} />
 
+        <CircuitDivider label="RESEARCH & DOMAIN ARCHITECTURE" />
+
         {/* 3. About & Core Domains Section */}
         <About />
 
+        <CircuitDivider label="FACILITY INFRASTRUCTURE & LAB 104" />
+
         {/* 4. Club Room & Workshop Facilities (Photos & Video Showcase) */}
         <WorkshopAndLab />
+
+        <CircuitDivider label="AUTONOMOUS FLEET & PLATFORMS" />
 
         {/* 5. Projects Showcase Section */}
         <ProjectsShowcase />
@@ -65,6 +72,8 @@ export default function Home() {
 
         {/* 6. Key Events & Workshops Section */}
         <UpcomingEvents onOpenRegister={(trackId) => handleOpenRegister(trackId)} />
+
+        <CircuitDivider label="FLAGSHIP NATIONAL CHAMPIONSHIP" />
 
         {/* 7. Wartech Flagship Highlight Section */}
         <Wartech
