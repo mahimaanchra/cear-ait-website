@@ -25,3 +25,70 @@ export function getSupabaseBrowserClient() {
 }
 
 export const SUPABASE_BUCKET_NAME = "cear-media";
+
+export const SUPABASE_TABLES = {
+  REGISTRATIONS: "registrations",
+  INQUIRIES: "inquiries",
+  SITE_CONTENT: "site_content",
+} as const;
+
+export type SupabaseTableName = (typeof SUPABASE_TABLES)[keyof typeof SUPABASE_TABLES];
+
+export interface SupabaseHealthResult {
+  configured: boolean;
+  reachable: boolean;
+  latencyMs?: number;
+  error?: string;
+}
+
+/**
+ * Checks connectivity to the Supabase cloud instance.
+ * Gracefully degrades if credentials are not configured in local environment.
+ */
+export async function checkSupabaseHealth(): Promise<SupabaseHealthResult> {
+  if (!isSupabaseConfigured()) {
+    return {
+      configured: false,
+      reachable: false,
+    };
+  }
+
+  const client = getSupabaseServerClient();
+  if (!client) {
+    return {
+      configured: true,
+      reachable: false,
+      error: "Client instantiation failed",
+    };
+  }
+
+  const start = Date.now();
+  try {
+    const { error } = await client
+      .from(SUPABASE_TABLES.SITE_CONTENT)
+      .select("key")
+      .limit(1);
+
+    if (error && error.code !== "PGRST116" && !error.message.includes("does not exist")) {
+      return {
+        configured: true,
+        reachable: false,
+        latencyMs: Date.now() - start,
+        error: error.message,
+      };
+    }
+
+    return {
+      configured: true,
+      reachable: true,
+      latencyMs: Date.now() - start,
+    };
+  } catch (err: unknown) {
+    return {
+      configured: true,
+      reachable: false,
+      latencyMs: Date.now() - start,
+      error: err instanceof Error ? err.message : "Unknown error",
+    };
+  }
+}
