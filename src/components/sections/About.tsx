@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain,
@@ -8,17 +8,10 @@ import {
   Eye,
   Navigation,
   ArrowUpRight,
-  Sparkles,
   X,
-  Layers,
-  Cpu as Chip,
-  ShieldCheck,
-  Calendar,
-  Compass,
   Check,
   Copy,
-  Gauge,
-  Sliders,
+  Calendar,
 } from "lucide-react";
 import { siteConfig, focusAreas } from "@/data/siteData";
 import { WordBlurReveal } from "@/components/ui/WordBlurReveal";
@@ -39,6 +32,9 @@ interface Milestone {
   description: string;
   achievements: string[];
   techStack: string[];
+  missionObjective: string;
+  fieldDeployment: string;
+  telemetryMetric: string;
 }
 
 const cearMilestones: Milestone[] = [
@@ -50,6 +46,9 @@ const cearMilestones: Milestone[] = [
       "Founded by visionaries at Army Institute of Technology, Pune to build an indigenous hands-on hardware incubator for combat mechatronics and control circuits.",
     achievements: ["Established Lab 104", "First Combat Cadre", "Custom STM32 Motor Drives"],
     techStack: ["FreeRTOS", "STM32", "Altium", "FDM 3D"],
+    missionObjective: "Establish indigenous rapid prototyping test cell and dual-motor combat drive systems.",
+    fieldDeployment: "Lab 104 Hardware Incubator, AIT Pune",
+    telemetryMetric: "100% in-house power distribution and firmware verification",
   },
   {
     year: "2022",
@@ -59,6 +58,9 @@ const cearMilestones: Milestone[] = [
       "Pioneered aquatic underwater robotics, designing the award-winning Jalpari AUV platform which secured 3rd Position and Unique Design honours at IIT Guwahati Techniche.",
     achievements: ["IIT Guwahati Podium", "Sub-surface Telemetry", "FPV Drone Racing Team"],
     techStack: ["T200 Thrusters", "Hydrodynamics", "Pixhawk", "MAVLink"],
+    missionObjective: "Sub-surface autonomous navigation, depth control loop, and buoyancy stabilization.",
+    fieldDeployment: "Techniche National Arena, IIT Guwahati & AIT Testing Tank",
+    telemetryMetric: "3m hydrostatic depth seal rating and acoustic ping telemetry",
   },
   {
     year: "2024",
@@ -68,6 +70,9 @@ const cearMilestones: Milestone[] = [
       "Created the premier national robotics battleground in Western India, hosting 8 competition disciplines ranging from Robo Soccer and 15kg Robowar to Micromouse mazes.",
     achievements: ["50+ Inter-Collegiate Teams", "₹1.5L+ Prize Pool", "8 Battle Arenas"],
     techStack: ["RF 2.4GHz", "High-Voltage LiPo", "Autonomous Dohyo"],
+    missionObjective: "Scale Western India's largest robotics proving ground with high-voltage combat safety specs.",
+    fieldDeployment: "AIT Central Grounds & Manekshaw Arena",
+    telemetryMetric: "50+ competing teams across 8 simultaneous engineering arenas",
   },
   {
     year: "2026",
@@ -77,6 +82,9 @@ const cearMilestones: Milestone[] = [
       "Deploying decentralized robotic swarms, multi-agent SLAM, and TensorRT neural networks on Jetson Orin Nano accelerators for next-generation defense applications.",
     achievements: ["Sub-14ms YOLOv8 Inference", "GPS-Denied Visual SLAM", "Swarm Coordination"],
     techStack: ["ROS2 Humble", "Jetson Orin", "YOLOv8", "RealSense Depth"],
+    missionObjective: "Decentralized tactical edge perception, vision-inertial odometry, and swarm mesh relays.",
+    fieldDeployment: "CEAR Tactical Proving Grounds, Lab 104 Robotics Wing",
+    telemetryMetric: "< 14ms edge inference latency at 1080p stream resolution",
   },
 ];
 
@@ -122,6 +130,23 @@ export function About() {
   const [nodeCount, setNodeCount] = useState<number>(36);
   const [copiedStack, setCopiedStack] = useState(false);
   const [activeMilestoneYear, setActiveMilestoneYear] = useState<string>("2026");
+  const [copiedMilestone, setCopiedMilestone] = useState(false);
+
+  // Close domain modal with Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedDomain) {
+        setSelectedDomain(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedDomain]);
+
+  const selectedMilestone = useMemo(
+    () => cearMilestones.find((m) => m.year === activeMilestoneYear) || cearMilestones[3],
+    [activeMilestoneYear]
+  );
 
   const handleCopyStack = () => {
     if (!selectedDomain) return;
@@ -135,6 +160,21 @@ Operational Target: ${details.benchmarks}`;
     navigator.clipboard.writeText(stackText);
     setCopiedStack(true);
     setTimeout(() => setCopiedStack(false), 2000);
+  };
+
+  const handleCopyMilestoneDossier = () => {
+    if (!selectedMilestone) return;
+    const dossierText = `CEAR STRATEGIC MILESTONE // ${selectedMilestone.year} (${selectedMilestone.phase})
+Title: ${selectedMilestone.title}
+Deployment: ${selectedMilestone.fieldDeployment}
+Mission Objective: ${selectedMilestone.missionObjective}
+Telemetry Benchmark: ${selectedMilestone.telemetryMetric}
+Key Breakthroughs:
+${selectedMilestone.achievements.map((a) => `- ${a}`).join("\n")}
+Tech Stacks: ${selectedMilestone.techStack.join(", ")}`;
+    navigator.clipboard.writeText(dossierText);
+    setCopiedMilestone(true);
+    setTimeout(() => setCopiedMilestone(false), 2000);
   };
 
   return (
@@ -341,6 +381,84 @@ Operational Target: ${details.benchmarks}`;
               );
             })}
           </div>
+
+          {/* Active Milestone Deep-Dive Dossier Telemetry Panel */}
+          {selectedMilestone && (
+            <motion.div
+              key={selectedMilestone.year}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25 }}
+              className="p-6 sm:p-8 rounded-3xl bg-white/80 backdrop-blur-2xl border border-white/90 shadow-[0_15px_40px_rgba(36,13,43,0.06)] space-y-5"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-4">
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] font-semibold bg-[#ff6b35]/10 px-2.5 py-0.5 rounded-full border border-[#ff6b35]/20">
+                      {selectedMilestone.phase} Phase // {selectedMilestone.year}
+                    </span>
+                    <span className="text-xs font-mono text-[#240d2b]/50">
+                      Deployment: {selectedMilestone.fieldDeployment}
+                    </span>
+                  </div>
+                  <h4 className="text-xl sm:text-2xl font-bold font-display text-[#240d2b] mt-1.5">
+                    {selectedMilestone.title}
+                  </h4>
+                </div>
+
+                <button
+                  onClick={handleCopyMilestoneDossier}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono text-[#240d2b]/70 hover:text-[#ff6b35] border border-[#240d2b]/[0.1] bg-white hover:bg-[#f6f3ee] transition-all cursor-pointer shadow-2xs shrink-0 self-start sm:self-center"
+                >
+                  {copiedMilestone ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Copied Dossier</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Milestone Dossier</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+                <div className="p-4 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1.5">
+                  <span className="text-[10px] uppercase font-bold text-[#240d2b]/50 block">
+                    Strategic Objective
+                  </span>
+                  <p className="font-body text-[#240d2b]/80 leading-relaxed">
+                    {selectedMilestone.missionObjective}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1.5">
+                  <span className="text-[10px] uppercase font-bold text-[#240d2b]/50 block">
+                    Telemetry Benchmark
+                  </span>
+                  <p className="font-semibold text-[#ff6b35] font-mono leading-relaxed">
+                    {selectedMilestone.telemetryMetric}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1.5">
+                  <span className="text-[10px] uppercase font-bold text-[#240d2b]/50 block">
+                    Verified Breakthroughs
+                  </span>
+                  <div className="space-y-1">
+                    {selectedMilestone.achievements.map((ach, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 text-[#240d2b]/80">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]" />
+                        <span>{ach}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Technical Domains Section with Glass Cards */}

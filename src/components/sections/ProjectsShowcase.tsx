@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,12 +18,14 @@ import {
   Check,
   SlidersHorizontal,
   ChevronDown,
+  Download,
 } from "lucide-react";
 import { Project } from "@/data/siteData";
 import { useSiteContent } from "@/context/SiteContentContext";
 import { GlassCard } from "@/components/ui/GlassCard";
 
 const categories = ["All Platforms", "Autonomous", "Manipulation", "Aquatics", "Robotics", "Aerial"];
+const statusFilters = ["All Statuses", "Operational", "Active R&D", "Podium Winner", "Completed"];
 
 type SortOption = "featured" | "name" | "status";
 
@@ -31,11 +33,26 @@ export function ProjectsShowcase() {
   const { projects } = useSiteContent();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState("All Platforms");
+  const [activeStatus, setActiveStatus] = useState("All Statuses");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
   const [copiedShareId, setCopiedShareId] = useState<string | null>(null);
+
+  // Close modal on Escape key and handle scroll locking
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedProject(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedProject]);
 
   // Extract top tech stack tags dynamically
   const popularTags = useMemo(() => {
@@ -58,6 +75,10 @@ export function ProjectsShowcase() {
         activeCategory === "All Platforms" ||
         p.category.toLowerCase() === activeCategory.toLowerCase();
 
+      const matchesStatus =
+        activeStatus === "All Statuses" ||
+        p.status.toLowerCase() === activeStatus.toLowerCase();
+
       const matchesTag = !selectedTag || (p.tags && p.tags.includes(selectedTag));
 
       const query = searchQuery.toLowerCase().trim();
@@ -68,7 +89,7 @@ export function ProjectsShowcase() {
         p.category.toLowerCase().includes(query) ||
         (p.tags && p.tags.some((t) => t.toLowerCase().includes(query)));
 
-      return matchesCategory && matchesTag && matchesSearch;
+      return matchesCategory && matchesStatus && matchesTag && matchesSearch;
     });
 
     if (sortBy === "name") {
@@ -78,7 +99,7 @@ export function ProjectsShowcase() {
     }
 
     return result;
-  }, [projects, activeCategory, selectedTag, searchQuery, sortBy]);
+  }, [projects, activeCategory, activeStatus, selectedTag, searchQuery, sortBy]);
 
   const handleShareProject = (p: Project) => {
     const specDetails = p.specs ? p.specs.map((s) => `${s.label}: ${s.value}`).join(" | ") : "";
@@ -86,6 +107,41 @@ export function ProjectsShowcase() {
     navigator.clipboard.writeText(text);
     setCopiedShareId(p.id);
     setTimeout(() => setCopiedShareId(null), 2000);
+  };
+
+  const handleDownloadDatasheet = (p: Project) => {
+    const specDetails = p.specs ? p.specs.map((s) => `- ${s.label}: ${s.value}`).join("\n") : "None specified";
+    const content = `=====================================================================
+CEAR PLATFORM DATASHEET // LAB 104 ROBOTICS WING
+ARMY INSTITUTE OF TECHNOLOGY, PUNE
+=====================================================================
+Platform: ${p.title}
+Domain: ${p.category}
+Operational Status: ${p.status}
+Tags: ${p.tags.join(", ")}
+
+OVERVIEW:
+${p.description}
+
+TECHNICAL SPECIFICATIONS:
+${p.longDescription || p.description}
+
+HARDWARE & COMPUTATIONAL ARCHITECTURE:
+${specDetails}
+
+SOURCE CODE & ASSETS:
+GitHub: ${p.githubUrl || "Proprietary Defense Research / Internal Lab 104 Repository"}
+=====================================================================`;
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `CEAR_${p.title.replace(/\s+/g, "_").toUpperCase()}_DATASHEET.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -201,36 +257,61 @@ export function ProjectsShowcase() {
             </div>
           </div>
 
-          {/* Secondary Tech Stack Tag Chips */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-mono">
-            <span className="text-[11px] text-[#240d2b]/50 uppercase tracking-wider shrink-0 flex items-center gap-1">
-              <SlidersHorizontal className="w-3 h-3 text-[#ff6b35]" />
-              <span>Tech Stack:</span>
-            </span>
-            {popularTags.map((tag) => {
-              const isTagSelected = selectedTag === tag;
-              return (
+          {/* Secondary Tech Stack Tag Chips and Status Filter */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-mono">
+              <span className="text-[11px] text-[#240d2b]/50 uppercase tracking-wider shrink-0 flex items-center gap-1">
+                <SlidersHorizontal className="w-3 h-3 text-[#ff6b35]" />
+                <span>Tech Stack:</span>
+              </span>
+              {popularTags.map((tag) => {
+                const isTagSelected = selectedTag === tag;
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => setSelectedTag(isTagSelected ? null : tag)}
+                    className={`px-3 py-1 rounded-lg transition-all shrink-0 cursor-pointer border ${
+                      isTagSelected
+                        ? "bg-[#ff6b35] text-white border-[#ff6b35] font-semibold shadow-xs"
+                        : "bg-white/70 text-[#240d2b]/70 border-white/80 hover:border-[#ff6b35]/40 hover:text-[#240d2b]"
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+              {selectedTag && (
                 <button
-                  key={tag}
-                  onClick={() => setSelectedTag(isTagSelected ? null : tag)}
-                  className={`px-3 py-1 rounded-lg transition-all shrink-0 cursor-pointer border ${
-                    isTagSelected
-                      ? "bg-[#ff6b35] text-white border-[#ff6b35] font-semibold shadow-xs"
-                      : "bg-white/70 text-[#240d2b]/70 border-white/80 hover:border-[#ff6b35]/40 hover:text-[#240d2b]"
-                  }`}
+                  onClick={() => setSelectedTag(null)}
+                  className="text-[11px] text-[#ff6b35] hover:underline cursor-pointer shrink-0 ml-1"
                 >
-                  {tag}
+                  Clear Tag
                 </button>
-              );
-            })}
-            {selectedTag && (
-              <button
-                onClick={() => setSelectedTag(null)}
-                className="text-[11px] text-[#ff6b35] hover:underline cursor-pointer shrink-0 ml-1"
-              >
-                Clear Tag
-              </button>
-            )}
+              )}
+            </div>
+
+            {/* Status Filter Chips */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs font-mono">
+              <span className="text-[11px] text-[#240d2b]/50 uppercase tracking-wider shrink-0">
+                Status:
+              </span>
+              {statusFilters.map((st) => {
+                const isSelected = activeStatus === st;
+                return (
+                  <button
+                    key={st}
+                    onClick={() => setActiveStatus(st)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] transition-all shrink-0 cursor-pointer border ${
+                      isSelected
+                        ? "bg-[#240d2b] text-white border-[#240d2b] font-semibold shadow-xs"
+                        : "bg-white/60 text-[#240d2b]/70 border-white/80 hover:border-[#ff6b35]/40 hover:text-[#240d2b]"
+                    }`}
+                  >
+                    {st}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -244,6 +325,7 @@ export function ProjectsShowcase() {
                 <button
                   onClick={() => {
                     setActiveCategory("All Platforms");
+                    setActiveStatus("All Statuses");
                     setSelectedTag(null);
                     setSearchQuery("");
                   }}
@@ -487,30 +569,40 @@ export function ProjectsShowcase() {
                 </div>
               )}
 
-              <div className="pt-4 border-t border-[#240d2b]/[0.08] flex items-center justify-between">
-                <button
-                  onClick={() => handleShareProject(selectedProject)}
-                  className="inline-flex items-center gap-1.5 text-xs font-mono text-[#240d2b]/70 hover:text-[#ff6b35] cursor-pointer"
-                >
-                  {copiedShareId === selectedProject.id ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Copied Spec to Clipboard</span>
-                    </>
-                  ) : (
-                    <>
-                      <Share2 className="w-3.5 h-3.5" />
-                      <span>Copy Spec Summary</span>
-                    </>
-                  )}
-                </button>
+              <div className="pt-4 border-t border-[#240d2b]/[0.08] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleShareProject(selectedProject)}
+                    className="inline-flex items-center gap-1.5 text-xs font-mono text-[#240d2b]/70 hover:text-[#ff6b35] cursor-pointer"
+                  >
+                    {copiedShareId === selectedProject.id ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Copied Spec to Clipboard</span>
+                      </>
+                    ) : (
+                      <>
+                        <Share2 className="w-3.5 h-3.5" />
+                        <span>Copy Spec Summary</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => handleDownloadDatasheet(selectedProject)}
+                    className="inline-flex items-center gap-1.5 text-xs font-mono text-[#240d2b]/70 hover:text-[#ff6b35] cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5 text-[#ff6b35]" />
+                    <span>Datasheet (.TXT)</span>
+                  </button>
+                </div>
 
                 {selectedProject.githubUrl && (
                   <a
                     href={selectedProject.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium text-white bg-[#ff6b35] hover:bg-[#fa5519] transition-colors shadow-[0_2px_12px_rgba(255,107,53,0.35)]"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium text-white bg-[#ff6b35] hover:bg-[#fa5519] transition-colors shadow-[0_2px_12px_rgba(255,107,53,0.35)]"
                   >
                     <Github className="w-3.5 h-3.5" />
                     <span>View GitHub Repo</span>
