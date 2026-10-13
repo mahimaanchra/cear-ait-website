@@ -100,7 +100,31 @@ All components must adhere strictly to the CEAR Sandstone & Terracotta glassmorp
 
 ---
 
-## 5. Hardware-Software Telemetry Integration
+## 5. UI Architecture & Interactive Component Protocols
+
+The CEAR front-end adheres to a glassmorphic, high-contrast tactical aesthetic designed for high information density and responsive accessibility:
+
+1. **Wartech Rulebook Engine (`RulebookModal.tsx`)**:
+   - **Multi-Tab Live Search**: Real-time keyword filtering across all 4 rulebook domains: 8 Track Arenas, General Directives, Safety & Kill-Switch, and Protests & Scoring FAQ.
+   - **Match Counter Badges**: Dynamic chip counts on each tab strip to immediately indicate matching regulation counts.
+   - **Keyboard Navigability**: Accessible `Escape` shortcut to dismiss modal and `/` or `Ctrl/Cmd+K` keyboard shortcut to autofocus the directive search query.
+   - **Citation & Rule Copy**: One-click clipboard citations and complete track arena regulation extraction for competitors.
+
+2. **Interactive Strategic Timeline (`About.tsx`)**:
+   - **Telemetry Dossiers**: Milestone inspection mode linking the 2020 (Genesis), 2022 (Expansion), 2024 (National Arena), and 2026 (Frontier) roadmap nodes to an interactive mission dossier.
+   - **Verified Breakthroughs**: Displays deployment proving grounds, strategic mission targets, and quantitative telemetry benchmarks (e.g. `< 14ms` edge inference, `3m` hydrostatic seals).
+
+3. **Platform Datasheet Exporter (`ProjectsShowcase.tsx`)**:
+   - **Multi-Axis Filtering**: Dynamic categorization by robotics discipline (Autonomous, Manipulation, Aquatics, Robotics, Aerial) and operational status (`Active R&D`, `Operational`, `Podium Winner`, `Completed`).
+   - **Datasheet Generator**: Client-side generation of standardized engineering specification briefs (`.TXT`) containing complete kinematic envelopes, compute stacks, and hardware telemetry parameters.
+
+4. **Vector Logo Resilience (`CearLogo.tsx`)**:
+   - **Dynamic Asset Synchronization**: Reactive `src` synchronization supporting dynamic themes and custom emblems.
+   - **High-Tech Geometric Fallback**: Self-contained SVG hex vector mark providing zero-layout-shift resilience even during network interruptions or missing raster assets.
+
+---
+
+## 6. Hardware-Software Telemetry Integration
 
 For engineers working on robotic payloads in Lab 104:
 - **ROS2 Distribution**: ROS2 Humble Hawksbill / Iron Irwini running on Jetson Orin Nano / Raspberry Pi 4.
@@ -110,7 +134,7 @@ For engineers working on robotic payloads in Lab 104:
 
 ---
 
-## 6. Branching & Git Conventions
+## 7. Branching & Git Conventions
 
 ### Branch Naming
 - `feature/<short-desc>`: New features, pages, or components
@@ -134,7 +158,7 @@ git commit -m "feat(telemetry): add multi-tab telemetry HUD with real-time FPS a
 
 ---
 
-## 7. Pre-Submission Checklist
+## 8. Pre-Submission Checklist
 
 Before committing or pushing to `main`:
 - [ ] Code compiles with **zero errors and warnings**:
