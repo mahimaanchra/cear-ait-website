@@ -49,6 +49,7 @@ import {
   Phone,
   RefreshCw,
   FileSpreadsheet,
+  Archive,
 } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
 import { TeamMember, EventItem, Project, WorkshopMediaItem, Achievement } from "@/data/siteData";
@@ -1908,9 +1909,224 @@ export default function AdminPage() {
         {/* ================================================================= */}
         {activeTab === "inquiries" && (
           <div className="space-y-6">
-            <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-8 text-center text-slate-400 font-mono text-xs">
-              Inquiries tab initialized ({inquiries.length} total, {unreadInquiriesCount} unread)
+            {/* Quick Metrics Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-4">
+                <span className="text-slate-400 text-xs font-mono block">TOTAL INQUIRIES</span>
+                <span className="text-2xl font-black font-tech text-white mt-1 block">
+                  {inquiries.length}
+                </span>
+                <span className="text-[10px] font-mono text-slate-400">Public &amp; Institutional</span>
+              </div>
+              <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-4">
+                <span className="text-slate-400 text-xs font-mono block">PENDING ACTION</span>
+                <span className="text-2xl font-black font-tech text-amber-400 mt-1 block">
+                  {unreadInquiriesCount}
+                </span>
+                <span className="text-[10px] font-mono text-amber-400/80">Awaiting Cadre Response</span>
+              </div>
+              <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-4">
+                <span className="text-slate-400 text-xs font-mono block">RESOLVED ROSTER</span>
+                <span className="text-2xl font-black font-tech text-emerald-400 mt-1 block">
+                  {inquiries.filter((i) => i.status === "responded").length}
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400/80">Answered via Telemetry</span>
+              </div>
+              <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-4">
+                <span className="text-slate-400 text-xs font-mono block">ARCHIVED DOSSIERS</span>
+                <span className="text-2xl font-black font-tech text-slate-400 mt-1 block">
+                  {inquiries.filter((i) => i.status === "archived").length}
+                </span>
+                <span className="text-[10px] font-mono text-slate-500">Saved to Lab Records</span>
+              </div>
             </div>
+
+            {/* Filter Pills */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap gap-2 text-[11px] font-mono">
+                {[
+                  { id: "all", label: `All Inquiries (${inquiries.length})` },
+                  { id: "unread", label: `Unread (${unreadInquiriesCount})` },
+                  { id: "responded", label: `Responded (${inquiries.filter((i) => i.status === "responded").length})` },
+                  { id: "archived", label: `Archived (${inquiries.filter((i) => i.status === "archived").length})` },
+                ].map((pill) => (
+                  <button
+                    key={pill.id}
+                    onClick={() => setInquiryStatusFilter(pill.id as any)}
+                    className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                      inquiryStatusFilter === pill.id
+                        ? "bg-amber-500/20 text-amber-300 border-amber-500/50 font-bold"
+                        : "bg-[#0c121e] text-slate-400 border-slate-800 hover:border-slate-700"
+                    }`}
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+                <span>Showing {filteredInquiries.length} of {inquiries.length} transmissions</span>
+              </div>
+            </div>
+
+            {/* Inquiries List */}
+            {isLoadingInquiries ? (
+              <div className="text-center py-16 bg-[#0c121e] border border-slate-800 rounded-xl space-y-2">
+                <RefreshCw className="w-6 h-6 text-amber-400 animate-spin mx-auto" />
+                <p className="font-mono text-xs text-slate-400">Loading incoming transmissions...</p>
+              </div>
+            ) : filteredInquiries.length === 0 ? (
+              <div className="text-center py-16 bg-[#0c121e] border border-slate-800 rounded-xl space-y-3">
+                <Mail className="w-8 h-8 text-slate-600 mx-auto" />
+                <p className="font-tech text-slate-400 text-sm uppercase tracking-wider">
+                  No transmissions match the selected criteria
+                </p>
+                <button
+                  onClick={() => {
+                    setInquiryStatusFilter("all");
+                    setSearchQuery("");
+                  }}
+                  className="text-xs font-mono text-amber-400 hover:underline cursor-pointer"
+                >
+                  Reset Inquiry Filters
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filteredInquiries.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-[#0c121e] border border-slate-800 hover:border-amber-500/40 rounded-xl p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition-all shadow-md group"
+                  >
+                    <div className="space-y-2 max-w-2xl">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard?.writeText(item.id);
+                            setCopiedInquiryId(item.id);
+                            setTimeout(() => setCopiedInquiryId(null), 2000);
+                          }}
+                          className="text-xs font-mono font-bold text-white bg-slate-800 hover:bg-slate-700 px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+                          title="Click to copy ID"
+                        >
+                          <span>{item.id}</span>
+                          {copiedInquiryId === item.id ? (
+                            <Check className="w-3 h-3 text-emerald-400" />
+                          ) : (
+                            <Copy className="w-3 h-3 text-slate-400" />
+                          )}
+                        </button>
+                        <span
+                          className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
+                            item.status === "unread"
+                              ? "bg-amber-950/80 text-amber-400 border border-amber-500/40"
+                              : item.status === "responded"
+                              ? "bg-emerald-950/80 text-emerald-400 border border-emerald-500/40"
+                              : "bg-slate-800 text-slate-400 border border-slate-700"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-500">
+                          {new Date(item.created_at).toLocaleString("en-US", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          })}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h4 className="font-tech text-base font-bold text-white group-hover:text-amber-300 transition-colors">
+                          {item.subject}
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-2 mt-0.5 text-xs font-mono">
+                          <span className="text-slate-300 font-semibold">{item.name}</span>
+                          <span className="text-slate-600">•</span>
+                          <a
+                            href={`mailto:${item.email}`}
+                            className="text-cyan-400 hover:underline flex items-center gap-1"
+                          >
+                            <span>{item.email}</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed font-sans">
+                        {item.message}
+                      </p>
+                    </div>
+
+                    {/* Action Hub Buttons */}
+                    <div className="flex flex-wrap items-center gap-2 self-start lg:self-center shrink-0">
+                      <button
+                        onClick={() => setSelectedInquiry(item)}
+                        className="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-mono text-xs px-3.5 py-2 rounded-lg border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>Inspect</span>
+                      </button>
+
+                      <a
+                        href={`mailto:${item.email}?subject=Re: ${encodeURIComponent(item.subject)} - CEAR AIT&body=Hello ${encodeURIComponent(item.name)},\n\nThank you for reaching out to CEAR AIT Pune.\n\nRegarding your inquiry:\n> ${encodeURIComponent(item.message.slice(0, 150))}...\n\n`}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          if (item.status === "unread") {
+                            handleUpdateInquiryStatus(item.id, "responded");
+                          }
+                        }}
+                        className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 border border-amber-500/40 font-mono text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Mail className="w-3.5 h-3.5" />
+                        <span>Reply</span>
+                      </a>
+
+                      {item.status === "unread" ? (
+                        <button
+                          onClick={() => handleUpdateInquiryStatus(item.id, "responded")}
+                          disabled={isUpdatingInquiry}
+                          className="bg-emerald-950/40 hover:bg-emerald-900/50 text-emerald-300 border border-emerald-600/50 font-mono text-[11px] px-2.5 py-2 rounded-lg transition-colors cursor-pointer"
+                          title="Mark as Responded"
+                        >
+                          Mark Responded
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleUpdateInquiryStatus(item.id, "unread")}
+                          disabled={isUpdatingInquiry}
+                          className="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 font-mono text-[11px] px-2.5 py-2 rounded-lg transition-colors cursor-pointer"
+                          title="Mark as Unread"
+                        >
+                          Mark Unread
+                        </button>
+                      )}
+
+                      {item.status !== "archived" && (
+                        <button
+                          onClick={() => handleUpdateInquiryStatus(item.id, "archived")}
+                          disabled={isUpdatingInquiry}
+                          className="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 p-2 rounded-lg transition-colors cursor-pointer"
+                          title="Archive Inquiry"
+                        >
+                          <Archive className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => handleDeleteInquiry(item.id)}
+                        disabled={isUpdatingInquiry}
+                        className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
+                        title="Delete inquiry record"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
