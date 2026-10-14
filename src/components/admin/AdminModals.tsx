@@ -20,9 +20,14 @@ import {
   Upload,
   Trophy,
   Award,
+  Mail,
+  MessageSquare,
+  Clock,
+  Archive,
 } from "lucide-react";
 import { TeamMember, EventItem, Project, WorkshopMediaItem, Achievement } from "@/data/siteData";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { InquiryRecord } from "@/app/api/contact/route";
 
 // =========================================================================
 // 1. TEAM MEMBER MODAL WITH LIVE CARD SIMULATOR
@@ -1520,6 +1525,230 @@ export function AchievementModal({
             </button>
           </div>
         </form>
+      </motion.div>
+    </div>
+  );
+}
+
+// =========================================================================
+// 7. INQUIRY DETAIL MODAL (Full Message Inspector & Rapid Reply)
+// =========================================================================
+export function InquiryDetailModal({
+  isOpen,
+  inquiry,
+  onClose,
+  onUpdateStatus,
+  onDelete,
+}: {
+  isOpen: boolean;
+  inquiry: InquiryRecord | null;
+  onClose: () => void;
+  onUpdateStatus: (id: string, status: "unread" | "responded" | "archived") => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+}) {
+  const [copiedText, setCopiedText] = useState(false);
+  const [isActionPending, setIsActionPending] = useState(false);
+
+  if (!isOpen || !inquiry) return null;
+
+  const handleCopyMessage = () => {
+    const textToCopy = `[CEAR Inquiry from ${inquiry.name} <${inquiry.email}>]\nSubject: ${inquiry.subject}\nReceived: ${inquiry.created_at}\n\n${inquiry.message}`;
+    navigator.clipboard?.writeText(textToCopy);
+    setCopiedText(true);
+    setTimeout(() => setCopiedText(false), 2000);
+  };
+
+  const handleStatusChange = async (status: "unread" | "responded" | "archived") => {
+    setIsActionPending(true);
+    try {
+      await onUpdateStatus(inquiry.id, status);
+    } finally {
+      setIsActionPending(false);
+    }
+  };
+
+  const mailtoSubject = encodeURIComponent(`Re: ${inquiry.subject} - CEAR AIT Pune`);
+  const mailtoBody = encodeURIComponent(
+    `Hello ${inquiry.name},\n\nThank you for reaching out to the Centre of Excellence for AI & Robotics (CEAR) at Army Institute of Technology, Pune.\n\nRegarding your inquiry:\n"${inquiry.message}"\n\n[Write your response here]\n\nBest regards,\nCEAR Technical Cadre\nLab 104, Army Institute of Technology, Pune\nWebsite: https://cear-ait-website.vercel.app`
+  );
+  const mailtoLink = `mailto:${inquiry.email}?subject=${mailtoSubject}&body=${mailtoBody}`;
+
+  const formattedDate = new Date(inquiry.created_at).toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+      <div
+        className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+      />
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 15 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 15 }}
+        className="relative w-full max-w-2xl bg-[#0c121e] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-10 my-8"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 bg-[#080d16] border-b border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-400">
+              <Mail className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs font-bold text-slate-300">
+                  {inquiry.id}
+                </span>
+                <span
+                  className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
+                    inquiry.status === "unread"
+                      ? "bg-amber-950/80 text-amber-400 border border-amber-500/40"
+                      : inquiry.status === "responded"
+                      ? "bg-emerald-950/80 text-emerald-400 border border-emerald-500/40"
+                      : "bg-slate-800 text-slate-400 border border-slate-700"
+                  }`}
+                >
+                  {inquiry.status}
+                </span>
+              </div>
+              <p className="text-[11px] font-mono text-slate-400 mt-0.5 flex items-center gap-1.5">
+                <Clock className="w-3 h-3 text-slate-500" />
+                <span>Received {formattedDate}</span>
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Body Content */}
+        <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+          {/* Sender Dossier */}
+          <div className="bg-[#060a12] border border-slate-800/80 rounded-xl p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/60 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center text-amber-300 font-mono font-bold text-sm">
+                  {inquiry.name.slice(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <h4 className="text-sm font-tech font-bold text-white tracking-wide">
+                    {inquiry.name}
+                  </h4>
+                  <a
+                    href={`mailto:${inquiry.email}`}
+                    className="text-xs font-mono text-cyan-400 hover:underline flex items-center gap-1"
+                  >
+                    <span>{inquiry.email}</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Status Switcher Pills */}
+              <div className="flex items-center gap-1 text-[10px] font-mono self-start sm:self-auto bg-slate-900/80 p-1 rounded-lg border border-slate-800">
+                <span className="text-slate-500 px-1">Status:</span>
+                {(["unread", "responded", "archived"] as const).map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => handleStatusChange(st)}
+                    disabled={isActionPending || inquiry.status === st}
+                    className={`px-2 py-0.5 rounded capitalize transition-all cursor-pointer ${
+                      inquiry.status === st
+                        ? "bg-slate-700 text-white font-bold"
+                        : "text-slate-400 hover:text-white hover:bg-slate-800"
+                    }`}
+                  >
+                    {st}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Subject */}
+            <div className="pt-1">
+              <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">
+                Subject Dossier
+              </span>
+              <p className="text-sm font-semibold text-white tracking-wide">
+                {inquiry.subject}
+              </p>
+            </div>
+          </div>
+
+          {/* Full Message Body */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                <MessageSquare className="w-3.5 h-3.5 text-amber-400" />
+                <span>Transmitted Transmission Content</span>
+              </span>
+              <button
+                onClick={handleCopyMessage}
+                className="text-[11px] font-mono text-slate-400 hover:text-cyan-400 flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                {copiedText ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-emerald-400 font-bold">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy Message</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#060a12] border border-slate-800 font-sans text-sm text-slate-200 leading-relaxed whitespace-pre-wrap selection:bg-amber-500/30">
+              {inquiry.message}
+            </div>
+          </div>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 px-6 py-4 bg-[#080d16] border-t border-slate-800">
+          <button
+            type="button"
+            onClick={() => onDelete(inquiry.id)}
+            disabled={isActionPending}
+            className="px-3.5 py-2 bg-red-950/40 hover:bg-red-900/60 border border-red-800/50 text-red-300 font-mono text-xs rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span>Delete Inquiry</span>
+          </button>
+
+          <div className="flex items-center gap-2 justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs rounded-lg transition-colors cursor-pointer"
+            >
+              Close
+            </button>
+            <a
+              href={mailtoLink}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => {
+                if (inquiry.status === "unread") {
+                  handleStatusChange("responded");
+                }
+              }}
+              className="px-5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-mono text-xs font-bold rounded-lg shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <Mail className="w-4 h-4" />
+              <span>Compose Reply</span>
+            </a>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

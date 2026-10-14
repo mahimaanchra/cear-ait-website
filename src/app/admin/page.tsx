@@ -61,6 +61,7 @@ import {
   GalleryModal,
   CloudSetupModal,
   AchievementModal,
+  InquiryDetailModal,
 } from "@/components/admin/AdminModals";
 
 const DEFAULT_PASSCODE = "cear@2026";
@@ -2127,6 +2128,15 @@ export default function AdminPage() {
       <CloudSetupModal
         isOpen={isCloudHelpModalOpen}
         onClose={() => setIsCloudHelpModalOpen(false)}
+      />
+
+      {/* Inquiry Details Inspector & Reply Modal */}
+      <InquiryDetailModal
+        isOpen={Boolean(selectedInquiry)}
+        inquiry={selectedInquiry}
+        onClose={() => setSelectedInquiry(null)}
+        onUpdateStatus={handleUpdateInquiryStatus}
+        onDelete={handleDeleteInquiry}
       />
 
       {/* Registration Details Inspection Modal */}
