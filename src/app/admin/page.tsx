@@ -53,6 +53,7 @@ import {
 import { useSiteContent } from "@/context/SiteContentContext";
 import { TeamMember, EventItem, Project, WorkshopMediaItem, Achievement } from "@/data/siteData";
 import { RegistrationRecord } from "@/app/api/register/route";
+import { InquiryRecord } from "@/app/api/contact/route";
 import {
   MemberModal,
   EventModal,
@@ -107,8 +108,8 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
 
-  // Tabs: 'team' | 'events' | 'projects' | 'gallery' | 'achievements' | 'registrations' | 'settings'
-  const [activeTab, setActiveTab] = useState<"team" | "events" | "projects" | "gallery" | "achievements" | "registrations" | "settings">("team");
+  // Tabs: 'team' | 'events' | 'projects' | 'gallery' | 'achievements' | 'registrations' | 'inquiries' | 'settings'
+  const [activeTab, setActiveTab] = useState<"team" | "events" | "projects" | "gallery" | "achievements" | "registrations" | "inquiries" | "settings">("team");
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState("");
@@ -125,6 +126,14 @@ export default function AdminPage() {
   const [registrationStatusFilter, setRegistrationStatusFilter] = useState<string>("all");
   const [selectedRegistration, setSelectedRegistration] = useState<RegistrationRecord | null>(null);
   const [copiedRegId, setCopiedRegId] = useState<string | null>(null);
+
+  // Inquiries Inbox State
+  const [inquiries, setInquiries] = useState<InquiryRecord[]>([]);
+  const [isLoadingInquiries, setIsLoadingInquiries] = useState(false);
+  const [inquiryStatusFilter, setInquiryStatusFilter] = useState<"all" | "unread" | "responded" | "archived">("all");
+  const [selectedInquiry, setSelectedInquiry] = useState<InquiryRecord | null>(null);
+  const [isUpdatingInquiry, setIsUpdatingInquiry] = useState(false);
+  const [copiedInquiryId, setCopiedInquiryId] = useState<string | null>(null);
 
   const fetchRegistrations = useCallback(async () => {
     setIsLoadingRegistrations(true);
@@ -144,11 +153,30 @@ export default function AdminPage() {
     }
   }, []);
 
+  const fetchInquiries = useCallback(async () => {
+    setIsLoadingInquiries(true);
+    try {
+      const authPass = localStorage.getItem(CUSTOM_PASSCODE_KEY) || DEFAULT_PASSCODE;
+      const res = await fetch("/api/contact", {
+        headers: { "x-admin-passcode": authPass },
+      });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.inquiries)) {
+        setInquiries(data.inquiries);
+      }
+    } catch (err) {
+      console.error("Failed to fetch inquiries", err);
+    } finally {
+      setIsLoadingInquiries(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchRegistrations();
+      fetchInquiries();
     }
-  }, [isAuthenticated, fetchRegistrations]);
+  }, [isAuthenticated, fetchRegistrations, fetchInquiries]);
 
   const exportRegistrationsCsv = () => {
     if (registrations.length === 0) {
@@ -238,6 +266,115 @@ export default function AdminPage() {
       showToast(err?.message || "Failed to update status", "warning");
     }
   };
+
+  const exportInquiriesCsv = () => {
+    if (inquiries.length === 0) {
+      showToast("No inquiries available to export", "info");
+      return;
+    }
+    const headers = [
+      "ID",
+      "Name",
+      "Email",
+      "Subject",
+      "Message",
+      "Status",
+      "Created At",
+    ];
+    const rows = inquiries.map((item) => [
+      item.id,
+      `"${(item.name || "").replace(/"/g, '""')}"`,
+      `"${(item.email || "").replace(/"/g, '""')}"`,
+      `"${(item.subject || "").replace(/"/g, '""')}"`,
+      `"${(item.message || "").replace(/"/g, '""').replace(/\n/g, ' ')}"`,
+      item.status,
+      item.created_at,
+    ]);
+    const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `cear_inquiries_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast("✓ Exported inquiries to CSV!", "success");
+  };
+
+  const handleUpdateInquiryStatus = async (
+    id: string,
+    status: "unread" | "responded" | "archived"
+  ) => {
+    setIsUpdatingInquiry(true);
+    try {
+      const authPass = localStorage.getItem(CUSTOM_PASSCODE_KEY) || DEFAULT_PASSCODE;
+      const res = await fetch("/api/contact", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-passcode": authPass,
+        },
+        body: JSON.stringify({ id, status }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setInquiries((prev) =>
+          prev.map((item) => (String(item.id) === String(id) ? { ...item, status } : item))
+        );
+        if (selectedInquiry && String(selectedInquiry.id) === String(id)) {
+          setSelectedInquiry((prev) => (prev ? { ...prev, status } : null));
+        }
+        showToast(`✓ Inquiry status marked as ${status}!`, "success");
+      } else {
+        showToast(data.error || "Failed to update inquiry status", "warning");
+      }
+    } catch (err: any) {
+      showToast(err?.message || "Failed to update inquiry status", "warning");
+    } finally {
+      setIsUpdatingInquiry(false);
+    }
+  };
+
+  const handleDeleteInquiry = async (id: string) => {
+    if (!window.confirm("Are you sure you want to permanently delete this inquiry?")) return;
+    setIsUpdatingInquiry(true);
+    try {
+      const authPass = localStorage.getItem(CUSTOM_PASSCODE_KEY) || DEFAULT_PASSCODE;
+      const res = await fetch(`/api/contact?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+        headers: { "x-admin-passcode": authPass },
+      });
+      const data = await res.json();
+      if (data.success) {
+        setInquiries((prev) => prev.filter((item) => String(item.id) !== String(id)));
+        if (selectedInquiry && String(selectedInquiry.id) === String(id)) {
+          setSelectedInquiry(null);
+        }
+        showToast("✓ Inquiry deleted successfully!", "success");
+      } else {
+        showToast(data.error || "Failed to delete inquiry", "warning");
+      }
+    } catch (err: any) {
+      showToast(err?.message || "Failed to delete inquiry", "warning");
+    } finally {
+      setIsUpdatingInquiry(false);
+    }
+  };
+
+  const unreadInquiriesCount = inquiries.filter((i) => i.status === "unread").length;
+
+  const filteredInquiries = inquiries.filter((item) => {
+    const matchesStatus = inquiryStatusFilter === "all" || item.status === inquiryStatusFilter;
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return matchesStatus;
+    const matchesSearch =
+      (item.name || "").toLowerCase().includes(q) ||
+      (item.email || "").toLowerCase().includes(q) ||
+      (item.subject || "").toLowerCase().includes(q) ||
+      (item.message || "").toLowerCase().includes(q) ||
+      (item.id || "").toLowerCase().includes(q);
+    return matchesStatus && matchesSearch;
+  });
 
   // Toast Notification
   const [toastMessage, setToastMessage] = useState<{ text: string; type: "success" | "info" | "warning" } | null>(null);
@@ -836,6 +973,27 @@ export default function AdminPage() {
                 </button>
               </div>
             )}
+            {activeTab === "inquiries" && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={fetchInquiries}
+                  disabled={isLoadingInquiries}
+                  className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-tech font-bold text-xs px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                  title="Refresh inquiries"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isLoadingInquiries ? "animate-spin" : ""}`} />
+                  <span>Refresh</span>
+                </button>
+                <button
+                  onClick={exportInquiriesCsv}
+                  className="bg-amber-500 hover:bg-amber-400 text-[#070b12] font-tech font-bold text-xs px-3.5 py-1.5 rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.3)] flex items-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                  title="Export inquiries to CSV file"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Export CSV</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -911,6 +1069,23 @@ export default function AdminPage() {
           >
             <FileText className="w-4 h-4" />
             <span>Registrations ({registrations.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("inquiries")}
+            className={`py-3 px-4 text-xs font-tech font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer uppercase tracking-wider shrink-0 relative ${
+              activeTab === "inquiries"
+                ? "border-amber-400 text-amber-400 bg-amber-950/20"
+                : "border-transparent text-slate-400 hover:text-white"
+            }`}
+          >
+            <Mail className="w-4 h-4" />
+            <span>Inquiries ({inquiries.length})</span>
+            {unreadInquiriesCount > 0 && (
+              <span className="px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold bg-amber-500 text-black leading-none animate-pulse">
+                {unreadInquiriesCount} NEW
+              </span>
+            )}
           </button>
 
           <button
@@ -1724,6 +1899,17 @@ export default function AdminPage() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 7: INQUIRIES INBOX                                            */}
+        {/* ================================================================= */}
+        {activeTab === "inquiries" && (
+          <div className="space-y-6">
+            <div className="bg-[#0c121e] border border-slate-800 rounded-xl p-8 text-center text-slate-400 font-mono text-xs">
+              Inquiries tab initialized ({inquiries.length} total, {unreadInquiriesCount} unread)
+            </div>
           </div>
         )}
 
