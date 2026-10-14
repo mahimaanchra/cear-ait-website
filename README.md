@@ -189,13 +189,16 @@ The website includes an integrated, zero-friction Content Management System buil
 - **Default Access Passcode**: `cear@2026`
 
 ### CMS Capabilities:
+- **Inquiries Inbox**: Complete incoming transmission management with live unread badge, status lifecycle (`unread` / `responded` / `archived`), 1-click email reply generator, and CSV audit export.
+- **Registrations Roster**: Wartech and Induction candidate review, verification status switcher (`pending` / `verified` / `shortlisted` / `rejected`), and CSV data download.
 - **Team / Cadre Management**: Add, update, or remove leadership profiles, domains, designations, and social links.
 - **Fleet & Project Showcase**: Edit robotics platforms, specifications, readiness levels, and platform tags.
 - **Events & Timeline**: Schedule workshops, hackathons, and induction drives with custom dates and venues.
+- **Track Record Accolades**: Manage national awards, podiums, and championship laurels.
 - **Drag-and-Drop Image Uploader**: Direct upload pipeline via `/api/upload` supporting WebP, PNG, and JPEG assets with client-side preview.
 - **Hybrid Storage Engine**:
   - *Cloud Mode*: Persists data into Supabase PostgreSQL tables and uploads media to Supabase Storage bucket.
-  - *Offline Mode*: Automatically falls back to `public/customContent.json` and local `public/uploads/` directory when credentials are not configured.
+  - *Offline Mode*: Automatically falls back to `src/data/` JSON storage and local `public/uploads/` directory when credentials are not configured.
 
 ---
 
@@ -216,25 +219,29 @@ cear-ait-website/
 │   │   ├── robots.ts             # Search engine crawler policies
 │   │   ├── sitemap.ts            # Dynamic XML sitemap generator
 │   │   ├── about/                # Detailed CEAR institutional background page
-│   │   ├── admin/                # Admin CMS Control Center
+│   │   ├── admin/                # Admin CMS Control Center & Inquiries Inbox
 │   │   ├── api/                  # Serverless API routes
+│   │   │   ├── contact/          # GET / POST / PATCH / DELETE inquiries
 │   │   │   ├── content/          # GET / POST content synchronization
-│   │   │   ├── health/           # System health check endpoint
+│   │   │   ├── health/           # System health check & telemetry endpoint
+│   │   │   ├── register/         # GET / POST / PATCH candidate registrations
 │   │   │   └── upload/           # Media file upload handler
 │   │   ├── projects/             # Comprehensive robotics platforms gallery
 │   │   ├── team/                 # Complete cadre & hierarchy directory
 │   │   └── wartech/              # Wartech robotics tournament portal
 │   ├── components/
-│   │   ├── admin/                # CMS Modals & image upload components
+│   │   ├── admin/                # CMS Modals, InquiryDetailModal & image upload
 │   │   ├── sections/             # Primary UI sections (Hero, About, Fleet, Team, etc.)
 │   │   └── ui/                   # Cyber Matrix canvas, glowing cards, modals, badges
 │   ├── context/
 │   │   └── SiteContentContext.tsx# Centralized state provider & live CMS sync
 │   ├── data/
-│   │   └── initialContent.ts     # Static seed content & baseline platform specs
+│   │   └── siteData.ts           # Static seed content & baseline platform specs
 │   └── lib/
 │       ├── supabase.ts           # Supabase client instantiation & helpers
 │       └── utils.ts              # Tailwind class merging (clsx + twMerge)
+├── supabase/
+│   └── schema.sql                # Production PostgreSQL schema and storage RLS policies
 ├── tailwind.config.ts            # Custom tactical theme colors & keyframes
 ├── tsconfig.json                 # TypeScript compiler specifications
 └── package.json                  # Dependencies and execution scripts
@@ -244,13 +251,20 @@ cear-ait-website/
 
 ## 🔌 API Endpoints
 
-The internal Next.js serverless API routes handle data serialization and asset pipelines:
+The internal Next.js serverless API routes handle data serialization, candidate registrations, inquiries, and asset pipelines:
 
 | Method | Endpoint | Description | Payload / Response |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/health` | Service uptime and deployment environment check | `{ status: "ok", timestamp: ... }` |
-| `GET` | `/api/content` | Fetches active site content (fleet, cadre, events) | `{ projects: [], team: [], events: [] }` |
+| `GET` | `/api/health` | Service uptime and deployment environment check | `{ status: "operational", callsign: "LAB-104-ALPHA", ... }` |
+| `GET` | `/api/content` | Fetches active site content (fleet, cadre, events) | `{ projects: [], team: [], events: [], achievements: [] }` |
 | `POST` | `/api/content` | Saves and broadcasts updated CMS state | `{ success: true, timestamp: ... }` |
+| `POST` | `/api/contact` | Submits public transmission / inquiry | `{ name, email, subject, message }` |
+| `GET` | `/api/contact` | Retrieves all inquiries (Auth required: `x-admin-passcode`) | `{ success: true, inquiries: [...] }` |
+| `PATCH` | `/api/contact` | Updates inquiry status (`unread`/`responded`/`archived`) | `{ id, status }` |
+| `DELETE` | `/api/contact` | Permanently deletes an inquiry record (`?id=...`) | `{ success: true, id }` |
+| `POST` | `/api/register` | Submits candidate registration (Wartech or Inductions) | `{ registration_type, applicant_name, email, ... }` |
+| `GET` | `/api/register` | Retrieves registrations roster (Auth required) | `{ success: true, registrations: [...] }` |
+| `PATCH` | `/api/register` | Updates verification status (`pending`/`verified`/`shortlisted`) | `{ id, status }` |
 | `POST` | `/api/upload` | Multipart form uploader for platform and profile images | `{ url: "/uploads/filename.webp" }` |
 
 ---

@@ -80,7 +80,9 @@ All components must adhere strictly to the CEAR Sandstone & Terracotta glassmorp
    - `GET /api/register`: Authenticated endpoint (requires `x-admin-passcode`) used by the Admin Panel for candidate roster review and CSV exports.
    - `PATCH /api/register`: Authenticated endpoint for updating application status (`approved`, `shortlisted`, `rejected`) in Supabase or local storage.
    - `POST /api/contact`: Handles campus inquiries and collaboration proposals with automatic input validation and persistence.
-   - `GET /api/contact`: Authenticated endpoint for retrieving inquiry history and messages.
+   - `GET /api/contact`: Authenticated endpoint (requires `x-admin-passcode`) for retrieving inquiry transmissions history.
+   - `PATCH /api/contact`: Authenticated endpoint for updating inquiry status (`unread`, `responded`, `archived`) with Supabase cloud sync and local JSON fallback.
+   - `DELETE /api/contact`: Authenticated endpoint for permanently purging resolved inquiries.
    - `GET /api/content` & `POST /api/content`: Dynamic content synchronization with cloud Supabase and local JSON fallback for live site updates.
    - `POST /api/upload`: Multipart image upload gateway targeting Supabase Storage bucket (`cear-media`) with resilient base64 fallback.
 
@@ -96,7 +98,7 @@ All components must adhere strictly to the CEAR Sandstone & Terracotta glassmorp
    ```
 
 5. **Admin Panel (`/admin`)**:
-   - Passcode-secured portal with tabs for Cadre Cadets, Events & Timeline, Robotics Fleet, Lab 104 Media, Track Record Accolades, Registrations Roster (with status management and CSV download), and System Backups.
+   - Passcode-secured portal with tabs for Cadre Cadets, Events & Timeline, Robotics Fleet, Lab 104 Media, Track Record Accolades, Registrations Roster (with status management and CSV download), Inquiries Inbox (live unread counter, status toggles, mailto reply generator, and CSV audit export), and System Backups.
 
 ---
 
