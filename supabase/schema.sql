@@ -87,6 +87,17 @@ CREATE POLICY "Allow select inquiries"
   FOR SELECT
   USING (true);
 
+CREATE POLICY "Allow update inquiries"
+  ON public.inquiries
+  FOR UPDATE
+  USING (true)
+  WITH CHECK (true);
+
+CREATE POLICY "Allow delete inquiries"
+  ON public.inquiries
+  FOR DELETE
+  USING (true);
+
 -- ----------------------------------------------------------------
 -- 4. Storage Bucket Setup for Media & Photographs
 -- ----------------------------------------------------------------
