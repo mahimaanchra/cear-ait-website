@@ -12,15 +12,24 @@ import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
 import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
+import { CommandPaletteModal, useCommandPaletteShortcut } from "@/components/ui/CommandPaletteModal";
 
 export default function WartechPage() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState<string | undefined>(undefined);
   const [rulebookModalOpen, setRulebookModalOpen] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+
+  useCommandPaletteShortcut(() => setCommandPaletteOpen(true));
 
   const handleOpenRegister = (trackId?: string) => {
     setSelectedTrack(trackId);
     setRegisterModalOpen(true);
+  };
+
+  const handleOpenRulebook = (trackId?: string) => {
+    if (trackId) setSelectedTrack(trackId);
+    setRulebookModalOpen(true);
   };
 
   return (
@@ -35,13 +44,16 @@ export default function WartechPage() {
       <AutonomousStatusWidget />
 
       {/* Floating Glassmorphic Navbar */}
-      <Navbar onOpenRegister={() => handleOpenRegister()} />
+      <Navbar
+        onOpenRegister={() => handleOpenRegister()}
+        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+      />
 
       <main className="relative z-10 pt-28">
         <SubpageBreadcrumb currentPage="Wartech" />
         <Wartech
           onOpenRegister={handleOpenRegister}
-          onOpenRulebook={() => setRulebookModalOpen(true)}
+          onOpenRulebook={() => handleOpenRulebook()}
         />
       </main>
       <Footer />
@@ -59,6 +71,13 @@ export default function WartechPage() {
           setRulebookModalOpen(false);
           handleOpenRegister(trackId);
         }}
+      />
+
+      <CommandPaletteModal
+        isOpen={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        onOpenRegister={handleOpenRegister}
+        onOpenRulebook={handleOpenRulebook}
       />
     </div>
   );

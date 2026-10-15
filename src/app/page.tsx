@@ -14,6 +14,7 @@ import { ContactAndFAQ } from "@/components/sections/ContactAndFAQ";
 import { Footer } from "@/components/sections/Footer";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
+import { CommandPaletteModal, useCommandPaletteShortcut } from "@/components/ui/CommandPaletteModal";
 import { ArchitecturalCleanBackground } from "@/components/ui/ArchitecturalCleanBackground";
 import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
 import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
@@ -23,13 +24,18 @@ export default function Home() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [selectedWartechTrack, setSelectedWartechTrack] = useState<string | undefined>(undefined);
   const [rulebookModalOpen, setRulebookModalOpen] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+
+  // Global keyboard shortcut: Cmd+K / Ctrl+K
+  useCommandPaletteShortcut(() => setCommandPaletteOpen(true));
 
   const handleOpenRegister = (trackId?: string) => {
     setSelectedWartechTrack(trackId);
     setRegisterModalOpen(true);
   };
 
-  const handleOpenRulebook = () => {
+  const handleOpenRulebook = (trackId?: string) => {
+    if (trackId) setSelectedWartechTrack(trackId);
     setRulebookModalOpen(true);
   };
 
@@ -45,7 +51,10 @@ export default function Home() {
       <AutonomousStatusWidget />
 
       {/* 1. Sticky Navigation Bar */}
-      <Navbar onOpenRegister={() => handleOpenRegister()} />
+      <Navbar
+        onOpenRegister={() => handleOpenRegister()}
+        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+      />
 
       {/* Main Single-Page Sections */}
       <main className="relative">
@@ -105,6 +114,14 @@ export default function Home() {
           setRulebookModalOpen(false);
           handleOpenRegister(trackId);
         }}
+      />
+
+      {/* Omnibar Tactical Command Palette */}
+      <CommandPaletteModal
+        isOpen={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        onOpenRegister={handleOpenRegister}
+        onOpenRulebook={handleOpenRulebook}
       />
     </div>
   );

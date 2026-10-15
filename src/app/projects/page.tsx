@@ -11,9 +11,26 @@ import { Footer } from "@/components/sections/Footer";
 import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
 import { AutonomousStatusWidget } from "@/components/ui/AutonomousStatusWidget";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
+import { RulebookModal } from "@/components/ui/RulebookModal";
+import { CommandPaletteModal, useCommandPaletteShortcut } from "@/components/ui/CommandPaletteModal";
 
 export default function ProjectsPage() {
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
+  const [rulebookModalOpen, setRulebookModalOpen] = useState(false);
+  const [selectedTrack, setSelectedTrack] = useState<string | undefined>(undefined);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+
+  useCommandPaletteShortcut(() => setCommandPaletteOpen(true));
+
+  const handleOpenRegister = (trackId?: string) => {
+    setSelectedTrack(trackId);
+    setRegisterModalOpen(true);
+  };
+
+  const handleOpenRulebook = (trackId?: string) => {
+    if (trackId) setSelectedTrack(trackId);
+    setRulebookModalOpen(true);
+  };
 
   return (
     <div className="relative min-h-screen bg-[#f6f3ee] text-[#240d2b] font-body selection:bg-[#ff6b35] selection:text-white">
@@ -27,7 +44,10 @@ export default function ProjectsPage() {
       <AutonomousStatusWidget />
 
       {/* Floating Glassmorphic Navbar */}
-      <Navbar onOpenRegister={() => setRegisterModalOpen(true)} />
+      <Navbar
+        onOpenRegister={() => handleOpenRegister()}
+        onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+      />
 
       <main className="relative z-10 pt-28">
         <SubpageBreadcrumb currentPage="Projects" />
@@ -39,6 +59,23 @@ export default function ProjectsPage() {
       <RegistrationModal
         isOpen={registerModalOpen}
         onClose={() => setRegisterModalOpen(false)}
+        initialTrack={selectedTrack}
+      />
+
+      <RulebookModal
+        isOpen={rulebookModalOpen}
+        onClose={() => setRulebookModalOpen(false)}
+        onSelectTrack={(trackId) => {
+          setRulebookModalOpen(false);
+          handleOpenRegister(trackId);
+        }}
+      />
+
+      <CommandPaletteModal
+        isOpen={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        onOpenRegister={handleOpenRegister}
+        onOpenRulebook={handleOpenRulebook}
       />
     </div>
   );
