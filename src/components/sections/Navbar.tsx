@@ -4,11 +4,12 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowUpRight, Sparkles } from "lucide-react";
+import { Menu, X, ArrowUpRight, Sparkles, Search } from "lucide-react";
 import { CearLogo } from "@/components/ui/CearLogo";
 
 interface NavbarProps {
   onOpenRegister?: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
 const navLinks = [
@@ -20,7 +21,7 @@ const navLinks = [
   { name: "Contact", href: "/#contact" },
 ];
 
-export function Navbar({ onOpenRegister }: NavbarProps) {
+export function Navbar({ onOpenRegister, onOpenCommandPalette }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
@@ -110,35 +111,52 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             })}
           </nav>
 
-          {/* Right: Tangerine Glass Action Button */}
-          <div className="hidden sm:flex items-center gap-3">
-            {onOpenRegister ? (
+          {/* Right: Search / Command Palette and Tangerine Glass Action Button */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {onOpenCommandPalette && (
               <button
-                onClick={onOpenRegister}
-                className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#ff6b35] hover:bg-[#fa5519] px-4 py-2 rounded-full transition-all shadow-[0_2px_14px_rgba(255,107,53,0.35)] hover:shadow-[0_4px_18px_rgba(255,107,53,0.5)] cursor-pointer hover:scale-102 active:scale-98"
+                onClick={onOpenCommandPalette}
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono bg-white/75 hover:bg-white text-[#240d2b]/80 hover:text-[#240d2b] border border-white/90 shadow-[0_2px_10px_rgba(36,13,43,0.04)] transition-all cursor-pointer hover:scale-102 active:scale-98"
+                title="Open Command Palette (Cmd + K)"
+                aria-label="Open Command Palette"
               >
-                <span>Wartech &apos;26</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <Search className="w-3.5 h-3.5 text-[#ff6b35]" />
+                <span className="hidden md:inline text-[#240d2b]/60 text-[11px]">Search</span>
+                <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded-md bg-black/5 text-[10px] text-[#240d2b]/70 border border-black/5 font-semibold">
+                  ⌘K
+                </kbd>
               </button>
-            ) : (
-              <Link
-                href="#wartech"
-                className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#ff6b35] hover:bg-[#fa5519] px-4 py-2 rounded-full transition-all shadow-[0_2px_14px_rgba(255,107,53,0.35)] hover:shadow-[0_4px_18px_rgba(255,107,53,0.5)]"
-              >
-                <span>Wartech &apos;26</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
             )}
-          </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl text-[#240d2b] hover:bg-white/60 backdrop-blur-md transition-colors"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+            <div className="hidden sm:flex items-center">
+              {onOpenRegister ? (
+                <button
+                  onClick={onOpenRegister}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#ff6b35] hover:bg-[#fa5519] px-4 py-2 rounded-full transition-all shadow-[0_2px_14px_rgba(255,107,53,0.35)] hover:shadow-[0_4px_18px_rgba(255,107,53,0.5)] cursor-pointer hover:scale-102 active:scale-98"
+                >
+                  <span>Wartech &apos;26</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+              ) : (
+                <Link
+                  href="#wartech"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#ff6b35] hover:bg-[#fa5519] px-4 py-2 rounded-full transition-all shadow-[0_2px_14px_rgba(255,107,53,0.35)] hover:shadow-[0_4px_18px_rgba(255,107,53,0.5)]"
+                >
+                  <span>Wartech &apos;26</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              )}
+            </div>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-xl text-[#240d2b] hover:bg-white/60 backdrop-blur-md transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -153,6 +171,24 @@ export function Navbar({ onOpenRegister }: NavbarProps) {
             className="fixed inset-x-0 top-16 z-40 bg-[#f6f3ee]/95 backdrop-blur-2xl border-b border-white/80 shadow-2xl p-6 md:hidden"
           >
             <nav className="flex flex-col space-y-3">
+              {onOpenCommandPalette && (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenCommandPalette();
+                  }}
+                  className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/90 border border-white/90 text-xs font-mono text-[#240d2b] shadow-xs cursor-pointer text-left"
+                >
+                  <span className="flex items-center gap-2">
+                    <Search className="w-4 h-4 text-[#ff6b35]" />
+                    <span>Search Fleet &amp; Arenas</span>
+                  </span>
+                  <kbd className="px-1.5 py-0.5 rounded-md bg-black/5 text-[10px] text-[#240d2b]/60 border border-black/5">
+                    ⌘K
+                  </kbd>
+                </button>
+              )}
+
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
