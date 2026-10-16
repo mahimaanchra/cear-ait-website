@@ -20,6 +20,7 @@ import {
   MapPin,
   Check,
   Compass,
+  BookOpen,
 } from "lucide-react";
 import {
   projects,
@@ -34,7 +35,7 @@ import {
   WorkshopMediaItem,
 } from "@/data/siteData";
 
-export type CommandCategory = "all" | "fleet" | "wartech" | "cadre" | "facility" | "actions";
+export type CommandCategory = "all" | "fleet" | "wartech" | "research" | "cadre" | "facility" | "actions";
 
 export interface CommandItem {
   id: string;
@@ -205,7 +206,50 @@ export function CommandPaletteModal({
       });
     });
 
-    // 4. Cadre & Leadership
+    // 4. Lab 104 Research Whitepapers
+    const whitepapers = [
+      {
+        id: "paper-tb-26-01",
+        title: "TB-26-01: YOLOv8 Edge Inference on Jetson Orin Nano",
+        subtitle: "72.4 FPS • 11.8ms Latency • TensorRT FP16 Quantization • Edge AI",
+        keywords: ["yolo", "yolov8", "jetson", "tensorrt", "edge", "ai", "vision", "cuda", "latency"],
+      },
+      {
+        id: "paper-tb-26-02",
+        title: "TB-26-02: Jalpari AUV Hydrodynamics & Active Ballast",
+        subtitle: "45m Depth • ±0.05m Neutral Buoyancy • Marine Autonomous Systems",
+        keywords: ["jalpari", "auv", "underwater", "ballast", "marine", "hydrodynamics", "depth"],
+      },
+      {
+        id: "paper-tb-26-03",
+        title: "TB-26-03: Distributed Micro-RTPS ROS2 SLAM & Dual-EKF",
+        subtitle: "Sub-3.2cm Drift • 100Hz EKF Pose • GPS-Denied Subterranean Mapping",
+        keywords: ["ros2", "slam", "ekf", "lidar", "rtps", "mapping", "navigation", "odometry"],
+      },
+      {
+        id: "paper-tb-26-04",
+        title: "TB-26-04: High-Density 48V/60A FOC BLDC Motor Driver",
+        subtitle: "95A Peak Burst • 40kHz PWM FOC • Combat Robotics Mechatronics",
+        keywords: ["foc", "bldc", "motor", "driver", "48v", "mosfet", "combat", "inverter"],
+      },
+    ];
+
+    whitepapers.forEach((wp) => {
+      list.push({
+        id: wp.id,
+        title: wp.title,
+        subtitle: wp.subtitle,
+        category: "research",
+        categoryLabel: "Research Whitepaper",
+        icon: <BookOpen className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "Lab 104",
+        keywords: [...wp.keywords, wp.title, wp.subtitle],
+        actionType: "navigate",
+        target: "/#research",
+      });
+    });
+
+    // 5. Cadre & Leadership
     const allCadre: TeamMember[] = [
       facultyIncharge,
       ...secretaries,
@@ -227,7 +271,7 @@ export function CommandPaletteModal({
       });
     });
 
-    // 5. Facilities & Lab 104
+    // 6. Facilities & Lab 104
     workshopGallery.forEach((f: WorkshopMediaItem) => {
       list.push({
         id: `facility-${f.id}`,
@@ -342,6 +386,7 @@ export function CommandPaletteModal({
       all: allItems.length,
       fleet: allItems.filter((i) => i.category === "fleet").length,
       wartech: allItems.filter((i) => i.category === "wartech").length,
+      research: allItems.filter((i) => i.category === "research").length,
       cadre: allItems.filter((i) => i.category === "cadre").length,
       facility: allItems.filter((i) => i.category === "facility").length,
       actions: allItems.filter((i) => i.category === "actions").length,
@@ -351,6 +396,7 @@ export function CommandPaletteModal({
       { id: "all", label: "All Telemetry", count: counts.all },
       { id: "fleet", label: "Fleet & Robots", count: counts.fleet },
       { id: "wartech", label: "Wartech Arenas", count: counts.wartech },
+      { id: "research", label: "Research Bulletins", count: counts.research },
       { id: "cadre", label: "Cadre Roster", count: counts.cadre },
       { id: "facility", label: "Lab 104", count: counts.facility },
       { id: "actions", label: "Quick Actions", count: counts.actions },

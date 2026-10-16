@@ -11,6 +11,7 @@ import { UpcomingEvents } from "@/components/sections/UpcomingEvents";
 import { Wartech } from "@/components/sections/Wartech";
 import { Achievements } from "@/components/sections/Achievements";
 import { ContactAndFAQ } from "@/components/sections/ContactAndFAQ";
+import { ResearchWhitepapers } from "@/components/sections/ResearchWhitepapers";
 import { Footer } from "@/components/sections/Footer";
 import { RegistrationModal } from "@/components/ui/RegistrationModal";
 import { RulebookModal } from "@/components/ui/RulebookModal";
@@ -90,10 +91,15 @@ export default function Home() {
           onOpenRulebook={handleOpenRulebook}
         />
 
-        {/* 8. Track Record & Achievements */}
+        <CircuitDivider label="ENGINEERING WHITEPAPERS & TECHNICAL BULLETINS" />
+
+        {/* 8. Lab 104 Research Whitepapers */}
+        <ResearchWhitepapers />
+
+        {/* 9. Track Record & Achievements */}
         <Achievements />
 
-        {/* 9. Communications & FAQ */}
+        {/* 10. Communications & FAQ */}
         <ContactAndFAQ />
       </main>
 

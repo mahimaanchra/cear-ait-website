@@ -17,6 +17,7 @@ const navLinks = [
   { name: "Workshop", href: "/#workshop" },
   { name: "Projects", href: "/#projects" },
   { name: "Wartech '26", href: "/#wartech", isFlagship: true },
+  { name: "Research", href: "/#research" },
   { name: "Team", href: "/#team" },
   { name: "Contact", href: "/#contact" },
 ];
@@ -39,6 +40,7 @@ export function Navbar({ onOpenRegister, onOpenCommandPalette }: NavbarProps) {
         "team",
         "events",
         "wartech",
+        "research",
         "contact",
       ];
       for (const sectionId of sections) {
