@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { wartechTracks, WartechTrack } from "@/data/siteData";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { WartechArenaBracket } from "@/components/wartech/WartechArenaBracket";
 
 interface WartechProps {
   onOpenRegister?: (trackId?: string) => void;
@@ -303,6 +304,9 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
             </div>
           )}
         </div>
+
+        {/* Live Arena Match Telemetry & Bracket HUD */}
+        <WartechArenaBracket />
       </div>
 
       {/* Track Details Glass Modal */}
