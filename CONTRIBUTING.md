@@ -160,7 +160,27 @@ git commit -m "feat(telemetry): add multi-tab telemetry HUD with real-time FPS a
 
 ---
 
-## 8. Pre-Submission Checklist
+## 8. Command Palette & Tournament Telemetry Guidelines
+
+### 8.1 Command Palette Extensions (`src/components/ui/CommandPaletteModal.tsx`)
+When adding new pages, robots, or high-priority shortcuts:
+1. Register items in the `allItems` registry inside `CommandPaletteModal.tsx`.
+2. Assign appropriate `CommandCategory` (`fleet`, `wartech`, `research`, `cadre`, `facility`, or `actions`).
+3. Include search keywords (`keywords: string[]`) covering synonyms, technical specifications, and acronyms.
+4. Support keyboard navigation and shortcut bindings across all subpage layouts.
+
+### 8.2 Wartech Arena Telemetry (`src/components/wartech/WartechArenaBracket.tsx`)
+1. Matches in the RoboWars tree must specify weight parameters, weapon RPM readouts, armor materials, and seed rank.
+2. RoboSoccer standings table automatically sorts and computes goal differentials and qualification statuses.
+3. Keep referee telemetry logs informative and aligned with Wartech regulation standards.
+
+### 8.3 Engineering Bulletins (`src/components/sections/ResearchWhitepapers.tsx`)
+1. Each bulletin must include an abstract, quantifiable metrics, hardware BOM, firmware stack, and benchmark comparison table.
+2. Ensure download and citation export utilities remain functional offline without external CDN dependencies.
+
+---
+
+## 9. Pre-Submission Checklist
 
 Before committing or pushing to `main`:
 - [ ] Code compiles with **zero errors and warnings**:

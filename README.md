@@ -92,6 +92,9 @@ This production web platform acts as the public face and digital command centre 
 | :--- | :--- |
 | **🛸 Autonomous Fleet Showcase** | Interactive directory of CEAR engineering platforms (Cerberus UGV, Autonomous Quadrotor, Robotic Manipulators, RoboSoccer units, AUV Jalpari) with tech specs and telemetry status badges. |
 | **⚔️ Wartech Arena Hub** | Dedicated championship portal featuring combat track details, downloadable rulebooks via interactive modals, and team registration workflows. |
+| **🏆 Live Arena Bracket & Match HUD** | Real-time tournament tree for RoboWars 15kg with bot weapon dossiers, kinetic damage ratings, referee logs, and RoboSoccer standings. |
+| **⌘K Tactical Command Palette** | Omnibar spotlight search modal accessible across all routes with keyboard shortcut `Cmd + K` or `Ctrl + K` for instant fleet, track, and cadre jumping. |
+| **📚 Lab 104 Research Whitepapers** | Open technical repository containing peer-reviewed bulletins on YOLOv8 edge inference, Jalpari AUV ballast, ROS2 SLAM, and 48V/60A FOC motor drivers. |
 | **👥 Cadre Hierarchy Directory** | Categorized team showcase highlighting Faculty In-Charge, Student Secretaries, Joint Secretaries, Technical Leads, and Core Contributors. |
 | **🔬 Lab 104 & Workshop Archive** | Interactive photography archive with high-resolution lightbox modal viewing, tags, and behind-the-scenes engineering builds. |
 | **🛡 Built-in Admin CMS (`/admin`)** | Passcode-protected control panel (`cear@2026`) enabling authorized cadre to update fleet projects, upcoming workshops, and cadre members with instant drag-and-drop media uploads. |
@@ -231,8 +234,9 @@ cear-ait-website/
 │   │   └── wartech/              # Wartech robotics tournament portal
 │   ├── components/
 │   │   ├── admin/                # CMS Modals, InquiryDetailModal & image upload
-│   │   ├── sections/             # Primary UI sections (Hero, About, Fleet, Team, etc.)
-│   │   └── ui/                   # Cyber Matrix canvas, glowing cards, modals, badges
+│   │   ├── sections/             # Primary UI sections (Hero, About, Fleet, ResearchWhitepapers, etc.)
+│   │   ├── ui/                   # CommandPaletteModal, Cyber Matrix canvas, glowing cards, modals, badges
+│   │   └── wartech/              # WartechArenaBracket live tournament tree & telemetry HUD
 │   ├── context/
 │   │   └── SiteContentContext.tsx# Centralized state provider & live CMS sync
 │   ├── data/
