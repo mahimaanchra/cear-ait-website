@@ -21,6 +21,11 @@ import {
   Check,
   Compass,
   BookOpen,
+  Crosshair,
+  Activity,
+  Cpu,
+  Layers,
+  Radio,
 } from "lucide-react";
 import {
   projects,
@@ -146,6 +151,54 @@ export function CommandPaletteModal({
         keywords: ["email", "contact", "support", "collaborate", "mail"],
         actionType: "copy",
         target: siteConfig.contactEmail,
+      },
+      {
+        id: "action-launch-mission-cockpit",
+        title: "Launch Autonomous Operations Center (AOC)",
+        subtitle: "Open full-screen tactical 2D LiDAR radar, attitude gyro gauges, and ROS2 terminal",
+        category: "actions",
+        categoryLabel: "Tactical HUD",
+        icon: <Crosshair className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "Live Telemetry",
+        keywords: ["telemetry", "cockpit", "hud", "radar", "lidar", "rover", "ros2", "attitude", "waypoint", "aoc"],
+        actionType: "action",
+        target: "cear-open-mission-cockpit",
+      },
+      {
+        id: "action-autonomy-pipeline",
+        title: "End-to-End Embedded Autonomy Pipeline",
+        subtitle: "Inspect signal flow: Sensing -> Jetson TensorRT -> Dual-EKF -> Nav2 -> 40kHz FOC",
+        category: "actions",
+        categoryLabel: "Architecture",
+        icon: <Layers className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "Signal Flow",
+        keywords: ["pipeline", "architecture", "foc", "jetson", "sensor", "fusion", "ros2", "telemetry"],
+        actionType: "navigate",
+        target: "/#about",
+      },
+      {
+        id: "action-reserve-bench",
+        title: "Reserve Lab 104 Prototyping Bench Slot",
+        subtitle: "Generate official cadet access pass for certified electronics & fabrication bays",
+        category: "actions",
+        categoryLabel: "Lab Pass",
+        icon: <Wrench className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "Pass Generator",
+        keywords: ["bench", "reserve", "slot", "lab", "pass", "equipment", "booking", "fabrication"],
+        actionType: "navigate",
+        target: "/#workshop",
+      },
+      {
+        id: "action-arena-bracket",
+        title: "RoboWars 15kg Arena Bracket & Telemetry",
+        subtitle: "Inspect quarterfinal, semifinal, and final match telemetry and judge scoring",
+        category: "actions",
+        categoryLabel: "Combat Telemetry",
+        icon: <Activity className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "RoboWars",
+        keywords: ["bracket", "tournament", "robowars", "combat", "telemetry", "arena", "match"],
+        actionType: "navigate",
+        target: "/#wartech",
       },
       {
         id: "action-open-admin",
@@ -329,6 +382,9 @@ export function CommandPaletteModal({
           setCopiedActionId(null);
           onClose();
         }, 1200);
+      } else if (item.actionType === "action" && item.target) {
+        onClose();
+        window.dispatchEvent(new CustomEvent(item.target));
       } else if (item.actionType === "navigate" && item.target) {
         onClose();
         if (item.target.startsWith("/#") && window.location.pathname === "/") {
