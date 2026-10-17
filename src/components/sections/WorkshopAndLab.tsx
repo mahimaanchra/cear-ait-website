@@ -23,6 +23,15 @@ import {
   CheckCircle2,
   Cpu,
   ShieldCheck,
+  Calendar,
+  Clock,
+  User,
+  Copy,
+  Check,
+  Search,
+  FileText,
+  AlertTriangle,
+  Download,
 } from "lucide-react";
 import { workshopGallery as defaultGallery, WorkshopMediaItem } from "@/data/siteData";
 import { useSiteContent } from "@/context/SiteContentContext";
@@ -37,19 +46,33 @@ const categories = [
   "Testing Arena",
 ];
 
-interface EquipmentItem {
+const equipmentCategories = [
+  "All Apparatus",
+  "Electronics",
+  "Fabrication",
+  "AI Compute",
+  "Arena & Flight",
+];
+
+export interface EquipmentItem {
   id: string;
+  benchId: string;
   name: string;
   category: "Electronics" | "Fabrication" | "AI Compute" | "Arena & Flight";
   status: "Online & Calibrated" | "Available for Cadets" | "Active R&D";
   bay: string;
   specs: string[];
   description: string;
+  safetyProtocol: string;
+  calibrationDate: string;
+  cadreIncharge: string;
+  capacity: string;
 }
 
 const labEquipment: EquipmentItem[] = [
   {
     id: "eq-scopes",
+    benchId: "BENCH-104-A1",
     name: "Rigol & Keysight 4-Ch Digital Storage Oscilloscopes",
     category: "Electronics",
     status: "Online & Calibrated",
@@ -57,9 +80,14 @@ const labEquipment: EquipmentItem[] = [
     specs: ["200 MHz Bandwidth", "1 GSa/s Sample Rate", "CAN / I2C / SPI Decoding"],
     description:
       "Multi-channel signal validation, PWM duty-cycle verification for brushless ESCs, and sensor ripple analysis.",
+    safetyProtocol: "ESD Grounding Wrist Strap required. Maximum probe input: 300V CAT II.",
+    calibrationDate: "Oct 2026 (Certified ISO/IEC 17025)",
+    cadreIncharge: "Sec. Electronics & Hardware",
+    capacity: "2 Cadets concurrently",
   },
   {
     id: "eq-soldering",
+    benchId: "BENCH-104-A2",
     name: "JBC High-Precision Micro-Soldering & Hot-Air Rework",
     category: "Electronics",
     status: "Available for Cadets",
@@ -67,9 +95,14 @@ const labEquipment: EquipmentItem[] = [
     specs: ["0402 SMD Capable", "PID Thermal Control", "ESD-Safe Station"],
     description:
       "Rapid precision hand-assembly of custom surface-mount flight controller and motor driver boards.",
+    safetyProtocol: "Active fume extraction mandatory. Protective safety spectacles required.",
+    calibrationDate: "Sep 2026 (Thermal Sensor Calibrated)",
+    cadreIncharge: "Lead Fabrication Cadre",
+    capacity: "1 Cadet per rework station",
   },
   {
     id: "eq-3dprinters",
+    benchId: "BENCH-104-C1",
     name: "Bambu Lab X1-Carbon & Multi-Material FDM Array",
     category: "Fabrication",
     status: "Active R&D",
@@ -77,9 +110,14 @@ const labEquipment: EquipmentItem[] = [
     specs: ["Carbon-Fiber Nylon", "Dual-Gear Extruder", "Sub-0.1mm Resolution"],
     description:
       "High-strength mechanical enclosures, lightweight tactical quadcopter arms, and planetary gear housings.",
+    safetyProtocol: "Enclosure doors must remain latched during high-temp bed heating (110°C).",
+    calibrationDate: "Oct 2026 (Bed Mesh Laser Calibrated)",
+    cadreIncharge: "Joint Sec. Mechanical & CAD",
+    capacity: "3 Concurrent Build Slots",
   },
   {
     id: "eq-pcbmill",
+    benchId: "BENCH-104-D1",
     name: "LPKF Precision Double-Sided PCB Prototype Mill",
     category: "Fabrication",
     status: "Online & Calibrated",
@@ -87,9 +125,14 @@ const labEquipment: EquipmentItem[] = [
     specs: ["Sub-100um Track Clearance", "High-Speed Spindle (60k RPM)", "Dual-Sided Alignment"],
     description:
       "In-house turnaround of double-sided RF boards, power distribution buses, and sensor interface shields.",
+    safetyProtocol: "Acoustic hearing protection and HEPA vacuum mist collection active.",
+    calibrationDate: "Oct 2026 (Spindle Runout < 3um)",
+    cadreIncharge: "Core Hardware Engineer",
+    capacity: "1 Cadet Operator + Mentor",
   },
   {
     id: "eq-jetson",
+    benchId: "BENCH-104-E1",
     name: "NVIDIA Jetson Orin Nano & Edge Neural Accelerators",
     category: "AI Compute",
     status: "Active R&D",
@@ -97,9 +140,14 @@ const labEquipment: EquipmentItem[] = [
     specs: ["40 TOPS AI Compute", "TensorRT Engine", "PyTorch Mobile / ROS2"],
     description:
       "Real-time edge neural inference for autonomous obstacle clustering, visual SLAM, and target classification.",
+    safetyProtocol: "Monitor 15W/25W TDP power limits and thermal throttling thresholds.",
+    calibrationDate: "Oct 2026 (JetPack 6.0 / CUDA 12.2)",
+    cadreIncharge: "Lead AI & Autonomous Systems",
+    capacity: "Remote SSH or Lab Workstation",
   },
   {
     id: "eq-sensors",
+    benchId: "BENCH-104-E2",
     name: "Intel RealSense D435i Depth & Slamtec RPLIDAR S2",
     category: "AI Compute",
     status: "Available for Cadets",
@@ -107,9 +155,14 @@ const labEquipment: EquipmentItem[] = [
     specs: ["360° Laser SLAM", "90 FPS Stereo Depth", "Integrated 6-DOF IMU"],
     description:
       "Precision spatial mapping, 3D point cloud generation, and obstacle avoidance across indoor GPS-denied environments.",
+    safetyProtocol: "Class 1 Eye-Safe Laser. Avoid optical scratching on infrared emitter lenses.",
+    calibrationDate: "Oct 2026 (Depth Target Matrix Checked)",
+    cadreIncharge: "Vision & Perception Lead",
+    capacity: "2 Cadets concurrently",
   },
   {
     id: "eq-arena",
+    benchId: "BENCH-104-F1",
     name: "Enclosed Netted Drone Test Cage & Combat Dohyo",
     category: "Arena & Flight",
     status: "Online & Calibrated",
@@ -117,6 +170,10 @@ const labEquipment: EquipmentItem[] = [
     specs: ["Safety-Netted Perimeter", "LED Air Gates", "Impact-Resistant Lexan"],
     description:
       "Indoor test flight envelope for autonomous micro-UAVs, robotic soccer skirmishes, and battle trials.",
+    safetyProtocol: "Strict dual-killswitch radio test and safety marshal clearance prior to arming.",
+    calibrationDate: "Oct 2026 (Lexan Impact Test Passed)",
+    cadreIncharge: "Wartech Event Marshal",
+    capacity: "1 Team in Arena Cage",
   },
 ];
 
@@ -133,6 +190,27 @@ export function WorkshopAndLab() {
   const [viewMode, setViewMode] = useState<"slider" | "grid">("slider");
   const [isHoveringSlide, setIsHoveringSlide] = useState(false);
   const [lightboxZoom, setLightboxZoom] = useState<number>(1);
+
+  // Equipment & Bench Reservation State
+  const [activeEquipmentCategory, setActiveEquipmentCategory] = useState("All Apparatus");
+  const [equipmentSearch, setEquipmentSearch] = useState("");
+  const [selectedEquipment, setSelectedEquipment] = useState<EquipmentItem | null>(null);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingPass, setBookingPass] = useState<{
+    passId: string;
+    cadetName: string;
+    rollNo: string;
+    slot: string;
+    project: string;
+    issuedAt: string;
+  } | null>(null);
+  const [copiedPassId, setCopiedPassId] = useState(false);
+  const [bookingForm, setBookingForm] = useState({
+    cadetName: "",
+    rollNo: "",
+    slot: "Slot 1 (09:00 - 12:00 IST) // Morning",
+    project: "Tactical Robotics & Autonomous Navigation",
+  });
 
   // Filter gallery items
   const filteredPhotos =
@@ -651,63 +729,168 @@ export function WorkshopAndLab() {
         {/* ================= MAIN TAB 2: LAB EQUIPMENT & TOOLING ================= */}
         {activeMainTab === "equipment" && (
           <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#240d2b]/[0.08] pb-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-5">
               <div>
-                <span className="text-xs font-mono tracking-widest uppercase text-[#ff6b35] font-semibold">
-                  Lab 104 Tooling &amp; Prototyping Infrastructure
+                <span className="text-xs font-mono tracking-widest uppercase text-[#ff6b35] font-semibold flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Lab 104 Tooling &amp; Prototyping Infrastructure</span>
                 </span>
-                <h3 className="text-2xl font-bold font-display text-[#240d2b] mt-1">
+                <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#240d2b] mt-1">
                   Active Engineering Apparatus Roster
                 </h3>
               </div>
-              <span className="text-xs font-mono text-[#240d2b]/60 bg-white/80 px-3.5 py-1.5 rounded-full border border-white/80">
-                Total 7 Certified Hardware Stations
-              </span>
+
+              {/* Search & Apparatus Counter */}
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#240d2b]/40 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="Search apparatus, bay, specs..."
+                    value={equipmentSearch}
+                    onChange={(e) => setEquipmentSearch(e.target.value)}
+                    className="pl-8 pr-7 py-1.5 rounded-full bg-white/80 border border-white/90 text-xs font-mono text-[#240d2b] placeholder-[#240d2b]/40 focus:outline-hidden focus:ring-2 focus:ring-[#ff6b35]/30 focus:border-[#ff6b35] transition-all shadow-xs w-52 sm:w-60"
+                  />
+                  {equipmentSearch && (
+                    <button
+                      onClick={() => setEquipmentSearch("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#240d2b]/40 hover:text-[#240d2b] cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+                <span className="text-xs font-mono text-[#240d2b]/60 bg-white/80 px-3 py-1.5 rounded-full border border-white/80 whitespace-nowrap">
+                  {labEquipment.length} Certified Stations
+                </span>
+              </div>
             </div>
 
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap gap-2">
+              {equipmentCategories.map((cat) => {
+                const isActive = activeEquipmentCategory === cat;
+                const count =
+                  cat === "All Apparatus"
+                    ? labEquipment.length
+                    : labEquipment.filter((e) => e.category === cat).length;
+
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveEquipmentCategory(cat)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isActive
+                        ? "bg-[#240d2b] text-white shadow-xs font-bold"
+                        : "bg-white/70 hover:bg-white text-[#240d2b]/70 hover:text-[#240d2b] border border-white/80"
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                        isActive ? "bg-white/20 text-white" : "bg-black/5 text-[#240d2b]/50"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Equipment Grid Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {labEquipment.map((eq) => (
-                <GlassCard
-                  key={eq.id}
-                  spotlightColor="rgba(255, 107, 53, 0.12)"
-                  className="p-6 flex flex-col justify-between space-y-4"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono tracking-wider uppercase px-2.5 py-1 rounded-full bg-white/90 border border-[#240d2b]/[0.08] text-[#240d2b] font-bold">
-                        {eq.category}
+              {labEquipment
+                .filter((eq) => {
+                  const matchesCat =
+                    activeEquipmentCategory === "All Apparatus" ||
+                    eq.category === activeEquipmentCategory;
+                  const q = equipmentSearch.toLowerCase().trim();
+                  if (!q) return matchesCat;
+                  return (
+                    matchesCat &&
+                    (eq.name.toLowerCase().includes(q) ||
+                      eq.bay.toLowerCase().includes(q) ||
+                      eq.description.toLowerCase().includes(q) ||
+                      eq.specs.some((s) => s.toLowerCase().includes(q)))
+                  );
+                })
+                .map((eq) => (
+                  <GlassCard
+                    key={eq.id}
+                    spotlightColor="rgba(255, 107, 53, 0.12)"
+                    className="p-6 flex flex-col justify-between space-y-4 hover:border-[#ff6b35]/40 transition-all group"
+                  >
+                    <div className="space-y-3">
+                      {/* Top Badges */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] font-mono tracking-wider uppercase px-2.5 py-1 rounded-full bg-white/90 border border-[#240d2b]/[0.08] text-[#240d2b] font-bold">
+                            {eq.category}
+                          </span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#240d2b]/5 text-[#240d2b]/60">
+                            {eq.benchId}
+                          </span>
+                        </div>
+                        <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium text-emerald-700 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span>{eq.status}</span>
+                        </span>
+                      </div>
+
+                      {/* Title & Bay */}
+                      <h4 className="font-display text-lg font-bold text-[#240d2b] tracking-tight group-hover:text-[#ff6b35] transition-colors">
+                        {eq.name}
+                      </h4>
+
+                      <span className="text-[11px] font-mono text-[#ff6b35] font-semibold block">
+                        {eq.bay}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-medium text-emerald-700 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span>{eq.status}</span>
-                      </span>
+
+                      <p className="text-xs text-[#240d2b]/70 font-body leading-relaxed">
+                        {eq.description}
+                      </p>
+
+                      {/* Safety Alert Strip */}
+                      <div className="p-2.5 rounded-xl bg-amber-500/[0.07] border border-amber-500/20 flex items-start gap-2 text-[11px] text-amber-900 font-mono">
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                        <span className="leading-tight">{eq.safetyProtocol}</span>
+                      </div>
                     </div>
 
-                    <h4 className="font-display text-lg font-bold text-[#240d2b] tracking-tight">
-                      {eq.name}
-                    </h4>
+                    <div className="space-y-3 pt-2">
+                      {/* Specs Tags */}
+                      <div className="pt-3 border-t border-[#240d2b]/[0.06] flex flex-wrap gap-1.5">
+                        {eq.specs.map((spec, i) => (
+                          <span
+                            key={i}
+                            className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#f6f3ee] border border-[#240d2b]/[0.06] text-[#240d2b]/80"
+                          >
+                            {spec}
+                          </span>
+                        ))}
+                      </div>
 
-                    <span className="text-[11px] font-mono text-[#ff6b35] block">
-                      {eq.bay}
-                    </span>
-
-                    <p className="text-xs text-[#240d2b]/70 font-body leading-relaxed">
-                      {eq.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-[#240d2b]/[0.06] flex flex-wrap gap-1.5">
-                    {eq.specs.map((spec, i) => (
-                      <span
-                        key={i}
-                        className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#f6f3ee] border border-[#240d2b]/[0.06] text-[#240d2b]/80"
-                      >
-                        {spec}
-                      </span>
-                    ))}
-                  </div>
-                </GlassCard>
-              ))}
+                      {/* Metadata Row & Booking Trigger */}
+                      <div className="flex items-center justify-between pt-1">
+                        <div className="text-[10px] font-mono text-[#240d2b]/50">
+                          <span>{eq.capacity}</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setSelectedEquipment(eq);
+                            setBookingSuccess(false);
+                            setBookingPass(null);
+                          }}
+                          className="px-3 py-1.5 rounded-full bg-[#ff6b35] hover:bg-[#fa5519] text-white text-[11px] font-mono font-bold transition-all shadow-[0_2px_10px_rgba(255,107,53,0.3)] hover:scale-102 cursor-pointer flex items-center gap-1.5"
+                        >
+                          <span>Reserve Bench</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </GlassCard>
+                ))}
             </div>
           </div>
         )}
@@ -834,6 +1017,319 @@ export function WorkshopAndLab() {
                         {spec}
                       </span>
                     ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* INTERACTIVE LAB 104 EQUIPMENT INSPECTION & BENCH RESERVATION MODAL */}
+      <AnimatePresence>
+        {selectedEquipment && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-xl animate-fade-in font-mono select-none">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-3xl bg-white/95 rounded-3xl overflow-hidden border border-white/90 shadow-[0_25px_70px_rgba(36,13,43,0.35)] flex flex-col max-h-[92vh] text-[#240d2b]"
+            >
+              {/* Modal Header */}
+              <div className="p-5 sm:p-6 border-b border-[#240d2b]/[0.08] flex items-center justify-between bg-[#f6f3ee]/60">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-[#ff6b35]/15 text-[#ff6b35] font-bold border border-[#ff6b35]/20">
+                      {selectedEquipment.benchId}
+                    </span>
+                    <span className="text-[10px] font-mono text-[#240d2b]/50">
+                      {selectedEquipment.category} &bull; {selectedEquipment.status}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-[#240d2b] tracking-tight">
+                    {selectedEquipment.name}
+                  </h3>
+                  <span className="text-xs font-mono text-[#ff6b35] font-semibold block">
+                    {selectedEquipment.bay}
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setSelectedEquipment(null);
+                    setBookingSuccess(false);
+                    setBookingPass(null);
+                  }}
+                  className="p-2 rounded-full bg-black/5 hover:bg-[#ff6b35] hover:text-white transition-colors cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-5 sm:p-7 overflow-y-auto space-y-6 flex-1 text-xs font-mono">
+                {/* SUCCESS VIEW: Official Lab 104 Hardware Pass */}
+                {bookingSuccess && bookingPass ? (
+                  <div className="p-6 rounded-3xl bg-emerald-500/[0.08] border-2 border-emerald-500/30 space-y-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center shadow-md">
+                        <Check className="w-5 h-5 stroke-[3]" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-bold tracking-widest uppercase text-emerald-800">
+                          Pass Authorized // Lab 104 Robotics Wing
+                        </span>
+                        <h4 className="text-base sm:text-lg font-bold text-[#240d2b]">
+                          Bench Slot Reserved Successfully
+                        </h4>
+                      </div>
+                    </div>
+
+                    {/* Official Certificate Ticket */}
+                    <div className="p-4 rounded-2xl bg-white/90 border border-emerald-500/20 shadow-xs space-y-3">
+                      <div className="flex justify-between items-center border-b border-[#240d2b]/[0.08] pb-2 text-[11px]">
+                        <span className="text-[#240d2b]/50">PASS SERIAL ID:</span>
+                        <span className="font-bold text-[#ff6b35]">{bookingPass.passId}</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-[11px]">
+                        <div>
+                          <span className="text-[#240d2b]/50 block">Cadet Operator:</span>
+                          <span className="font-bold text-[#240d2b]">{bookingPass.cadetName} ({bookingPass.rollNo})</span>
+                        </div>
+                        <div>
+                          <span className="text-[#240d2b]/50 block">Assigned Bench:</span>
+                          <span className="font-bold text-[#240d2b]">{selectedEquipment.benchId}</span>
+                        </div>
+                        <div>
+                          <span className="text-[#240d2b]/50 block">Time Window:</span>
+                          <span className="font-bold text-emerald-700">{bookingPass.slot}</span>
+                        </div>
+                        <div>
+                          <span className="text-[#240d2b]/50 block">R&amp;D Mission Target:</span>
+                          <span className="font-bold text-[#240d2b] truncate block">{bookingPass.project}</span>
+                        </div>
+                      </div>
+                      <div className="border-t border-[#240d2b]/[0.08] pt-2 flex items-center justify-between text-[10px] text-[#240d2b]/60">
+                        <span>Issued: {bookingPass.issuedAt}</span>
+                        <span className="font-bold text-emerald-700">STATUS: APPROVED &bull; ESD VERIFIED</span>
+                      </div>
+                    </div>
+
+                    {/* Pass Action Buttons */}
+                    <div className="flex flex-wrap items-center gap-3 pt-1">
+                      <button
+                        onClick={() => {
+                          const passText = `[CEAR LAB 104 BENCH RESERVATION PASS]
+Pass ID: ${bookingPass.passId}
+Cadet: ${bookingPass.cadetName} (Roll: ${bookingPass.rollNo})
+Station: ${selectedEquipment.name} [${selectedEquipment.benchId}]
+Bay Location: ${selectedEquipment.bay}
+Time Slot: ${bookingPass.slot}
+Project: ${bookingPass.project}
+Safety Protocol: ${selectedEquipment.safetyProtocol}
+Authorized By: Lab 104 Safety Marshal, Army Institute of Technology, Pune
+Issued: ${bookingPass.issuedAt}`;
+                          navigator.clipboard?.writeText(passText);
+                          setCopiedPassId(true);
+                          setTimeout(() => setCopiedPassId(false), 2400);
+                        }}
+                        className="flex-1 py-2.5 rounded-xl bg-[#240d2b] hover:bg-[#3b1646] text-white font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                      >
+                        {copiedPassId ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Pass Token Copied</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>Copy Pass Token</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setSelectedEquipment(null);
+                          setBookingSuccess(false);
+                          setBookingPass(null);
+                        }}
+                        className="px-5 py-2.5 rounded-xl bg-white border border-[#240d2b]/15 hover:bg-black/5 text-[#240d2b] font-bold transition-colors cursor-pointer"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    {/* Left Column: Specs & Protocols (6 Cols) */}
+                    <div className="md:col-span-6 space-y-4">
+                      <div>
+                        <span className="text-[10px] font-bold tracking-widest uppercase text-[#240d2b]/50 block mb-1">
+                          Apparatus Overview
+                        </span>
+                        <p className="text-xs text-[#240d2b]/75 font-body leading-relaxed">
+                          {selectedEquipment.description}
+                        </p>
+                      </div>
+
+                      {/* Technical Specs Checklist */}
+                      <div className="p-3.5 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-2">
+                        <span className="text-[10px] font-bold tracking-wider uppercase text-[#240d2b]/60 block">
+                          Verified Engineering Parameters
+                        </span>
+                        <ul className="space-y-1.5 text-[11px]">
+                          {selectedEquipment.specs.map((s, i) => (
+                            <li key={i} className="flex items-center gap-2 text-[#240d2b]">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <span>{s}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Calibration & Safety Badges */}
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-xl bg-amber-500/[0.08] border border-amber-500/20 text-amber-950 space-y-1">
+                          <span className="font-bold flex items-center gap-1.5 text-[10px] uppercase text-amber-900">
+                            <AlertTriangle className="w-3 h-3 text-amber-600" />
+                            <span>Safety &amp; Compliance Requirement</span>
+                          </span>
+                          <p className="text-[11px] leading-tight text-amber-900/80">
+                            {selectedEquipment.safetyProtocol}
+                          </p>
+                        </div>
+
+                        <div className="flex justify-between items-center text-[10px] text-[#240d2b]/60 px-1">
+                          <span>Calibration: <strong>{selectedEquipment.calibrationDate}</strong></span>
+                          <span>Incharge: <strong>{selectedEquipment.cadreIncharge}</strong></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Reservation Form (6 Cols) */}
+                    <div className="md:col-span-6 p-5 rounded-2xl bg-[#f6f3ee]/80 border border-[#240d2b]/[0.08] space-y-4">
+                      <div>
+                        <span className="text-[10px] font-bold tracking-widest uppercase text-[#ff6b35] block">
+                          Cadet Access Control
+                        </span>
+                        <h4 className="text-sm font-bold text-[#240d2b]">
+                          Reserve Prototyping Slot
+                        </h4>
+                      </div>
+
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          if (!bookingForm.cadetName || !bookingForm.rollNo) return;
+                          const passId = `CEAR-LAB104-${Math.floor(10000 + Math.random() * 90000)}`;
+                          setBookingPass({
+                            passId,
+                            cadetName: bookingForm.cadetName,
+                            rollNo: bookingForm.rollNo,
+                            slot: bookingForm.slot,
+                            project: bookingForm.project,
+                            issuedAt: new Date().toLocaleTimeString("en-GB", { hour12: false }) + " IST",
+                          });
+                          setBookingSuccess(true);
+                        }}
+                        className="space-y-3"
+                      >
+                        <div>
+                          <label className="text-[10px] text-[#240d2b]/60 block mb-1">
+                            Cadet Full Name *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. Cadet Rohan Sharma"
+                            value={bookingForm.cadetName}
+                            onChange={(e) =>
+                              setBookingForm((prev) => ({ ...prev, cadetName: e.target.value }))
+                            }
+                            className="w-full px-3 py-2 rounded-xl bg-white border border-[#240d2b]/15 text-xs text-[#240d2b] focus:outline-hidden focus:ring-1 focus:ring-[#ff6b35]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-[#240d2b]/60 block mb-1">
+                            Roll / Student Registration No. *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. 23104 / BE Mech / TE Comp"
+                            value={bookingForm.rollNo}
+                            onChange={(e) =>
+                              setBookingForm((prev) => ({ ...prev, rollNo: e.target.value }))
+                            }
+                            className="w-full px-3 py-2 rounded-xl bg-white border border-[#240d2b]/15 text-xs text-[#240d2b] focus:outline-hidden focus:ring-1 focus:ring-[#ff6b35]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-[#240d2b]/60 block mb-1">
+                            Target R&amp;D Project
+                          </label>
+                          <select
+                            value={bookingForm.project}
+                            onChange={(e) =>
+                              setBookingForm((prev) => ({ ...prev, project: e.target.value }))
+                            }
+                            className="w-full px-3 py-2 rounded-xl bg-white border border-[#240d2b]/15 text-xs text-[#240d2b] focus:outline-hidden focus:ring-1 focus:ring-[#ff6b35]"
+                          >
+                            <option value="Jalpari AUV Sub-surface Sensor Calibration">
+                              Jalpari AUV Sub-surface Sensor Calibration
+                            </option>
+                            <option value="Wartech 15kg Combat Bot ESC Tuning & Power Bus">
+                              Wartech 15kg Combat Bot ESC Tuning &amp; Power Bus
+                            </option>
+                            <option value="YOLOv8 Jetson TensorRT Edge Perception">
+                              YOLOv8 Jetson TensorRT Edge Perception
+                            </option>
+                            <option value="Tactical Drone Flight Gate Trials">
+                              Tactical Drone Flight Gate Trials
+                            </option>
+                            <option value="Tactical Robotics & Autonomous Navigation">
+                              General Tactical Robotics R&amp;D
+                            </option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] text-[#240d2b]/60 block mb-1">
+                            Prototyping Time Slot
+                          </label>
+                          <select
+                            value={bookingForm.slot}
+                            onChange={(e) =>
+                              setBookingForm((prev) => ({ ...prev, slot: e.target.value }))
+                            }
+                            className="w-full px-3 py-2 rounded-xl bg-white border border-[#240d2b]/15 text-xs text-[#240d2b] focus:outline-hidden focus:ring-1 focus:ring-[#ff6b35]"
+                          >
+                            <option value="Slot 1 (09:00 - 12:00 IST) // Morning">
+                              Slot 1 (09:00 - 12:00 IST) // Morning
+                            </option>
+                            <option value="Slot 2 (14:00 - 17:00 IST) // Afternoon">
+                              Slot 2 (14:00 - 17:00 IST) // Afternoon
+                            </option>
+                            <option value="Slot 3 (17:30 - 21:00 IST) // Evening R&D">
+                              Slot 3 (17:30 - 21:00 IST) // Evening R&amp;D
+                            </option>
+                          </select>
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="w-full py-2.5 rounded-xl bg-[#ff6b35] hover:bg-[#fa5519] text-white font-bold transition-all shadow-[0_4px_16px_rgba(255,107,53,0.3)] hover:scale-101 cursor-pointer flex items-center justify-center gap-1.5 mt-2"
+                        >
+                          <ShieldCheck className="w-4 h-4" />
+                          <span>Generate Lab 104 Bench Pass</span>
+                        </button>
+                      </form>
+                    </div>
                   </div>
                 )}
               </div>
