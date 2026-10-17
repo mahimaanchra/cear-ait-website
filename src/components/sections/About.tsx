@@ -12,6 +12,13 @@ import {
   Check,
   Copy,
   Calendar,
+  Sparkles,
+  Zap,
+  Activity,
+  Layers,
+  Radio,
+  ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
 import { siteConfig, focusAreas } from "@/data/siteData";
 import { WordBlurReveal } from "@/components/ui/WordBlurReveal";
@@ -36,6 +43,87 @@ interface Milestone {
   fieldDeployment: string;
   telemetryMetric: string;
 }
+
+export interface ArchitectureNode {
+  id: string;
+  step: string;
+  title: string;
+  subsystem: string;
+  chipset: string;
+  protocol: string;
+  latencyBudget: string;
+  rosTopic: string;
+  description: string;
+  verifiedMetric: string;
+}
+
+export const ARCHITECTURE_PIPELINE: ArchitectureNode[] = [
+  {
+    id: "sensing",
+    step: "01",
+    title: "Tactical Sensor Rig",
+    subsystem: "Perception & Spatial Mapping",
+    chipset: "Slamtec RPLIDAR S2 + RealSense D435i",
+    protocol: "USB 3.0 / UART 1Mbaud",
+    latencyBudget: "< 11ms acquisition",
+    rosTopic: "/scan & /camera/depth/image_rect_raw",
+    description:
+      "360° laser time-of-flight ranging up to 30m paired with stereo infrared depth streaming at 90 FPS.",
+    verifiedMetric: "32,000 range points/s @ 0.05m accuracy",
+  },
+  {
+    id: "neural",
+    step: "02",
+    title: "Edge Neural Inference",
+    subsystem: "AI Vision Clustering",
+    chipset: "NVIDIA Jetson Orin Nano (40 TOPS)",
+    protocol: "PCIe Gen4 / TensorRT Engine",
+    latencyBudget: "12.8ms / 78.1 FPS",
+    rosTopic: "/yolo/detections & /target_poses",
+    description:
+      "Hardware-accelerated YOLOv8 FP16 model detecting arena obstacles, adversary bots, and gate waypoints.",
+    verifiedMetric: "Sub-14ms YOLOv8 edge inference at 14.2W TDP",
+  },
+  {
+    id: "fusion",
+    step: "03",
+    title: "Dual-EKF Sensor Fusion",
+    subsystem: "Localization & State Estimation",
+    chipset: "BNO085 9-DOF IMU + Optical Flow",
+    protocol: "SPI 40MHz / I2C Fast-Mode+",
+    latencyBudget: "< 2.0ms filter loop",
+    rosTopic: "/odometry/filtered & /tf",
+    description:
+      "Extended Kalman Filter fusing wheel tick counts, high-G accelerometer drift correction, and visual odometry.",
+    verifiedMetric: "Sub-1.8cm cumulative position drift per 10m",
+  },
+  {
+    id: "planning",
+    step: "04",
+    title: "Nav2 Trajectory Planner",
+    subsystem: "Autonomous Navigation",
+    chipset: "Quad-Core ARM Cortex-A78AE",
+    protocol: "Micro-XRCE-DDS / ROS2 Humble",
+    latencyBudget: "18ms replan cycle",
+    rosTopic: "/cmd_vel & /plan",
+    description:
+      "TEB local planner computing smooth dynamic velocity vectors with active non-holonomic obstacle inflation.",
+    verifiedMetric: "Real-time obstacle avoidance at 2.4 m/s",
+  },
+  {
+    id: "actuation",
+    step: "05",
+    title: "40kHz Field-Oriented Control",
+    subsystem: "Power & Motor Drive",
+    chipset: "STM32H7 + TI DRV8301 Gate Drivers",
+    protocol: "CAN-FD 5Mbps / Space Vector PWM",
+    latencyBudget: "< 25μs current loop",
+    rosTopic: "/motor_status/telemetry",
+    description:
+      "Closed-loop 48V FOC BLDC commutating high-torque drive motors with active regenerative braking.",
+    verifiedMetric: "95A peak burst current with 40kHz PWM ripple",
+  },
+];
 
 const cearMilestones: Milestone[] = [
   {
@@ -86,6 +174,18 @@ const cearMilestones: Milestone[] = [
     fieldDeployment: "CEAR Tactical Proving Grounds, Lab 104 Robotics Wing",
     telemetryMetric: "< 14ms edge inference latency at 1080p stream resolution",
   },
+  {
+    year: "2027+",
+    phase: "Horizon",
+    title: "Autonomous Tactical Swarms & Defense Quadruped Platforms",
+    description:
+      "Next-frontier defense R&D targeting heterogeneous multi-agent swarm coordination across land, air, and aquatic battle domains, featuring bio-inspired quadruped scout robots.",
+    achievements: ["Heterogeneous Swarm Relays", "Bio-inspired Quadruped Actuation", "Sub-Surface UUV Swarm Mesh"],
+    techStack: ["Micro-RTPS Swarms", "Direct Drive BLDC", "Reinforcement Learning", "Ultra-Wideband Mesh"],
+    missionObjective: "Decentralized autonomous search-and-recon swarms operational in GPS-denied contested environments.",
+    fieldDeployment: "AIT Advanced Proving Ground & Defense Incubation Cell",
+    telemetryMetric: "16-node swarm mesh coordination with sub-10ms inter-agent sync",
+  },
 ];
 
 const domainDetails: Record<
@@ -130,7 +230,12 @@ export function About() {
   const [nodeCount, setNodeCount] = useState<number>(36);
   const [copiedStack, setCopiedStack] = useState(false);
   const [activeMilestoneYear, setActiveMilestoneYear] = useState<string>("2026");
+  const [milestonePhaseFilter, setMilestonePhaseFilter] = useState<string>("ALL");
   const [copiedMilestone, setCopiedMilestone] = useState(false);
+
+  // Subsystem Signal-Flow Architecture State
+  const [activeArchNodeId, setActiveArchNodeId] = useState<string>("sensing");
+  const [copiedArchSpecs, setCopiedArchSpecs] = useState(false);
 
   // Close domain modal with Escape key
   useEffect(() => {
@@ -143,9 +248,19 @@ export function About() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedDomain]);
 
+  const filteredMilestones = useMemo(() => {
+    if (milestonePhaseFilter === "ALL") return cearMilestones;
+    return cearMilestones.filter((m) => m.phase.toUpperCase() === milestonePhaseFilter.toUpperCase());
+  }, [milestonePhaseFilter]);
+
   const selectedMilestone = useMemo(
     () => cearMilestones.find((m) => m.year === activeMilestoneYear) || cearMilestones[3],
     [activeMilestoneYear]
+  );
+
+  const activeArchNode = useMemo(
+    () => ARCHITECTURE_PIPELINE.find((n) => n.id === activeArchNodeId) || ARCHITECTURE_PIPELINE[0],
+    [activeArchNodeId]
   );
 
   const handleCopyStack = () => {
@@ -323,12 +438,32 @@ Tech Stacks: ${selectedMilestone.techStack.join(", ")}`;
               </h3>
             </div>
             <p className="text-xs sm:text-sm text-[#240d2b]/60 font-mono">
-              2020 Foundation • 2026 Frontier Autonomous Swarms
+              2020 Foundation &bull; 2026 Swarms &bull; 2027+ Defense Horizon
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {cearMilestones.map((m) => {
+          {/* Strategic Milestone Phase Filter Pills */}
+          <div className="flex flex-wrap gap-2">
+            {["ALL", "Genesis", "Expansion", "National Arena", "Frontier", "Horizon"].map((phase) => {
+              const isActive = milestonePhaseFilter === phase;
+              return (
+                <button
+                  key={phase}
+                  onClick={() => setMilestonePhaseFilter(phase)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-[#ff6b35] text-white font-bold shadow-xs"
+                      : "bg-white/80 hover:bg-white text-[#240d2b]/70 border border-white/90"
+                  }`}
+                >
+                  {phase === "ALL" ? "All Strategic Phases" : phase}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+            {filteredMilestones.map((m) => {
               const isSelected = activeMilestoneYear === m.year;
               return (
                 <GlassCard
@@ -395,7 +530,7 @@ Tech Stacks: ${selectedMilestone.techStack.join(", ")}`;
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] font-semibold bg-[#ff6b35]/10 px-2.5 py-0.5 rounded-full border border-[#ff6b35]/20">
-                      {selectedMilestone.phase} Phase // {selectedMilestone.year}
+                      {selectedMilestone.phase} Phase &bull; {selectedMilestone.year}
                     </span>
                     <span className="text-xs font-mono text-[#240d2b]/50">
                       Deployment: {selectedMilestone.fieldDeployment}
@@ -510,6 +645,162 @@ Tech Stacks: ${selectedMilestone.techStack.join(", ")}`;
                 </div>
               </GlassCard>
             ))}
+          </div>
+        </div>
+
+        {/* ================= INTERACTIVE EMBEDDED AUTONOMY PIPELINE ================= */}
+        <div className="space-y-8 pt-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-6">
+            <div>
+              <span className="text-xs font-mono tracking-widest uppercase text-[#ff6b35] font-semibold flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>02 // Signal-Flow Architecture</span>
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-black font-display text-[#240d2b] tracking-tight mt-1">
+                End-to-End Embedded Autonomy Pipeline
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-[#240d2b]/60 font-mono">
+              From Raw Photons &bull; Dual-EKF Fusion &bull; 40kHz FOC Actuation
+            </p>
+          </div>
+
+          {/* 5-Step Pipeline Flow Bar */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            {ARCHITECTURE_PIPELINE.map((node) => {
+              const isSelected = activeArchNodeId === node.id;
+              return (
+                <button
+                  key={node.id}
+                  onClick={() => setActiveArchNodeId(node.id)}
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer relative overflow-hidden group ${
+                    isSelected
+                      ? "bg-[#240d2b] text-white border-[#240d2b] shadow-md ring-2 ring-[#ff6b35]"
+                      : "bg-white/80 hover:bg-white text-[#240d2b] border-white/90 hover:border-[#ff6b35]/40"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={`text-[10px] font-mono px-2 py-0.5 rounded-md font-bold ${
+                        isSelected
+                          ? "bg-[#ff6b35] text-white"
+                          : "bg-[#240d2b]/10 text-[#240d2b] group-hover:bg-[#ff6b35]/15 group-hover:text-[#ff6b35]"
+                      }`}
+                    >
+                      STAGE {node.step}
+                    </span>
+                    <span
+                      className={`text-[9px] font-mono ${
+                        isSelected ? "text-white/60" : "text-[#240d2b]/40"
+                      }`}
+                    >
+                      {node.latencyBudget}
+                    </span>
+                  </div>
+
+                  <h5 className="font-display font-bold text-sm tracking-tight truncate">
+                    {node.title}
+                  </h5>
+                  <p
+                    className={`text-[11px] font-mono truncate mt-0.5 ${
+                      isSelected ? "text-white/70" : "text-[#240d2b]/60"
+                    }`}
+                  >
+                    {node.subsystem}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Node Detail Card */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-white/85 backdrop-blur-2xl border border-white/90 shadow-[0_15px_40px_rgba(36,13,43,0.06)] space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-5">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-[#ff6b35]/15 text-[#ff6b35] font-bold border border-[#ff6b35]/20">
+                    Stage {activeArchNode.step} &bull; {activeArchNode.subsystem}
+                  </span>
+                  <span className="text-xs font-mono text-emerald-700 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    ACTIVE ARCHITECTURE
+                  </span>
+                </div>
+                <h4 className="text-xl sm:text-2xl font-bold font-display text-[#240d2b] tracking-tight mt-1.5">
+                  {activeArchNode.title}
+                </h4>
+              </div>
+
+              <button
+                onClick={() => {
+                  const archText = `[CEAR EMBEDDED ARCHITECTURE]
+Stage: ${activeArchNode.step} - ${activeArchNode.title}
+Subsystem: ${activeArchNode.subsystem}
+Chipset: ${activeArchNode.chipset}
+Bus Protocol: ${activeArchNode.protocol}
+Latency Budget: ${activeArchNode.latencyBudget}
+ROS2 Topic: ${activeArchNode.rosTopic}
+Benchmark: ${activeArchNode.verifiedMetric}
+Rationale: ${activeArchNode.description}`;
+                  navigator.clipboard?.writeText(archText);
+                  setCopiedArchSpecs(true);
+                  setTimeout(() => setCopiedArchSpecs(false), 2400);
+                }}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono text-[#240d2b]/70 hover:text-[#ff6b35] border border-[#240d2b]/[0.1] bg-white hover:bg-[#f6f3ee] transition-all cursor-pointer shadow-2xs self-start sm:self-center"
+              >
+                {copiedArchSpecs ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Copied Specs</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy Architecture Specs</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Parameter Matrix (4 Boxes) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
+              <div className="p-4 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1">
+                <span className="text-[10px] text-[#240d2b]/50 uppercase font-bold block">
+                  Processing Silicon
+                </span>
+                <span className="font-bold text-[#240d2b] block">{activeArchNode.chipset}</span>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1">
+                <span className="text-[10px] text-[#240d2b]/50 uppercase font-bold block">
+                  Bus / Serial Protocol
+                </span>
+                <span className="font-bold text-[#ff6b35] block">{activeArchNode.protocol}</span>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1">
+                <span className="text-[10px] text-[#240d2b]/50 uppercase font-bold block">
+                  Loop Latency Budget
+                </span>
+                <span className="font-bold text-emerald-700 block">{activeArchNode.latencyBudget}</span>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#f6f3ee] border border-[#240d2b]/[0.06] space-y-1">
+                <span className="text-[10px] text-[#240d2b]/50 uppercase font-bold block">
+                  Active ROS2 Topic
+                </span>
+                <span className="font-bold text-[#240d2b] truncate block">{activeArchNode.rosTopic}</span>
+              </div>
+            </div>
+
+            {/* Description & Benchmark */}
+            <div className="p-4 rounded-2xl bg-[#f6f3ee]/60 border border-[#240d2b]/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <p className="font-body text-[#240d2b]/80 leading-relaxed max-w-2xl">
+                {activeArchNode.description}
+              </p>
+              <div className="shrink-0 font-mono text-[11px] text-[#ff6b35] bg-[#ff6b35]/10 px-3 py-1.5 rounded-xl border border-[#ff6b35]/20 font-semibold">
+                &bull; {activeArchNode.verifiedMetric}
+              </div>
+            </div>
           </div>
         </div>
       </div>
