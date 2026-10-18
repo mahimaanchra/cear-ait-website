@@ -165,6 +165,18 @@ export function CommandPaletteModal({
         target: "cear-open-mission-cockpit",
       },
       {
+        id: "action-view-team-cadre",
+        title: "Explore Team & Research Cadre Directory",
+        subtitle: "Browse faculty mentorship, domain leads, and junior robotics researchers",
+        category: "actions",
+        categoryLabel: "Directory",
+        icon: <Users className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "Team",
+        keywords: ["team", "cadre", "members", "leads", "faculty", "directory", "students", "researchers"],
+        actionType: "navigate",
+        target: "/team",
+      },
+      {
         id: "action-autonomy-pipeline",
         title: "End-to-End Embedded Autonomy Pipeline",
         subtitle: "Inspect signal flow: Sensing -> Jetson TensorRT -> Dual-EKF -> Nav2 -> 40kHz FOC",
@@ -318,9 +330,56 @@ export function CommandPaletteModal({
         categoryLabel: "Cadre Roster",
         icon: <Users className="w-4 h-4 text-[#240d2b]" />,
         badge: m.tier.replace("_", " "),
-        keywords: [m.name, m.role, m.subRole || "", m.specialization || ""],
+        keywords: [m.name, m.role, m.subRole || "", m.specialization || "", "cadre", "team", "engineer"],
         actionType: "navigate",
-        target: "/#team",
+        target: "/team",
+      });
+    });
+
+    // 5b. Cadre Research Domains
+    const cadreDomains = [
+      {
+        id: "cadre-domain-ai",
+        title: "AI & Computer Vision Research Cadre",
+        subtitle: "YOLOv8 Edge Inference, Stereo Depth Fusion & Autonomous Target Pose Estimation",
+        keywords: ["ai", "vision", "cadre", "yolo", "neural", "tensorrt", "cuda", "deep learning"],
+        badge: "AI Cadre",
+      },
+      {
+        id: "cadre-domain-ros",
+        title: "Embedded Systems & ROS 2 Control Cadre",
+        subtitle: "Micro-RTPS Distributed Nodes, STM32 HAL Drivers & Real-time Dual-EKF Odometry",
+        keywords: ["ros", "ros2", "embedded", "stm32", "firmware", "rtos", "control", "cadre"],
+        badge: "Control Cadre",
+      },
+      {
+        id: "cadre-domain-mechatronics",
+        title: "Mechatronics & Combat CAD Cadre",
+        subtitle: "High-Tensile Titanium Weapon Systems, FEA Stress Simulation & SolidWorks Modeling",
+        keywords: ["cad", "mechatronics", "solidworks", "chassis", "combat", "fea", "cadre"],
+        badge: "Fab Cadre",
+      },
+      {
+        id: "cadre-domain-marine",
+        title: "Marine Autonomous Systems (Jalpari AUV)",
+        subtitle: "Active Buoyancy Control, Subaquatic Acoustic Localization & Hydrodynamic Modeling",
+        keywords: ["marine", "auv", "jalpari", "underwater", "hydrodynamics", "cadre", "buoyancy"],
+        badge: "Marine Cadre",
+      },
+    ];
+
+    cadreDomains.forEach((cd) => {
+      list.push({
+        id: cd.id,
+        title: cd.title,
+        subtitle: cd.subtitle,
+        category: "cadre",
+        categoryLabel: "Research Cadre",
+        icon: <Cpu className="w-4 h-4 text-[#ff6b35]" />,
+        badge: cd.badge,
+        keywords: [...cd.keywords, cd.title, cd.subtitle],
+        actionType: "navigate",
+        target: "/team",
       });
     });
 
