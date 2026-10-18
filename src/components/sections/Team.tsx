@@ -15,6 +15,9 @@ import {
   Award,
   Cpu,
   GraduationCap,
+  Mail,
+  Copy,
+  Check,
 } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
 import { TeamMember } from "@/data/siteData";
@@ -26,14 +29,33 @@ interface TeamProps {
 
 type CadreFilter = "all" | "leadership" | "contributors";
 
+export const DOMAIN_PILLS = [
+  "All Domains",
+  "AI & Vision",
+  "Embedded & ROS",
+  "Mechatronics & CAD",
+  "Autonomous Systems",
+] as const;
+
+export type DomainPill = (typeof DOMAIN_PILLS)[number];
+
 export function Team({ onOpenRegister }: TeamProps) {
   const { facultyIncharge, secretaries, jointSecretaries, coreContributors } = useSiteContent();
   const [activeTier, setActiveTier] = useState<CadreFilter>("all");
+  const [activeDomain, setActiveDomain] = useState<DomainPill>("All Domains");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
   const allLeadership = [facultyIncharge, ...secretaries, ...jointSecretaries];
   const allMembers = [facultyIncharge, ...secretaries, ...jointSecretaries, ...coreContributors];
+
+  const handleCopyEmail = (member: TeamMember) => {
+    const handle = `${member.name.toLowerCase().replace(/[^a-z0-9]/g, ".")}@aitpune.edu.in`;
+    navigator.clipboard?.writeText(handle);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
 
   const filteredMembers = allMembers.filter((m) => {
     const matchesTier =
@@ -43,8 +65,19 @@ export function Team({ onOpenRegister }: TeamProps) {
         ? m.tier === "faculty" || m.tier === "secretary" || m.tier === "joint_secretary"
         : m.tier === "contributor";
 
+    const matchesDomain =
+      activeDomain === "All Domains"
+        ? true
+        : activeDomain === "AI & Vision"
+        ? (m.specialization && /ai|vision|yolo|neural|deep|perception/i.test(m.specialization)) || /vision|ai/i.test(m.role)
+        : activeDomain === "Embedded & ROS"
+        ? (m.specialization && /ros|embedded|stm32|firmware|rtos|iot|hardware/i.test(m.specialization)) || /embedded|firmware|hardware/i.test(m.role)
+        : activeDomain === "Mechatronics & CAD"
+        ? (m.specialization && /cad|solidworks|mechatronics|chassis|fabrication|mechanical/i.test(m.specialization)) || /mechanical|cad|chassis/i.test(m.role)
+        : (m.specialization && /autonomy|slam|navigation|control|planning|defense/i.test(m.specialization)) || /autonomous|navigation|operations/i.test(m.role);
+
     const q = searchQuery.toLowerCase().trim();
-    if (!q) return matchesTier;
+    if (!q) return matchesTier && matchesDomain;
 
     const matchesQuery =
       m.name.toLowerCase().includes(q) ||
@@ -52,12 +85,12 @@ export function Team({ onOpenRegister }: TeamProps) {
       (m.subRole && m.subRole.toLowerCase().includes(q)) ||
       (m.specialization && m.specialization.toLowerCase().includes(q));
 
-    return matchesTier && matchesQuery;
+    return matchesTier && matchesDomain && matchesQuery;
   });
 
   return (
     <section id="team" className="relative py-28 sm:py-36 bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#240d2b]/[0.08] pb-6">
           <div className="space-y-2 max-w-2xl">
@@ -116,6 +149,26 @@ export function Team({ onOpenRegister }: TeamProps) {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Domain Filter Bar */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <span className="text-[10px] font-mono tracking-widest uppercase text-[#240d2b]/50 whitespace-nowrap mr-1">
+            Focus Domain:
+          </span>
+          {DOMAIN_PILLS.map((domain) => (
+            <button
+              key={domain}
+              onClick={() => setActiveDomain(domain)}
+              className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer whitespace-nowrap ${
+                activeDomain === domain
+                  ? "bg-[#ff6b35] text-white shadow-xs font-bold"
+                  : "bg-white/80 border border-white/90 text-[#240d2b]/70 hover:text-[#240d2b] hover:bg-white"
+              }`}
+            >
+              {domain}
+            </button>
+          ))}
         </div>
 
         {/* 1. Faculty In-Charge Spotlight (shown when Tier is all or leadership and no search, or when matched) */}
@@ -458,6 +511,18 @@ export function Team({ onOpenRegister }: TeamProps) {
                       <Github className="w-4 h-4" />
                     </a>
                   )}
+                  <button
+                    onClick={() => handleCopyEmail(selectedMember)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-black/10 text-[11px] font-mono text-[#240d2b] hover:border-[#ff6b35]/40 hover:text-[#ff6b35] transition-all cursor-pointer shadow-xs"
+                    title="Copy AIT email handle"
+                  >
+                    {copiedEmail ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    ) : (
+                      <Mail className="w-3.5 h-3.5 text-[#ff6b35]" />
+                    )}
+                    <span>{copiedEmail ? "Copied" : "Copy Email"}</span>
+                  </button>
                 </div>
 
                 <button
