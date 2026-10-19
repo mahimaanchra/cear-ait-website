@@ -26,6 +26,7 @@ import {
   Cpu,
   Layers,
   Radio,
+  Clock,
 } from "lucide-react";
 import {
   projects,
@@ -116,6 +117,30 @@ export function CommandPaletteModal({
         badge: "Flagship",
         keywords: ["wartech", "register", "championship", "robowars", "signup"],
         actionType: "register",
+      },
+      {
+        id: "action-wartech-arena-radar",
+        title: "Launch Wartech 2D Arena Radar Visualizer",
+        subtitle: "Inspect polar arena coordinates, obstacle hazard zones, and 8-track slot capacity",
+        category: "actions",
+        categoryLabel: "Championship Radar",
+        icon: <Radio className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "2D Radar",
+        keywords: ["radar", "wartech", "arena", "polar", "coordinates", "hazards", "sectors", "azimuth"],
+        actionType: "navigate",
+        target: "/wartech#wartech",
+      },
+      {
+        id: "action-wartech-countdown",
+        title: "Wartech Registration Countdown & Capacity Meter",
+        subtitle: "Live timer to Nov 15 deadline • 184/224 team slots allocated (40 remaining)",
+        category: "actions",
+        categoryLabel: "Capacity HUD",
+        icon: <Clock className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "Countdown",
+        keywords: ["countdown", "deadline", "slots", "capacity", "teams", "urgency", "register"],
+        actionType: "navigate",
+        target: "/wartech#wartech",
       },
       {
         id: "action-view-rulebook",
