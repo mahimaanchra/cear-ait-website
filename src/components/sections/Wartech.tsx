@@ -28,6 +28,8 @@ import {
 import { wartechTracks, WartechTrack } from "@/data/siteData";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { WartechArenaBracket } from "@/components/wartech/WartechArenaBracket";
+import { WartechCountdownHUD } from "@/components/wartech/WartechCountdownHUD";
+import { WartechArenaRadar } from "@/components/wartech/WartechArenaRadar";
 
 interface WartechProps {
   onOpenRegister?: (trackId?: string) => void;
@@ -155,6 +157,12 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
           </div>
         </div>
 
+        {/* Live Registration Countdown & Slot Capacity Telemetry */}
+        <WartechCountdownHUD
+          onOpenRegister={onOpenRegister}
+          onOpenRulebook={onOpenRulebook}
+        />
+
         {/* Arenas Filter & Search Navigation Bar */}
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#240d2b]/[0.08] pb-4">
@@ -281,6 +289,25 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
                         )}
                       </button>
                     </div>
+
+                    {/* Live Slot Allocation Meter */}
+                    <div className="space-y-1 pt-1">
+                      <div className="flex items-center justify-between text-[10px] font-mono">
+                        <span className="text-[#240d2b]/50">SLOTS ALLOCATED:</span>
+                        <span className="font-bold text-[#240d2b]">
+                          {track.filledSlots}/{track.maxSlots}
+                          {track.status === "Filling Fast" && (
+                            <span className="ml-1 text-[#ff6b35] font-semibold">⚡ Rush</span>
+                          )}
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 bg-black/5 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-[#ff6b35] to-[#fa5519]"
+                          style={{ width: `${Math.round((track.filledSlots / track.maxSlots) * 100)}%` }}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="pt-4 mt-5 border-t border-[#240d2b]/[0.06] flex items-center justify-between">
@@ -304,6 +331,9 @@ export function Wartech({ onOpenRegister, onOpenRulebook }: WartechProps) {
             </div>
           )}
         </div>
+
+        {/* 2D Polar Arena Radar Visualizer */}
+        <WartechArenaRadar onOpenRegister={onOpenRegister} />
 
         {/* Live Arena Match Telemetry & Bracket HUD */}
         <WartechArenaBracket />
