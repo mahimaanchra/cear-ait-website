@@ -27,6 +27,13 @@ export interface WartechTrack {
   status: "Registrations Open" | "Filling Fast" | "Coming Soon";
   iconName: string;
   accentColor: "blue" | "green" | "yellow" | "red";
+  maxSlots: number;
+  filledSlots: number;
+  registrationDeadline: string;
+  radarAngle: number; // 0 to 360 deg
+  radarDistance: number; // 0.25 to 0.85 normalized radial distance
+  radarSector: "Alpha Combat" | "Bravo Autonomy" | "Gamma Dynamic";
+  arenaHazards: string[];
 }
 
 export interface Achievement {
@@ -441,6 +448,20 @@ export const projects: Project[] = [
   },
 ];
 
+export const wartechChampionshipConfig = {
+  edition: "Wartech 2026 National Championship",
+  venue: "AIT Pune Main Arena Complex",
+  dates: "November 28–29, 2026",
+  targetIso: "2026-11-28T09:00:00+05:30",
+  registrationDeadlineIso: "2026-11-15T23:59:59+05:30",
+  registrationDeadlineFormatted: "15 November 2026 • 23:59 IST",
+  totalSlots: 224,
+  filledSlots: 184,
+  prizePoolTotal: "₹2,45,000",
+  phaseLabel: "Phase 2 Slot Allocations",
+  urgentNotice: "Only 40 Team Slots Remaining Across All 8 Battlegrounds",
+};
+
 export const wartechTracks: WartechTrack[] = [
   {
     id: "robo-soccer",
@@ -456,6 +477,13 @@ export const wartechTracks: WartechTrack[] = [
     status: "Filling Fast",
     iconName: "Trophy",
     accentColor: "blue",
+    maxSlots: 32,
+    filledSlots: 28,
+    registrationDeadline: "Nov 15, 2026",
+    radarAngle: 30,
+    radarDistance: 0.72,
+    radarSector: "Alpha Combat",
+    arenaHazards: ["Pneumatic Hazard Zone", "Goal Perimeter Foul Line", "High-G Kinetic Impact"],
   },
   {
     id: "robo-race",
@@ -471,6 +499,13 @@ export const wartechTracks: WartechTrack[] = [
     status: "Registrations Open",
     iconName: "Flame",
     accentColor: "red",
+    maxSlots: 32,
+    filledSlots: 26,
+    registrationDeadline: "Nov 15, 2026",
+    radarAngle: 75,
+    radarDistance: 0.85,
+    radarSector: "Gamma Dynamic",
+    arenaHazards: ["Oil Slick Ramps", "Loose Gravel Chicanes", "Elevated Bridge Drop"],
   },
   {
     id: "drone-racing",
@@ -486,6 +521,13 @@ export const wartechTracks: WartechTrack[] = [
     status: "Registrations Open",
     iconName: "Compass",
     accentColor: "green",
+    maxSlots: 24,
+    filledSlots: 21,
+    registrationDeadline: "Nov 15, 2026",
+    radarAngle: 120,
+    radarDistance: 0.65,
+    radarSector: "Gamma Dynamic",
+    arenaHazards: ["High-Velocity Neon Dive Gate", "Rotor Vortex Wind Zone", "Acro Tunnel Corkscrew"],
   },
   {
     id: "robo-sumo",
@@ -501,6 +543,13 @@ export const wartechTracks: WartechTrack[] = [
     status: "Filling Fast",
     iconName: "ShieldAlert",
     accentColor: "yellow",
+    maxSlots: 32,
+    filledSlots: 30,
+    registrationDeadline: "Nov 15, 2026",
+    radarAngle: 165,
+    radarDistance: 0.45,
+    radarSector: "Alpha Combat",
+    arenaHazards: ["Elevated Dohyo Ring Drop", "Zero-Traction Perimeter", "Torque Jam Crush"],
   },
   {
     id: "line-tracer",
@@ -516,6 +565,13 @@ export const wartechTracks: WartechTrack[] = [
     status: "Registrations Open",
     iconName: "Route",
     accentColor: "blue",
+    maxSlots: 32,
+    filledSlots: 24,
+    registrationDeadline: "Nov 15, 2026",
+    radarAngle: 210,
+    radarDistance: 0.78,
+    radarSector: "Bravo Autonomy",
+    arenaHazards: ["Reflective IR Glare Inversion", "90-Degree Acute Crossover", "Speed Deceleration Trap"],
   },
   {
     id: "pick-and-place",
@@ -531,6 +587,13 @@ export const wartechTracks: WartechTrack[] = [
     status: "Registrations Open",
     iconName: "Grab",
     accentColor: "green",
+    maxSlots: 24,
+    filledSlots: 18,
+    registrationDeadline: "Nov 15, 2026",
+    radarAngle: 255,
+    radarDistance: 0.55,
+    radarSector: "Alpha Combat",
+    arenaHazards: ["Magnetic Zone Interference", "Steep Loading Incline", "Precision Counterweight Zone"],
   },
   {
     id: "maze-runner",
@@ -546,6 +609,13 @@ export const wartechTracks: WartechTrack[] = [
     status: "Registrations Open",
     iconName: "Layers",
     accentColor: "yellow",
+    maxSlots: 24,
+    filledSlots: 20,
+    registrationDeadline: "Nov 15, 2026",
+    radarAngle: 300,
+    radarDistance: 0.68,
+    radarSector: "Bravo Autonomy",
+    arenaHazards: ["Blind Alley Acoustic Absorption", "Optical Reflectivity Shifts", "Dead-End Penalties"],
   },
   {
     id: "stair-climbing",
@@ -561,6 +631,13 @@ export const wartechTracks: WartechTrack[] = [
     status: "Registrations Open",
     iconName: "Zap",
     accentColor: "red",
+    maxSlots: 24,
+    filledSlots: 17,
+    registrationDeadline: "Nov 15, 2026",
+    radarAngle: 345,
+    radarDistance: 0.82,
+    radarSector: "Gamma Dynamic",
+    arenaHazards: ["45° Vertical Riser Incline", "Anti-Roll Friction Edge", "Multi-Tiered Stability Cam"],
   },
 ];
 
