@@ -3,8 +3,20 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Calendar, MapPin, ArrowRight, Sparkles, Filter, CheckCircle2, Bookmark, Flame } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  ArrowRight,
+  Sparkles,
+  Filter,
+  CheckCircle2,
+  Bookmark,
+  Flame,
+  Download,
+  Check,
+} from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
+import { EventItem } from "@/data/siteData";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { EventSpotlightCard } from "@/components/ui/EventSpotlightCard";
 
@@ -15,6 +27,8 @@ interface UpcomingEventsProps {
 export function UpcomingEvents({ onOpenRegister }: UpcomingEventsProps) {
   const { upcomingEvents } = useSiteContent();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [exportedEventId, setExportedEventId] = useState<string | null>(null);
+  const [batchExported, setBatchExported] = useState(false);
 
   // Derive unique categories
   const categories = ["All", ...Array.from(new Set(upcomingEvents.map((e) => e.category)))];
@@ -22,6 +36,83 @@ export function UpcomingEvents({ onOpenRegister }: UpcomingEventsProps) {
   const filteredEvents = selectedCategory === "All"
     ? upcomingEvents
     : upcomingEvents.filter((e) => e.category === selectedCategory);
+
+  const handleExportSingleICS = (event: EventItem) => {
+    const sanitize = (text: string) => text.replace(/,/g, "\\,").replace(/;/g, "\\;");
+    const dtStamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//CEAR AIT//Workshops and Events//EN",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      `SUMMARY:CEAR AIT: ${sanitize(event.title)}`,
+      `DESCRIPTION:${sanitize(event.description)} (${sanitize(event.category)})`,
+      `LOCATION:${sanitize(event.location)}`,
+      `DTSTAMP:${dtStamp}`,
+      `STATUS:CONFIRMED`,
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${event.id}-session.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setExportedEventId(event.id);
+    setTimeout(() => setExportedEventId(null), 2400);
+  };
+
+  const handleExportAllICS = () => {
+    const sanitize = (text: string) => text.replace(/,/g, "\\,").replace(/;/g, "\\;");
+    const dtStamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+    const eventsIcs = upcomingEvents
+      .map(
+        (ev) =>
+          [
+            "BEGIN:VEVENT",
+            `SUMMARY:CEAR AIT: ${sanitize(ev.title)}`,
+            `DESCRIPTION:${sanitize(ev.description)} (${sanitize(ev.category)})`,
+            `LOCATION:${sanitize(ev.location)}`,
+            `DTSTAMP:${dtStamp}`,
+            `STATUS:CONFIRMED`,
+            "END:VEVENT",
+          ].join("\r\n")
+      )
+      .join("\r\n");
+
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//CEAR AIT//Workshops and Events//EN",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      eventsIcs,
+      "END:VCALENDAR",
+    ].join("\r\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "CEAR-2026-Schedule.ics");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setBatchExported(true);
+    setTimeout(() => setBatchExported(false), 2400);
+  };
 
   return (
     <section id="events" className="relative py-28 sm:py-36 bg-transparent">
@@ -41,7 +132,24 @@ export function UpcomingEvents({ onOpenRegister }: UpcomingEventsProps) {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={handleExportAllICS}
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#240d2b] hover:text-[#ff6b35] px-4 py-2 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-white/80 shadow-xs cursor-pointer transition-all active:scale-98"
+              title="Download all scheduled workshops to Google / Apple Calendar"
+            >
+              {batchExported ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-emerald-700 font-semibold">Schedule Synced (.ics)</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-3.5 h-3.5 text-[#ff6b35]" />
+                  <span>Sync Schedule (.ics)</span>
+                </>
+              )}
+            </button>
             <div className="text-xs font-mono text-[#240d2b]/60 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-white/80 shadow-xs shrink-0">
               <span className="text-[#ff6b35] font-semibold">{upcomingEvents.length} Scheduled Sessions</span>
             </div>
@@ -190,18 +298,38 @@ export function UpcomingEvents({ onOpenRegister }: UpcomingEventsProps) {
                   </p>
                 </div>
 
-                <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.08] flex items-center justify-between">
-                  <span className="text-xs font-mono text-[#240d2b]/50">
+                <div className="pt-6 mt-6 border-t border-[#240d2b]/[0.08] flex items-center justify-between gap-3">
+                  <span className="text-xs font-mono text-[#240d2b]/50 hidden sm:inline">
                     Open to all AIT students
                   </span>
 
-                  <button
-                    onClick={() => onOpenRegister?.()}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#ff6b35] hover:bg-[#fa5519] px-4 py-2 rounded-full transition-all cursor-pointer shadow-[0_2px_12px_rgba(255,107,53,0.35)] hover:scale-102 active:scale-98"
-                  >
-                    <span>{event.ctaText || "Register"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-2 ml-auto">
+                    <button
+                      onClick={() => handleExportSingleICS(event)}
+                      className="inline-flex items-center gap-1.5 text-xs font-mono text-[#240d2b]/70 hover:text-[#240d2b] bg-white/80 border border-white/90 hover:border-[#ff6b35]/40 px-3 py-2 rounded-full transition-all cursor-pointer shadow-2xs active:scale-98"
+                      title="Save this session to calendar (.ics)"
+                    >
+                      {exportedEventId === event.id ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-700 font-semibold">Saved</span>
+                        </>
+                      ) : (
+                        <>
+                          <Calendar className="w-3.5 h-3.5 text-[#ff6b35]" />
+                          <span>Save Date</span>
+                        </>
+                      )}
+                    </button>
+
+                    <button
+                      onClick={() => onOpenRegister?.()}
+                      className="inline-flex items-center gap-1.5 text-xs font-medium font-body text-white bg-[#ff6b35] hover:bg-[#fa5519] px-4 py-2 rounded-full transition-all cursor-pointer shadow-[0_2px_12px_rgba(255,107,53,0.35)] hover:scale-102 active:scale-98"
+                    >
+                      <span>{event.ctaText || "Register"}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </GlassCard>
             ))}
