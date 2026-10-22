@@ -27,6 +27,7 @@ import {
   Layers,
   Radio,
   Clock,
+  Flame,
 } from "lucide-react";
 import {
   projects,
@@ -234,6 +235,18 @@ export function CommandPaletteModal({
         icon: <Activity className="w-4 h-4 text-[#ff6b35]" />,
         badge: "RoboWars",
         keywords: ["bracket", "tournament", "robowars", "combat", "telemetry", "arena", "match"],
+        actionType: "navigate",
+        target: "/#wartech",
+      },
+      {
+        id: "action-roborace-telemetry",
+        title: "RoboRace All-Terrain Leaderboard & Sectors",
+        subtitle: "View lap timing splits, speed traps, and sector telemetry for Wartech RoboRace",
+        category: "actions",
+        categoryLabel: "Race Telemetry",
+        icon: <Flame className="w-4 h-4 text-[#ff6b35]" />,
+        badge: "RoboRace",
+        keywords: ["race", "roborace", "circuit", "lap", "telemetry", "speed", "splits", "sectors", "gravel", "wartech"],
         actionType: "navigate",
         target: "/#wartech",
       },
