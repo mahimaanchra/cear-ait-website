@@ -30,6 +30,7 @@ import {
   Send,
   Eye,
   AlertCircle,
+  AlertTriangle,
 } from "lucide-react";
 
 type SubsystemTab = "overview" | "radar" | "nodes" | "rf" | "power";
@@ -68,7 +69,7 @@ export function AutonomousStatusWidget() {
   const [copiedCockpitLog, setCopiedCockpitLog] = useState(false);
 
   // Proving Ground Radar & Vehicle Simulation State
-  const [missionState, setMissionState] = useState<"patrol" | "holding" | "rth">("patrol");
+  const [missionState, setMissionState] = useState<"patrol" | "holding" | "rth" | "aborted">("patrol");
   const [roverPos, setRoverPos] = useState({ x: 42, y: 52 });
   const [headingDeg, setHeadingDeg] = useState(48);
   const [activeWpIndex, setActiveWpIndex] = useState(1);
@@ -118,7 +119,7 @@ export function AutonomousStatusWidget() {
 
   // Rover Autonomous Waypoint Navigation Simulation
   useEffect(() => {
-    if (missionState === "holding") return;
+    if (missionState === "holding" || missionState === "aborted") return;
 
     const navInterval = setInterval(() => {
       const targetWp = ARENA_WAYPOINTS[activeWpIndex];
@@ -826,7 +827,50 @@ Facility: Army Institute of Technology, Pune (Lab 104 Robotics Wing)`;
                       {/* Bottom Legend */}
                       <div className="absolute bottom-2 inset-x-3 flex items-center justify-between text-[9px] text-white/50 bg-black/60 backdrop-blur-md px-2.5 py-1.5 rounded-lg border border-white/10">
                         <span>Current Target: <strong className="text-[#ff6b35]">{ARENA_WAYPOINTS[activeWpIndex].name}</strong></span>
-                        <span>Velocity: <strong className="text-emerald-400">{missionState === "holding" ? "0.00" : "1.24"} m/s</strong></span>
+                        <span>Velocity: <strong className={missionState === "aborted" ? "text-red-400" : missionState === "holding" ? "text-amber-400" : "text-emerald-400"}>{missionState === "holding" || missionState === "aborted" ? "0.00" : "1.24"} m/s</strong></span>
+                      </div>
+                    </div>
+
+                    {/* Interactive Waypoint Dispatcher */}
+                    <div className="space-y-1.5 pt-1">
+                      <div className="flex items-center justify-between text-[11px] text-white/60">
+                        <span className="flex items-center gap-1 font-mono">
+                          <Crosshair className="w-3 h-3 text-[#ff6b35]" />
+                          <span>Dispatch Waypoint:</span>
+                        </span>
+                        <span className="text-[#ff6b35] font-bold font-mono">
+                          Target: {ARENA_WAYPOINTS[activeWpIndex].id}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                        {ARENA_WAYPOINTS.map((wp, idx) => (
+                          <button
+                            key={wp.id}
+                            onClick={() => {
+                              setActiveWpIndex(idx);
+                              if (missionState === "holding" || missionState === "aborted") {
+                                setMissionState("patrol");
+                              }
+                              setTerminalLogs((l) => [
+                                ...l.slice(-14),
+                                {
+                                  time: new Date().toLocaleTimeString("en-GB", { hour12: false }),
+                                  level: "CMD",
+                                  source: "mission_dispatch",
+                                  msg: `Manual waypoint locked: ${wp.name} (${wp.id}) // Ingress vector computed`,
+                                },
+                              ]);
+                            }}
+                            className={`p-1.5 rounded-lg text-[10px] font-mono transition-all text-left truncate cursor-pointer ${
+                              activeWpIndex === idx
+                                ? "bg-[#ff6b35] text-white font-bold shadow-xs"
+                                : "bg-white/5 hover:bg-white/10 text-white/70 border border-white/5"
+                            }`}
+                          >
+                            <span className="block font-bold truncate">{wp.id}</span>
+                            <span className="block text-[9px] opacity-80 truncate">{wp.name.split(" ")[0]}</span>
+                          </button>
+                        ))}
                       </div>
                     </div>
 
@@ -902,6 +946,52 @@ Facility: Army Institute of Technology, Pune (Lab 104 Robotics Wing)`;
                         <span>Return Dock</span>
                       </button>
                     </div>
+
+                    {/* Hard Emergency Stop Button */}
+                    {missionState === "aborted" ? (
+                      <div className="p-2.5 rounded-xl bg-red-950/80 border border-red-500/50 flex items-center justify-between gap-2 text-xs font-mono">
+                        <div className="flex items-center gap-1.5 text-red-300 min-w-0">
+                          <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0 animate-bounce" />
+                          <span className="truncate text-[11px] font-bold">HARD E-STOP ACTIVE // ACTUATORS LOCKED</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setMissionState("patrol");
+                            setTerminalLogs((l) => [
+                              ...l.slice(-14),
+                              {
+                                time: new Date().toLocaleTimeString("en-GB", { hour12: false }),
+                                level: "SUCCESS",
+                                source: "safety_daemon",
+                                msg: "Safe stop latch cleared. Dual-EKF state reset & propulsion re-enabled.",
+                              },
+                            ]);
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-[10px] cursor-pointer transition-colors shrink-0"
+                        >
+                          Clear Lockout
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setMissionState("aborted");
+                          setTerminalLogs((l) => [
+                            ...l.slice(-14),
+                            {
+                              time: new Date().toLocaleTimeString("en-GB", { hour12: false }),
+                              level: "WARN",
+                              source: "hw_safety",
+                              msg: "CRITICAL E-STOP LATCHED: 40kHz regenerative braking engaged. Actuator lockout active.",
+                            },
+                          ]);
+                        }}
+                        className="w-full py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-red-900/30 hover:bg-red-900/50 border border-red-500/40 text-red-300 hover:text-white shadow-xs active:scale-98"
+                      >
+                        <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
+                        <span>EMERGENCY SAFE STOP (E-STOP)</span>
+                      </button>
+                    )}
                   </div>
                 </div>
 
