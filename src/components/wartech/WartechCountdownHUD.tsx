@@ -17,6 +17,10 @@ import {
   Share2,
   Activity,
   Layers,
+  ChevronDown,
+  ChevronUp,
+  Zap,
+  Crosshair,
 } from "lucide-react";
 import { wartechChampionshipConfig, wartechTracks } from "@/data/siteData";
 
@@ -48,6 +52,13 @@ export function WartechCountdownHUD({
   });
 
   const [copiedCalendar, setCopiedCalendar] = useState(false);
+  const [showBreakdown, setShowBreakdown] = useState(false);
+  const [selectedSectorFilter, setSelectedSectorFilter] = useState<string>("All");
+
+  const filteredBreakdownTracks = useMemo(() => {
+    if (selectedSectorFilter === "All") return wartechTracks;
+    return wartechTracks.filter((t) => t.radarSector === selectedSectorFilter);
+  }, [selectedSectorFilter]);
 
   // Calculate live ticking difference
   useEffect(() => {
@@ -201,6 +212,20 @@ export function WartechCountdownHUD({
           {/* Quick Action Dock */}
           <div className="flex flex-wrap items-center justify-end gap-2.5 w-full">
             <button
+              onClick={() => setShowBreakdown(!showBreakdown)}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-mono text-white/90 hover:text-white transition-all cursor-pointer shadow-xs active:scale-98"
+              title="Toggle arena capacity breakdown"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <span>Track Slots (8 Arenas)</span>
+              {showBreakdown ? (
+                <ChevronUp className="w-3.5 h-3.5 text-white/60" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5 text-white/60" />
+              )}
+            </button>
+
+            <button
               onClick={handleDownloadICS}
               className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-mono text-white/90 hover:text-white transition-all cursor-pointer shadow-xs active:scale-98"
               title="Add deadline to Calendar"
@@ -230,6 +255,107 @@ export function WartechCountdownHUD({
           </div>
         </div>
       </div>
+
+      {/* Expandable 8-Track Battleground Allocation Drawer */}
+      <AnimatePresence>
+        {showBreakdown && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: "auto", marginTop: 24 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="border-t border-white/10 pt-6 space-y-4 overflow-hidden"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h4 className="font-display font-bold text-sm tracking-tight text-white flex items-center gap-2">
+                  <Crosshair className="w-4 h-4 text-[#ff6b35]" />
+                  <span>Individual Battleground Allocation Roster</span>
+                </h4>
+                <p className="text-xs text-white/60 font-body">
+                  Select any championship track to open instant team registration pre-assigned to that battleground.
+                </p>
+              </div>
+
+              {/* Sector Filter Chips */}
+              <div className="flex items-center gap-1.5 p-1 rounded-full bg-black/30 border border-white/10 text-xs font-mono self-start sm:self-auto">
+                {["All", "Alpha Combat", "Bravo Autonomy", "Gamma Dynamic"].map((sector) => (
+                  <button
+                    key={sector}
+                    onClick={() => setSelectedSectorFilter(sector)}
+                    className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
+                      selectedSectorFilter === sector
+                        ? "bg-[#ff6b35] text-white font-bold shadow-xs"
+                        : "text-white/70 hover:text-white"
+                    }`}
+                  >
+                    {sector === "All" ? "All Arenas" : sector.replace(" ", " ")}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Battleground Grid Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {filteredBreakdownTracks.map((track) => {
+                const trackFillPct = Math.round(((track.filledSlots || 24) / (track.maxSlots || 32)) * 100);
+                const trackRemaining = (track.maxSlots || 32) - (track.filledSlots || 24);
+
+                return (
+                  <div
+                    key={track.id}
+                    className="p-4 rounded-2xl bg-black/25 border border-white/10 hover:border-[#ff6b35]/40 transition-all space-y-3 group"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <span className="text-[10px] font-mono text-[#ff6b35] font-bold block">
+                          {track.trackCode} &bull; {track.radarSector}
+                        </span>
+                        <h5 className="font-display font-bold text-sm text-white group-hover:text-[#ff6b35] transition-colors mt-0.5">
+                          {track.title}
+                        </h5>
+                      </div>
+                      <span className="text-[10px] font-mono text-emerald-400 font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 shrink-0">
+                        {track.prizePool}
+                      </span>
+                    </div>
+
+                    {/* Filling Rate Bar */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-[11px] font-mono text-white/60">
+                        <span>Allocation:</span>
+                        <span className="text-white font-bold">
+                          {track.filledSlots || 24}/{track.maxSlots || 32} ({trackFillPct}%)
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden p-0.5 border border-white/10">
+                        <div
+                          style={{ width: `${trackFillPct}%` }}
+                          className={`h-full rounded-full ${
+                            trackFillPct >= 85 ? "bg-[#ff6b35]" : "bg-emerald-400"
+                          }`}
+                        />
+                      </div>
+                      <span className="text-[10px] font-mono text-amber-400 block pt-0.5">
+                        {trackRemaining} slots remaining
+                      </span>
+                    </div>
+
+                    {/* Quick Register Button */}
+                    <button
+                      onClick={() => onOpenRegister?.(track.id)}
+                      className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-white/10 hover:bg-[#ff6b35] text-white text-xs font-mono transition-all cursor-pointer border border-white/10 hover:border-transparent active:scale-98"
+                    >
+                      <span>Direct Register</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
