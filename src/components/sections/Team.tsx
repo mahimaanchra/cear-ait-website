@@ -18,6 +18,11 @@ import {
   Mail,
   Copy,
   Check,
+  Users,
+  Layers,
+  Activity,
+  CheckCircle2,
+  Radio,
 } from "lucide-react";
 import { useSiteContent } from "@/context/SiteContentContext";
 import { TeamMember } from "@/data/siteData";
@@ -46,6 +51,13 @@ export function Team({ onOpenRegister }: TeamProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedRoster, setCopiedRoster] = useState(false);
+
+  const handleCopyRosterEmail = () => {
+    navigator.clipboard?.writeText("cear@aitpune.edu.in");
+    setCopiedRoster(true);
+    setTimeout(() => setCopiedRoster(false), 2400);
+  };
 
   const allLeadership = [facultyIncharge, ...secretaries, ...jointSecretaries];
   const allMembers = [facultyIncharge, ...secretaries, ...jointSecretaries, ...coreContributors];
@@ -148,6 +160,69 @@ export function Team({ onOpenRegister }: TeamProps) {
                 </button>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Cadre Operations & Research Telemetry KPI Matrix */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="p-4 rounded-2xl bg-white/70 backdrop-blur-md border border-white/80 shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-[#ff6b35]">
+              <Users className="w-4 h-4" />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#240d2b]/50">
+                ACTIVE ROSTER
+              </span>
+            </div>
+            <div className="text-xl sm:text-2xl font-black font-display text-[#240d2b]">
+              {allMembers.length} Cadets
+            </div>
+            <p className="text-[11px] font-mono text-[#240d2b]/60">
+              Cross-disciplinary: Comp, E&amp;TC, Mech &amp; IT
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white/70 backdrop-blur-md border border-white/80 shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-[#ff6b35]">
+              <Layers className="w-4 h-4" />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#240d2b]/50">
+                SPECIALIZATION
+              </span>
+            </div>
+            <div className="text-xl sm:text-2xl font-black font-display text-[#240d2b]">
+              4 Research Wings
+            </div>
+            <p className="text-[11px] font-mono text-[#240d2b]/60">
+              Edge AI, ROS2 Humble, FOC Motor Drives, SLAM
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white/70 backdrop-blur-md border border-white/80 shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-[#ff6b35]">
+              <Activity className="w-4 h-4" />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#240d2b]/50">
+                PROTOTYPING
+              </span>
+            </div>
+            <div className="text-xl sm:text-2xl font-black font-display text-[#240d2b]">
+              2,400+ Hours
+            </div>
+            <p className="text-[11px] font-mono text-[#240d2b]/60">
+              Active test cell &amp; hardware validation in Lab 104
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white/70 backdrop-blur-md border border-white/80 shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-emerald-600">
+              <CheckCircle2 className="w-4 h-4" />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#240d2b]/50">
+                FABRICATION
+              </span>
+            </div>
+            <div className="text-xl sm:text-2xl font-black font-display text-[#240d2b]">
+              100% In-House
+            </div>
+            <p className="text-[11px] font-mono text-[#240d2b]/60">
+              Custom PCBs, planetary drives &amp; combat chassis
+            </p>
           </div>
         </div>
 
@@ -388,6 +463,11 @@ export function Team({ onOpenRegister }: TeamProps) {
                         <p className="text-[11px] font-mono text-[#240d2b]/65 truncate">
                           {c.role}
                         </p>
+                        {c.specialization && (
+                          <p className="text-[10px] font-mono text-[#ff6b35] truncate mt-0.5">
+                            #{c.specialization.split(",")[0].trim().replace(/\s+/g, "")}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <span className="text-xs text-[#240d2b]/30 group-hover:text-[#ff6b35] transition-colors">
@@ -402,9 +482,14 @@ export function Team({ onOpenRegister }: TeamProps) {
         {/* 4. Join Cadre CTA Banner */}
         <div className="rounded-[32px] sm:rounded-[36px] bg-gradient-to-r from-[#240d2b] via-[#3b1646] to-[#240d2b] p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div className="space-y-3 max-w-xl relative z-10">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] bg-white/10 px-3 py-1 rounded-full border border-white/10">
-              CADET SELECTION DRIVE &bull; 2026
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[10px] font-mono tracking-widest uppercase text-[#ff6b35] bg-white/10 px-3 py-1 rounded-full border border-white/10 font-semibold">
+                CADET SELECTION DRIVE &bull; 2026-27
+              </span>
+              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/15 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
+                RECRUITMENT ACTIVE
+              </span>
+            </div>
             <h3 className="text-2xl sm:text-4xl font-black font-display tracking-tight text-white">
               Ready to Build Autonomous Systems?
             </h3>
@@ -413,7 +498,25 @@ export function Team({ onOpenRegister }: TeamProps) {
             </p>
           </div>
 
-          <div className="shrink-0 relative z-10">
+          <div className="flex flex-wrap items-center gap-3 shrink-0 relative z-10">
+            <button
+              onClick={handleCopyRosterEmail}
+              className="inline-flex items-center gap-1.5 px-4 py-3 rounded-full text-xs font-mono text-white/90 bg-white/10 hover:bg-white/15 border border-white/15 transition-all cursor-pointer shadow-xs active:scale-98"
+              title="Copy intake inquiry email address"
+            >
+              {copiedRoster ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-300 font-semibold">Copied Email</span>
+                </>
+              ) : (
+                <>
+                  <Mail className="w-3.5 h-3.5 text-[#ff6b35]" />
+                  <span>cear@aitpune.edu.in</span>
+                </>
+              )}
+            </button>
+
             <button
               onClick={() => onOpenRegister?.()}
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-medium font-body bg-[#ff6b35] text-white hover:bg-[#fa5519] transition-all shadow-[0_4px_16px_rgba(255,107,53,0.4)] cursor-pointer hover:scale-102 active:scale-98"
